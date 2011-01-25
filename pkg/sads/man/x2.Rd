@@ -2,10 +2,10 @@
 \alias{x2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+square
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+x
 }
 \usage{
 x2(x)
@@ -17,29 +17,25 @@ x2(x)
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+x
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+x
 }
 \references{
-%% ~put references to the literature/web site here ~
+x
 }
 \author{
-%%  ~~who you are~~
+x
 }
 \note{
-%%  ~~further notes~~
+x
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+x
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
