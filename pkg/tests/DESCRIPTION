@@ -1,0 +1,10 @@
+Package: tests
+Type: Package
+Title: Experimental Functions
+Version: 0.1
+Date: 2011-01-28
+Author: Cristiano Strieder 
+Maintainer: Cristiano <cstrieder@gmail.com>
+Description: This package sets the base system for what will become sads.
+License: GPL-2
+LazyLoad: yes

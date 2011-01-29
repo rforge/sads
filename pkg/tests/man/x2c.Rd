@@ -1,14 +1,14 @@
-\name{x2}
-\alias{x2}
+\name{x2c}
+\alias{x2c}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Square made by R
+Square made by C
 }
 \description{
 z
 }
 \usage{
-x2(x)
+x2c(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -43,7 +43,7 @@ z
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function(x) x*x
+function(x) .C("quadrado", as.integer(x), PACKAGE="tests")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

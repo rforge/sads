@@ -1,6 +1,6 @@
-\name{x-package}
-\alias{x-package}
-\alias{x}
+\name{tests-package}
+\alias{tests-package}
+\alias{tests}
 \docType{package}
 \title{
 What the package does (short line)
@@ -12,7 +12,7 @@ More about what it does (maybe more than one line)
 }
 \details{
 \tabular{ll}{
-Package: \tab x\cr
+Package: \tab tests\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2011-01-28\cr
@@ -32,3 +32,4 @@ Maintainer: Who to complain to <yourfault@somewhere.net>
 ~~ Literature or other references for background information ~~
 }
 \keyword{ package }
+
