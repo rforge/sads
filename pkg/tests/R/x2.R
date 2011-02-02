@@ -1,3 +1,4 @@
-x2 <-
-function(x) x*x
+x2 <- function(x){
+return(x*x)
+}
 
