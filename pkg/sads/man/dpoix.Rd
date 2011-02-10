@@ -2,7 +2,7 @@
 \alias{dpoix}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Probability density function for the Poisson-Exponencial combination.
+Probability density function for the Poisson-Exponencial compound distribution.
 }
 \description{
 This function describes the probability density as a combination of two parts. 
@@ -10,18 +10,18 @@ An exponencial distribution describing the species abundance in the comunity and
 a Poisson distribution describing the sample proccess.
 }
 \usage{
-dpoix(x, a = 0.1, lambda = 0.5)
+dpoix(x, a, lambda)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-Number of individuals in the community.
+Vector of abundances of species in a sample taken from a community.
 }
   \item{a}{
-Fraction of the community sampled.
+Fraction of the community sampled. A real number between  zero and one.
 }
   \item{lambda}{
-Exponencial parameter. Specie dominance in the comunity.
+Parameter of the exponential distribution.
 }
 }
 \details{
@@ -52,7 +52,7 @@ z
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function(x, a = 0.1, lambda = 0.5) {
+function(x, a, lambda) {
   
   b <- a^(x-1)
   m <- lambda*b
