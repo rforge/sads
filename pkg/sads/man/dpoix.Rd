@@ -1,41 +1,65 @@
 \name{dpoix}
 \alias{dpoix}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-Probability density function for the Poisson-Exponencial compound distribution.
+\title{Compound Poisson-Exponential Distribution
+
 }
 \description{
-This function describes the probability density as a combination of two parts. 
-An exponencial distribution describing the species abundance in the comunity and 
-a Poisson distribution describing the sample proccess.
+Density for the Poisson-exponential compound probability distribution.
 }
 \usage{
-dpoix(x, a, lambda)
+dpoix(x, frac=1, rate, log=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-Vector of abundances of species in a sample taken from a community.
+Vector of (non-negative integer) quantiles.
 }
-  \item{a}{
-Fraction of the community sampled. A real number between  zero and one.
+\item{frac}{
+  Fraction of the population or community sampled (see details)
 }
-  \item{lambda}{
-Parameter of the exponential distribution.
+\item{lambda}{
+  Vector of (non-negative) rates of the exponential distribution of the
+  sampled population (see details).
+}
+\item{log}{
+  logical; if TRUE, probabilities p are given as log(p)
 }
 }
 \details{
-z
+A compound Poisson-exponential distribution is a Poisson probability distribution
+where its single parameter, the process mean rate, is frac*n, where n
+is a random variable with exponential distribution. The density function
+is
+
+p(x) = rate*frac^x / (frac + rate)^(x+1)
+
+In ecology, this distribution gives the probability that a species has
+an abundance of x individuals in a random sample of a fraction frac of
+the community. In the community the species abundances are independent
+random variables that follow the same exponential density function.
+
+Hence, a Poisson-exponential
+distribution is a model for species abundances distributions (SAD) under the
+assumptions that (a) species abundances in the community are independent
+identically distributed exponential variables, (b) sampling is a
+Poisson proccess with expected value frac*n, (c) the sampling is with
+replacement, or the fraction sampled is small enough to approximate a
+sample with replacement.
+
 }
 \value{
-z
+(log) density of the (zero-truncated) density
 }
 \references{
-Prado, P. I. K. L., Species Abundance Distribution, 
-Analitical advances in the understanding of an ecological basic pattern.
+
+  Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
+  and Sons.
+  
+  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling species abundances. \emph{Ecology Letters 10}:1037--1045
 }
 \author{
-Cristiano
+Paulo I. Prado & Cristiano Strieder
 }
 \note{
 z
@@ -44,22 +68,14 @@ z
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-z
+dexp, dpois
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function(x, a, lambda) {
-  
-  b <- a^(x-1)
-  m <- lambda*b
-  n <- (lambda + a)^x
-  m/n
-  }
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }
