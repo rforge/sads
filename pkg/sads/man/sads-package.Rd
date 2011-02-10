@@ -3,11 +3,10 @@
 \alias{sads}
 \docType{package}
 \title{
-Species Abundance Distribution Selection
+Modeling Species Abundance Distribution 
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Likelihood-based fit and selection of models for species abundance distributions
 }
 \details{
 \tabular{ll}{
