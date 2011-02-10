@@ -1,6 +1,6 @@
-dpoix <- function(x, a, lambda, log=FALSE) {
-	  b <- a^(x-1)
-	  m <- lambda*b
-	  n <- (lambda + a)^x
+dpoix <- function(x, frac, rate, log=FALSE) {
+	  b <- frac^(x-1)
+	  m <- rate*b
+	  n <- (rate + frac)^x
           if(log)log(m/n) else m/n
         }
