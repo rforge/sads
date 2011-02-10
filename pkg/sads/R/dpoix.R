@@ -1,7 +1,6 @@
-dpoix <- function(x, a = 0.1, lambda = 0.5) {
-	  
+dpoix <- function(x, a, lambda, log=FALSE) {
 	  b <- a^(x-1)
 	  m <- lambda*b
 	  n <- (lambda + a)^x
-	  m/n
-}
+          if(log)log(m/n) else m/n
+        }
