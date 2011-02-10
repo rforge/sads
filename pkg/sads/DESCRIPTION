@@ -1,10 +1,10 @@
 Package: sads
 Type: Package
-Title: Species Abundance Distribution Selection
+Title: Modelling Species Abundance Distributions
 Version: 0.1
 Date: 2011-02-02
-Author: Cristiano
-Maintainer: Cristiano <cstrieder@gmail.com>
+Author: Paulo Prado & Cristiano Strieder
+Maintainer: Paulo <prado@ib.usp.br>, Cristiano <cstrieder@gmail.com>
 Description: This package sets the base for what will become sads.
 License: GPL-2
 LazyLoad: yes
