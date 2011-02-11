@@ -18,7 +18,7 @@ Vector of (non-negative integer) quantiles.
 \item{frac}{
   Fraction of the population or community sampled (see details)
 }
-\item{lambda}{
+\item{rate}{
   Vector of (non-negative) rates of the exponential distribution of the
   sampled population (see details).
 }
@@ -37,7 +37,7 @@ p(x) = rate*frac^x / (frac + rate)^(x+1)
 In ecology, this distribution gives the probability that a species has
 an abundance of x individuals in a random sample of a fraction frac of
 the community. In the community the species abundances are independent
-random variables that follow the same exponential density function.
+random variables that follow an exponential density function.
 
 Hence, a Poisson-exponential
 distribution is a model for species abundances distributions (SAD) under the
