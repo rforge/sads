@@ -10,7 +10,7 @@ An exponencial distribution describing the species abundance in the comunity and
 a Poisson distribution describing the sample proccess.
 }
 \usage{
-depois(x, a = 0.1, lambda = 0.5)
+depois(x, a = 0.1, lambda = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
