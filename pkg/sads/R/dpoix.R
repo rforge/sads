@@ -1,6 +1,6 @@
 dpoix <- function(x, frac, rate, log=FALSE) {
-	  b <- frac^(x-1)
-	  m <- rate*b
-	  n <- (rate + frac)^x
-          if(log)log(m/n) else m/n
+	  b <- x*log(frac)
+	  m <- log(rate)
+	  n <- (x+1)*log(rate+frac)
+          if(log)b+m-n else exp(b+m-n)
         }
