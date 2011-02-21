@@ -1,0 +1,132 @@
+\documentclass{article}
+%\usepackage[latin1]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\newcommand{\R}{{\sf \,R\,}}
+\newcommand{\code}[1]{\texttt{#1}}
+\title{\normalsize Package sads  \\ Modeling Species Abundance Distributions \\ \large LOGBOOK}
+\author{\small Paulo Inácio Prado  and Cristiano Strieder}
+\SweaveOpts{eval=T, keep.source=T} 
+\begin{document}
+\maketitle
+
+\section*{Warning}
+Though this document will hopefully become a comprehensive vignette, currently it is a draft logbook used to clarify some aspects of the theoretical background of this package to developers, and to guide the next steps. 
+
+\section*{Poisson Sample}
+
+Given that there is $n$ individuals of a given species in a community and that a fraction $a$ of these individuals were randomly sampled, the probability of getting $y$ individuals in the sample is given by the Poisson distribution
+
+\begin{equation}
+  \label{eq:poisson}
+f(y)\, = \, \frac{{\left( a\,n\right) }^{y}\,{e}^{-a\,n}}{y!}
+\end{equation}
+
+Where the the single parameter of the Poisson $\lambda$ correspond to the expected value $E[y]$ and thus is substituted by the product $a\, n$. Now suppose that the abundance $n$ in the community is also a random variable that can be described by some probability distribution $g(n)$. Then the unconditional probability of getting $y$ individuals in the sample is given by the integral
+\begin{equation}
+  \label{eq:integral}
+  h(y) \, = \, \int^{\Omega}f(y)g(n) \, dn \
+\end{equation}
+
+Which is the sad model we are looking for. Although there are analytic solutions for many cases, our goal is to write a  \R  function that solves numerically equation \ref{eq:integral} in a generic way, that is, a single function whith an argument for $g(n)$. This function would then allow to compound any probability density function with the Poisson distribution. Taking this generalization further, we can substitute the Poisson distribution by another sampling model, e.g. the negative binomial to model aggregated sampling.
+
+Our first step is to construct a function for a particular case for which the analytical solution is known, which allow us to check the results of the numerical integration.
+
+
+\subsection*{Compounding with the exponential}
+
+Taking for $g(n)$ the exponential
+
+\begin{equation}
+  \label{equation}
+  g(n)\, = \, \lambda\,{e}^{-n\,\lambda}
+\end{equation}
+
+The equation \ref{eq:integral} solves to:
+
+
+\begin{equation}
+  \label{eq:poiexp}
+  h(y) = \frac{\lambda \, a^y}{(a+\lambda)^{y+1}}
+\end{equation}
+
+Using logarithms in the intermediary calculations to avoid overflow, we can define this function in \R as
+
+@ 
+<<dpoix>>=
+dpoix <- function(x, frac, rate, log=FALSE) {
+	  b <- x*log(frac)
+	  m <- log(rate)
+	  n <- (x+1)*log(rate+frac)
+          if(log)b+m-n else exp(b+m-n)
+        }
+@ %def 
+
+
+The equivalent function for numerical integration in \R is\footnote{This function must be passed to \code{Vectorize} to make \code{integrate} work with more than one  value of \code{y}}:
+
+
+<<exp>>=
+dsad <- Vectorize(FUN=
+                  function(y,a,lambda){
+                    poi <- function(y,n){
+                      w <- y*log(a*n)-lfactorial(y)-a*n
+                      exp(w)
+                    }
+                    f1 <- function(n){
+                      dexp(n,rate=lambda) * poi(y,n)
+                    }
+                    integrate(f1,0,Inf)$value
+                  },
+                  "y")
+@ %def 
+
+The functions seems to give the same results
+
+@ 
+<<tests>>=
+dsad(0:10,a=0.1,lambda=0.01)
+dpoix(0:10,frac=0.1,rate=0.01)
+@ %def 
+
+But as the valeu of $y$ increases the numeric solution goes to zero
+@ 
+<<tests2>>=
+dsad(c(200,20000),0.1,0.00001)
+dpoix(c(200,20000),0.1,0.00001)
+@ 
+The figure \ref{fig:fig1} shows that this effect occurs even for moderate values of $\lambda$. The next step is to investigate this, and to correct the numerical integration.
+
+
+ 
+<<echo=FALSE>>=
+x <- 0:50
+y1 <- dpoix(x,0.1,0.01)
+y2 <- dsad(x,0.1,0.01)
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
+@ %def
+
+<<echo=FALSE>>=
+x <- 0:50
+y1 <- dpoix(x,0.1,0.01)
+y2 <- dsad(x,0.1,0.01)
+@ 
+
+\begin{figure}
+  \label{fig:fig1}
+  \begin{center}
+<<fig=TRUE>>=
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
+@ %def
+\end{center}
+\caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\end{figure}
+
+
+\end{document}
