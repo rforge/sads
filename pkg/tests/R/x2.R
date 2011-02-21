@@ -1,4 +1,0 @@
-x2 <- function(x){
-return(x*x)
-}
-

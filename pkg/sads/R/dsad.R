@@ -7,6 +7,9 @@ dsad <- Vectorize(FUN=
                     f1 <- function(n){
                       dexp(n,rate=lambda) * poi(y,n)
                     }
-                    integrate(f1,0,Inf)$value
+                    t1 <- integrate(f1,0,Inf)$value
+		    y <- 0
+                    t0 <- integrate(f1,0,Inf)$value
+		    return(t1/(1-t0))
                   },
                   "y")
