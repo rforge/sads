@@ -78,7 +78,7 @@ dsad <- Vectorize(FUN=
                     f1 <- function(n){
                       dexp(n,rate=lambda) * poi(y,n)
                     }
-                    integrate(f1,0,Inf)$value
+                    integrate(f1,0,Inf, abs.tol = .Machine$double.eps^0.25/1000000)$value
                   },
                   "y")
 @ %def 
@@ -91,7 +91,7 @@ dsad(0:10,a=0.1,lambda=0.01)
 dpoix(0:10,frac=0.1,rate=0.01)
 @ %def 
 
-But as the valeu of $y$ increases the numeric solution goes to zero
+But as the value of $y$ increases the numeric solution goes to zero. This effect is circumvented by the argument \code{abs.tol}, but it is not yet solved for small values of \code{frac} and \code{rate}, e.g.
 @ 
 <<tests2>>=
 dsad(c(200,20000),0.1,0.00001)
@@ -99,21 +99,10 @@ dpoix(c(200,20000),0.1,0.00001)
 @ 
 The figure \ref{fig:fig1} shows that this effect occurs even for moderate values of $\lambda$. The next step is to investigate this, and to correct the numerical integration.
 
-
- 
 <<echo=FALSE>>=
 x <- 0:50
-y1 <- dpoix(x,0.1,0.01)
-y2 <- dsad(x,0.1,0.01)
-plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
-points(x,y2,pch=3,cex=0.5, type="b")
-legend("topright", c("analytical","numeric"), pch=c(1,3))
-@ %def
-
-<<echo=FALSE>>=
-x <- 0:50
-y1 <- dpoix(x,0.1,0.01)
-y2 <- dsad(x,0.1,0.01)
+y1 <- dpoix(x,0.01,0.001)
+y2 <- dsad(x,0.01,0.001)
 @ 
 
 \begin{figure}
