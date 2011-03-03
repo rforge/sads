@@ -7,6 +7,7 @@ dsad <- Vectorize(FUN=
                     f1 <- function(n){
                       dexp(n,rate=lambda) * poi(y,n)
                     }
-                    integrate(f1,0,Inf, abs.tol = .Machine$double.eps^0.25/1000000)$value
+					inf <- 5000
+                    integrate(f1,0,inf, abs.tol = .Machine$double.eps)$value
                   },
                   "y")

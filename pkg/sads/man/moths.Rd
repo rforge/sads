@@ -1,5 +1,5 @@
 \name{moths}
-\alias{moth}
+\alias{moths}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
   Moths caught by lightraping at Rothamsted 1933-1936

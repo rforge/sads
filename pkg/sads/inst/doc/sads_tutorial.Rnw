@@ -9,6 +9,7 @@
 \title{\normalsize Package sads  \\ Modeling Species Abundance Distributions \\ \large LOGBOOK}
 \author{\small Paulo Inácio Prado  and Cristiano Strieder}
 \SweaveOpts{eval=T, keep.source=T} 
+%\VignetteIndexEntry{Errata corrige to 1st edition of the companion book} 
 \begin{document}
 \maketitle
 
