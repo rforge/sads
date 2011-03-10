@@ -120,15 +120,23 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 
 \subsection*{Numerical integration}
 
-The first guess on investigating this integration was to verify the details of the integrate function. 
-From the associated help we found that it implements the adaptative quadrature method. Beyond the 
-expression to be integrated and limits, integrate() also allow to specify the absolute and relative 
-accuracy of the function used to approximate the integrand 
-(http://www.amtp.cam.ac.uk/lab/people/sd/lectures/nummeth98/integration.htm).
+The first step on investigating this integration is verify the details of the \code{integrate} function. 
+From the R-help of the function, we find that it implements the adaptative quadrature method. Additionally to the 
+expression being integrated and the limits of integration, \code{integrate} also allow to specify the absolute(\code{abs.tol}) and relative 
+(\code{rel.tol}) accuracy of the function used to approximate the integrand.\footnote{
+http://www.amtp.cam.ac.uk/lab/people/sd/lectures/nummeth98/integration.htm}
 
-After some trials we found that substitutig 'Inf' by particular values let the numerical solution matches 
-the anlytical. It is observated that increasing the upper limit when FRAC and RATE are getting lower 
-conduct to better aproximation of the numerical integration. Finally, considering the range of values 
-10e-12<FRAC<1 and 10e-6<RATE<1, the proposed solution is to replace Inf by 100/(a+lambda).
+As was said above, the numeric solution goes to zero as the value of \code{y} increases. And this effect is circumvented specifying a value 
+for \code{abs.tol}. Now we propose another way to circumvented the problem, it consist in manipulate the upper limit of integration \code{Inf}.
+Such procedure is not recommended according to R-help but for our purposes it was efficient.
 
+With a few trials we found that substitutig \code{Inf} by particular values, this can make the numerical solution matches 
+the anlytical. It is observated that increasing the upper limit, when \code{frac} and \code{rate} are getting lower, 
+conduct to better aproximation of the numerical integration. Considering the range of values 
+10e-12<\code{frac}<1 and 10e-5<\code{rate}<1, with \code{200<=y<=2000}, a good choice is replace \code{Inf} by \code{k*y/(a+lambda)} with 
+\code{k=1.9920941}. For ranges out of the cited above, then the value of \code{k}, or even the entire solution, may be defined more consistently.
+
+In fact, this is not a final solution yet. This result can be improved, for wide ranges of \code{frac}, \code{rate} and \code{y}, specifying 
+the upper limit of integration in an another alternative manner. This time the idea is to split the wide range of \code{y}, for example, in 
+two or more parts and then specify a solution fore each case.
 \end{document}
