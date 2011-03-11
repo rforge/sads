@@ -7,8 +7,15 @@ dsad <- Vectorize(FUN=
                     f1 <- function(n){
                       dexp(n,rate=lambda) * poi(y,n)
                     }
-					k <- 1.9920941
-                    integrate(f1,0,k*y/(a+lambda))$value
+					if (y<10){
+						integrate(f1,0,100/max(a,lambda))$value
+					}else if (y<50){
+						k <- 6
+						integrate(f1,0,k*y/(a+lambda))$value
+					}else{
+						k <- 1.9920941
+						integrate(f1,0,k*y/(a+lambda))$value
+					}
                   },
                   "y")
 		  
