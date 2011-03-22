@@ -55,7 +55,6 @@ The equation \ref{eq:integral} solves to:
 
 Using logarithms in the intermediary calculations to avoid overflow, we can define this function in \R as
 
-@ 
 <<dpoix>>=
 dpoix <- function(x, frac, rate, log=FALSE) {
 	  b <- x*log(frac)
@@ -86,19 +85,18 @@ dsad <- Vectorize(FUN=
 
 The functions seems to give the same results
 
-@ 
 <<tests>>=
 dsad(0:10,a=0.1,lambda=0.01)
 dpoix(0:10,frac=0.1,rate=0.01)
 @ %def 
 
 But as the value of $y$ increases the numeric solution goes to zero. This effect is circumvented by the argument \code{abs.tol}, but it is not yet solved for small values of \code{frac} and \code{rate}, e.g.
-@ 
+
 <<tests2>>=
 dsad(c(200,20000),0.1,0.00001)
 dpoix(c(200,20000),0.1,0.00001)
 @ 
-The figure \ref{fig:fig1} shows that this effect occurs even for moderate values of $\lambda$. The next step is to investigate this, and to correct the numerical integration.
+The figure \ref{fig:fig01} shows that this effect occurs even for moderate values of $\lambda$. The next step is to investigate this, and to correct the numerical integration.
 
 <<echo=FALSE>>=
 x <- 0:50
@@ -106,8 +104,7 @@ y1 <- dpoix(x,0.01,0.001)
 y2 <- dsad(x,0.01,0.001)
 @ 
 
-\begin{figure}
-  \label{fig:fig1}
+\begin{figure}[ht]
   \begin{center}
 <<fig=TRUE>>=
 plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
@@ -116,6 +113,7 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 @ %def
 \end{center}
 \caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\label{fig:fig01}
 \end{figure}
 
 \subsection*{Numerical integration}
@@ -133,13 +131,13 @@ for \code{abs.tol}. Although this approach conduct to a numerical result equival
 
 We now propose another way to circumvent the problem, it consist in manipulate the upper limit of integration \code{Inf}. Such procedure is not recommended according to R-help but for our purposes it seems to produce good results.
 
-With a few trials we found that substitutig \code{Inf} by particular values, this can make the numerical solution matches the anlytical. It is observated that increasing the upper limit, when \code{frac} and \code{rate} are getting lower,  conduct to better aproximation of the numerical integration. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-5}$, with $200 \leq \code{y} \geq 20000$, a reasonably good choice is replace \code{Inf} by \code{k*y/(a+lambda)} with \code{k=1.9920941}. Figure \ref{fig:fig1} shows the analytical and numerical curves visually matching. Figure \ref{fig:fig0} is the result when integral is calculated with \code{abs.tol}.
+With a few trials we found that substitutig \code{Inf} by particular values, this can make the numerical solution matches the anlytical. It is observated that increasing the upper limit, when \code{frac} and \code{rate} are getting lower,  conduct to better aproximation of the numerical integration. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-5}$, with $200 \leq \code{y} \geq 20000$, a reasonably good choice is replace \code{Inf} by \code{k*y/(a+lambda)} with \code{k=1.9920941}. Figure \ref{fig:k} shows the analytical and numerical curves visually matching. Figure \ref{fig:abs.tol} is the result when integral is calculated with \code{abs.tol}.
 
-\begin{figure}
-  \label{fig:fig0}
+\begin{figure}[ht]
   \begin{center}
 <<echo=false, fig=TRUE>>=
-x <- 200:20000
+j <- 20000
+x <- seq.int(200,j,j*0.01)
 frac <- 10^-1
 rate <- 10^-5
 y1 <- dpoix(x,frac,rate)
@@ -149,7 +147,8 @@ points(x,y2,pch=3,cex=0.5, type="b")
 legend("topright", c("analytical","numeric"), pch=c(1,3))
 @ %def
 \end{center}
-\caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-5}$, with $200 \leq \code{y} \geq 20000$}.
+\label{fig:abs.tol}
 \end{figure}
 
 <<echo=false>>=
@@ -168,11 +167,11 @@ dsad <- Vectorize(FUN=
                   "y")
 @
 
-\begin{figure}
-  \label{fig:fig2}
+\begin{figure}[ht]
   \begin{center}
 <<echo=false, fig=TRUE>>=
-x <- 200:20000
+j <- 20000
+x <- seq.int(200,j,j*0.01)
 frac <- 10^-1
 rate <- 10^-5
 y1 <- dpoix(x,frac,rate)
@@ -182,21 +181,21 @@ points(x,y2,pch=3,cex=0.5, type="b")
 legend("topright", c("analytical","numeric"), pch=c(1,3))
 @ %def
 \end{center}
-\caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-5}$, with $200 \leq \code{y} \geq 20000$}
+\label{fig:k}
 \end{figure}
 
 In the above case the value of \code{k} was manually tunned, hopefully giving exact results for:
 
-<<tests2>>=
+<<tests2a>>=
 dsad(c(200,20000),0.1,0.00001)
 dpoix(c(200,20000),0.1,0.00001)
 @
 
 For ranges out of the cited above, then the value of \code{k}, or even the entire solution, may be defined more consistently. This result can be improved, for wide ranges of \code{frac}, \code{rate} and \code{y}, if we specify 
-the upper limit of integration in an another alternative manner. This time the idea is to split the total range of any parameter, \code{y} for 
-example, in two or more parts and then specify the numerical integration for each part. The updated function for numerical integration is below.
+the upper limit of integration in an another alternative manner. This time the idea is to split the total range of any parameter, \code{y} for example, in two or more parts and then specify the numerical integration for each part, as is shown below.
 
-<<exp>>=
+<<exp2>>=
 dsad <- Vectorize(FUN=
                   function(y,a,lambda){
                     poi <- function(y,n){
@@ -219,16 +218,33 @@ dsad <- Vectorize(FUN=
                   "y")
 @ %def 
 
-@
-The above expression is an attempt to correct the result from the numerical  integration provided by the standart \code{integrate} R function. The limits for each \code{y} intervals were selected as example.
+The above expression is an attempt to correct the result from the numerical  integration provided by the standart \code{integrate} R function. The limits for each \code{y} interval were selected to exemplify.
 
-In fact, this is not a final solution yet. Both curves do not match for $\code{rate}=10^{-6}$\ and\ $\code{frac}=10^{-1}$, for example, as shows the graph of Figure \ref{fig:fig3} below:
+In fact, this is not a final solution yet, but results are improved as shows Figure  \ref{fig:good}. Unfortunately both curves do not match for all ranges. Figure \ref{fig:bad} show an example when it does not work, for $\code{rate}=10^{-6}$\ and\ $\code{frac}=10^{-1}$. Another methods/functions for numerical integration must be tested.
 
-\begin{figure}
-  \label{fig:fig3}
+\begin{figure}[ht]
   \begin{center}
 <<echo=false,fig=TRUE>>=
-x <- 0:20000
+j <- 50000
+x <- seq.int(0,j,j*0.01)
+frac <- 10^-1
+rate <- 10^-5
+y1 <- dpoix(x,frac,rate)
+y2 <- dsad(x,frac,rate)
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
+@ %def
+\end{center}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-5}$, with $0 \leq \code{y} \geq 50000$}
+\label{fig:good}
+\end{figure}
+
+\begin{figure}[ht]
+  \begin{center}
+<<echo=false,fig=TRUE>>=
+j <- 50000
+x <- seq.int(0,j,j*0.01)
 frac <- 10^-1
 rate <- 10^-6
 y1 <- dpoix(x,frac,rate)
@@ -238,24 +254,43 @@ points(x,y2,pch=3,cex=0.5, type="b")
 legend("topright", c("analytical","numeric"), pch=c(1,3))
 @ %def
 \end{center}
-\caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-6}$, with $0 \leq \code{y} \geq 50000$}
+\label{fig:bad}
 \end{figure}
+
+
+\subsubsection*{Integrating with function \code{adaptIntegrate}}
+
+The function \code{adaptIntegrate} come with the Cubature package. Cubature is a package for mutidimensional integration over hypercubes.
+
+Installation can be performed by:
+
+<<exp2, echo=false>>=
+install.packages("cubature",repos="http://R-Forge.R-project.org")
+library("cubature")
 @
-\end{document}
 
-\subsection*{Some aspects of the numerical integration}
-
-Given that \code{frac} is a fraction of the total number of individuals of the comunity, that was included in the sample. This give us a upper limit on the horizontal axis and consequently an upper limit for the integration \code{y=1/frac}.
-
-Also, independently of the limit of integration, the integral of the function for that interval must be 1. This aspects are verified:
-
-\begin{figure}
-  \label{fig:fig4}
+<<exp2>>=
+dsad <- Vectorize(FUN=
+                  function(y,a,lambda){
+                    poi <- function(y,n){
+                      w <- y*log(a*n)-lfactorial(y)-a*n
+                      exp(w)
+                    }
+                    f1 <- function(n){
+                      dexp(n,rate=lambda) * poi(y,n)
+                    }
+  				adaptIntegrate(f1,0,10^6)$integral
+                  },
+                  "y")
+@ %def
+\begin{figure}[ht]
   \begin{center}
-<<fig=TRUE>>=
-frac <- 10^-5
+<<echo=false,fig=TRUE>>=
+j <- 50000
+x <- seq.int(0,j,j*0.01)
+frac <- 10^-1
 rate <- 10^-5
-x <- 0:(1/frac)
 y1 <- dpoix(x,frac,rate)
 y2 <- dsad(x,frac,rate)
 plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
@@ -263,12 +298,21 @@ points(x,y2,pch=3,cex=0.5, type="b")
 legend("topright", c("analytical","numeric"), pch=c(1,3))
 @ %def
 \end{center}
-\caption{Probability value returned by the function \code{dpoix}, which calculates the Poisson-exponential analytically and the function \code{dsad}, which calculate the compound distribution by numerical integration.}
+\caption{Cubature. Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-6}$, with $0 \leq \code{y} \geq 50000$}
+\label{fig:bad}
 \end{figure}
 
-@
-<<tests4>>=
-sum(y1)
-sum(y2)
-@
 
+\subsection*{Some aspects of the numerical integration}
+
+One important aspect to verify when dealing with Probability Density Functions - PDFs, is that the sum of probabilities over the entire length is 1. This is tested for both \code{dpoix} and \code{dsad} with the \code{R} function \code{sum}.
+
+%<<tests4>>=
+%x <- 0:j
+%y1 <- dpoix(x,frac,rate)
+%y2 <- dsad(x,frac,rate)
+%sum(y1)
+%sum(y2)
+%@
+
+\end{document}
