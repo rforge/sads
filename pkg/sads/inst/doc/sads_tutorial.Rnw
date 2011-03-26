@@ -116,7 +116,7 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 \label{fig:fig01}
 \end{figure}
 
-\subsection*{Numerical integration}
+\subsection*{Numerical integration with the function \code{integrate}}
 
 The first step on investigating this integration is verify the details of the \code{integrate} function. 
 From the R-help of the function, we find that it implements the adaptative quadrature method. Additionally to the 
@@ -259,18 +259,97 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 \end{figure}
 
 
-\subsubsection*{Integrating with function \code{adaptIntegrate}}
+\subsection*{Numerical Integration with function \code{GLIntegrate}}
+
+Package \code{distr} provide an object oriented implementation of distributions. Additionaly, package \code{distrEx} provide extensions of package distr. That extensions include two functions for integration: \code{GLIntegrate} and \code{distrExIntegrate}.
+
+The R-help description of the \code{GLIntegrate} function says it use Gauss-Legendre quadrature over a finite interval, in contrast with our problem that has an infinite upper limit. 
+
+The \code{distrExIntegrate} function does not have the same limitation relative to the interval of integration. But, as the description of the function explain, it does a numerical integration via \code{integrate}, in case \code{integrate} fails a Gauss-Legendre quadrature is performed.
+
+Figures \ref{fig:GLIntegrate} and \ref{fig:distrExIntegrate} shows the result from using \code{GLIntegrate} and \code{distrExIntegrate} respectively. As expected, from the description of the function, \code{distrExIntegrate} exibits a shape like the one got from \code{integrate}.
+
+<<exp2distrEx, echo=false>>=
+library("distrEx")
+dsad <- Vectorize(FUN=
+                  function(y,a,lambda){
+                    poi <- function(y,n){
+                      w <- y*log(a*n)-lfactorial(y)-a*n
+                      exp(w)
+                    }
+                    f1 <- function(n){
+                      dexp(n,rate=lambda) * poi(y,n)
+                    }
+          GLIntegrate(f1,0,10^6)                  },
+                  "y")
+@ %def 
+
+\begin{figure}[ht]
+  \begin{center}
+<<echo=false,fig=TRUE>>=
+j <- 50000
+x <- seq.int(0,j,j*0.01)
+frac <- 10^-1
+rate <- 10^-6
+y1 <- dpoix(x,frac,rate)
+y2 <- dsad(x,frac,rate)
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
+@ %def
+\end{center}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-6}$, with $0 \leq \code{y} \geq 50000$. For the upper limit of integration it was used $10^{6}$.}
+\label{fig:GLIntegrate} For the 
+\end{figure}
+
+
+<<exp2distrExIntegrate, echo=false>>=
+library("distrEx")
+dsad <- Vectorize(FUN=
+                  function(y,a,lambda){
+                    poi <- function(y,n){
+                      w <- y*log(a*n)-lfactorial(y)-a*n
+                      exp(w)
+                    }
+                    f1 <- function(n){
+                      dexp(n,rate=lambda) * poi(y,n)
+                    }
+          distrExIntegrate(f1,0,Inf)                  },
+                  "y")
+@ %def 
+
+\begin{figure}[ht]
+  \begin{center}
+<<echo=false,fig=TRUE>>=
+j <- 50000
+x <- seq.int(0,j,j*0.01)
+frac <- 10^-1
+rate <- 10^-6
+y1 <- dpoix(x,frac,rate)
+y2 <- dsad(x,frac,rate)
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
+@ %def
+\end{center}
+\caption{Probability value returned by the function \code{dpoix} and the function \code{dsad}. Considering $\code{frac}=10^{-1}$ and $\code{rate}=10^{-6}$, with $0 \leq \code{y} \geq 50000$. For the upper limit of integration it was used \code{Inf}.}
+\label{fig:distrExIntegrate}
+\end{figure}
+
+
+\subsection*{Numerical Integration with function \code{adaptIntegrate}}
 
 The function \code{adaptIntegrate} come with the Cubature package. Cubature is a package for mutidimensional integration over hypercubes.
 
-Installation can be performed by:
+Installation can be performed with:
 
-<<exp2, echo=false>>=
+<<exp2, echo=false, eval=false>>=
 install.packages("cubature",repos="http://R-Forge.R-project.org")
 library("cubature")
 @
 
-<<exp2>>=
+<<exp2cubature>>=
+library("cubature")
 dsad <- Vectorize(FUN=
                   function(y,a,lambda){
                     poi <- function(y,n){
@@ -290,7 +369,7 @@ dsad <- Vectorize(FUN=
 j <- 50000
 x <- seq.int(0,j,j*0.01)
 frac <- 10^-1
-rate <- 10^-5
+rate <- 10^-6
 y1 <- dpoix(x,frac,rate)
 y2 <- dsad(x,frac,rate)
 plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
@@ -314,5 +393,76 @@ One important aspect to verify when dealing with Probability Density Functions -
 %sum(y1)
 %sum(y2)
 %@
+
+
+\subsection*{Compounding with the gamma}
+
+ 
+Taking for $g(n)$ the gamma
+
+\begin{equation}
+\label{eq:gamma}
+  g(n) = \frac{ \lambda^{\beta} n^{\beta-1} e^{- \lambda n} }{ \Gamma(\beta) }
+\end{equation}
+
+The equation \ref{eq:integral} solves to:
+
+\begin{equation}
+  \label{eq:poig}
+  h(y) = \frac{a^y \lambda^\beta \Gamma(y+\beta)}{y!\Gamma(\beta)(a+\lambda)^{y+\beta}}
+\end{equation}
+
+We can define this function in \R as
+
+<<dpoig>>=
+dpoig <- function(x, frac, rate, shape) {  
+  b <- (frac^x)*(rate^shape)*gamma(x+shape)
+  c <- factorial(x)*gamma(shape)*(frac+rate)^(x+shape)
+  b/c
+}
+@ %def 
+
+The equivalent function for numerical integration in \R is:
+
+<<dsadgamma>>=
+dsad_gamma <- Vectorize(FUN=
+function(y,a,lambda,shape=0.75,fn=2){
+  poi <- function(y,n){
+    w <- y*log(a*n)-lfactorial(y)-a*n
+    exp(w)
+  }
+  if(fn==1){
+    f1 <- function(n){
+      dexp(n,rate=lambda) * poi(y,n)
+    }
+  }else{  				
+    f1 <- function(n){
+      dgamma(n, shape, rate = lambda, scale = 1/rate) * poi(y,n)
+    }
+  }
+  if (y<10){
+  	integrate(f1,0,100/max(a,lambda))$value
+  }else if (y<50){
+  	k <- 6
+  	integrate(f1,0,k*y/(a+lambda))$value
+  }else{
+  	k <- 1.9920941
+  	integrate(f1,0,k*y/(a+lambda))$value
+  }
+},
+"y")
+@ %def 
+
+The functions seems to give the same results
+
+<<testsdpoig>>=
+frac <- 10^-1
+rate <- 10^-1
+x <- c(1, 10, 50, 100)
+shape <- 0.75
+dsad_gamma(x,frac,rate,shape,fn=2)
+dpoig(x,frac,rate,shape)
+@ %def 
+
 
 \end{document}
