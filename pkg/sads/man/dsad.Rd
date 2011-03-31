@@ -1,56 +1,123 @@
 \name{dsad}
 \alias{dsad}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Poisson and Negative Binomial Sampling of a community sad
-}
-\description{
-A given number of realizations of a probability distribution (species
-abundances in a community) is sampled by a Poisson or Negative Binomial process. 
+\title{Compound Distributions from Poisson or Negative Binomial Sampling}
+\description{Density probability of a Poisson (or Negative Binomial) distribution with
+  expected value (parameters 'lambda' or 'mu') distributed as a continuous random variable
+
 }
 \usage{
-dsad(y, a, lambda)
+dsad(y, frac, sad, samp="Poisson", k, log=FALSE, upper=0.9999, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{y}{
-  Individuals in the sample
+  vector of (non-negative integer) quantiles. For sads modelling, the
+  values are the number of individuals of each species in the sample
 }
-\item{a}{
-  Fraction of the population or community sampled (10e-12<a<=1)
+\item{frac}{
+single numeric '0<frac<=1'; fraction of the community sampled
 }
-\item{lambda}{
-  Vector of (non-negative) rates of the exponential distribution of the
-  sampled population (10e-6<lambda<=1).
+
+\item{sad}{
+name; root name of community sad distribution - e.g., 'lnorm' for the lognormal distribution; 'geom' for the geometric distribution.  
+}
+
+\item{samp}{
+  matched character; sampling process (Poisson or negative
+  binomial). Currently only Poisson implemented.
+}
+
+\item{k}{
+positive; size parameter for the sampling binomial negative. To be used
+when binomial negative sampling is implemented. 
+}
+
+\item{log}{
+  logical; if TRUE, probabilities p are given as log(p).
+}
+
+\item{upper}{
+Proportion of the community sad used to define the upper limit of the integration. '0>upper<=1',  see details.
+}
+
+\item{...}{
+parameters to be passed to the probability function defined
+by the argument sad
 }
 }
 \details{
-This function simulates a random sample taken from a community with S
-species. The expected species abundances in the sampled community follow a
+This function returns the density probability of a Poisson or Negative
+Binomial distribution that have their expected value distributed according another
+probability density. These expected values correspond to the parameters 'lambda'
+for the Poisson and 'mu' for the negative binomial.
+
+In ecology these compound distributions are used to describe
+the abundance distributions of species in samples taken from biological communities.
+The expected species abundances in the sampled community follow a
 probability distribution given by the argument 'sad'. A fraction 'frac' of
 the community is sampled, thus the expected abundance in the sample of each
 species is frac*n, where n is the species' expected abundance in the
 community.
 
-Two sampling processes can be simulated: a Poisson sample,
+Two sampling processes can be used: a Poisson sample,
 where individuals are sampled independently, and Negative Binomial
-sample, where individuals are aggregated over sampling units.
+sample, where individuals are aggregated over sampling units. Currently
+only the Poisson sampling is implemented.
 
-In general terms, this function takes a Poisson or Negative
-Binomial sampling with reposition of a vector of S realizations of a random variable,
-with the sampling intensity given by 'frac'. The resulting values are
-realizations of a Poisson (or a Negative Binomial) random variable where the
-parameter that correspond to the mean (=expected value of the variable) follows a probability
-distribution given by sad.
+In general terms, this function return Poisson or Negative
+Binomial probabilities densities where the parameter that correspond to
+the mean (=expected value of the variable) follows a probability
+distribution given by the argument 'sad'.  Some of these compound
+distributions are well-known models for sads (species abundance distributions), like the poisson-lognormal, or the
+poisson-gamma distributions. The poisson-gamma compounding results in
+the negative binomial distribution, and the Fisher log-series is a limiting case of this distribution.
+
+Taking g(n) as the distribution of abundances of species in the sampled community and
+f(y|n) as the conditional distribution of abundances in the sample given an
+abundance n in the community, the
+general expression for the probability distribution of abundances in the
+sample is
+
+integral_0^Inf g(n) f(y|n) dn
+
+Function dsad uses numerical integration through function integrate to solve this
+expression. To avoid errors for large values of y, the upper limit of
+integration is substituted by the quantile of g(n) at the probability
+level given by the
+argument 'upper'. The default value is 0.9999, thus the upper limit of
+the numerical integration correspond to the abundance value that
+encompasses 99.99\% of the species in the community. Although for many
+integration problems the use of finite limit values should be avoided
+(see help for integrate), in the present case this procedure resulted in
+best approximation to analytical values (see examples below)
+
+These compound probability distributions can be used as sad models under
+three key assumptions: (a) species abundances in the community are independent identically distributed
+variables that follow a theoretical distribution given by the argument
+'sad', (b) sampling is a Poisson or negative binomial proccess with expected
+value 'frac*n', (c) the sampling is with replacement, or the fraction
+sampled is small enough to approximate a sample with replacement. See
+Engen (1977) and Alonso et al. (2008) for critic evaluations.
 }
 \value{
-vector of (zero truncated) abundances in the sample
+vector of (log) probabilities
 }
 \references{
+  
+  Alonso, D. and Ostling, A., and Etienne, R. S. 2008 The implicit
+  assumption of symmetry and the species abundance
+  distribution. \emph{Ecology Letters, 11}: 93-105.
+
+  Engen, S. 1977. Comments on two different approaches to the analysis
+  of species frequency data. \emph{Biometrics, 33}: 205-213.
 
   Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
   and Sons.
   
-  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling species abundances. \emph{Ecology Letters 10}:1037--1045
+  Green,J. and Plotkin, J.B. 2007. A statistical theory for sampling
+  species abundances. \emph{Ecology Letters 10}:1037--1045
+
 }
 \author{
 Paulo I. Prado & Cristiano Strieder
@@ -59,12 +126,14 @@ Paulo I. Prado & Cristiano Strieder
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-dexp, dpois, dpoix
+dpois, dnbinom, integrate
 }
 
 \examples{
 
-##A Poisson sample from a community with an exponential sad
+##Poisson-exponential distribution
+## Community sad is a exponential with mean abundance = 10000 individuals
+## About 
 exp.samp <- dsad(S=200,frac=0.05,exp,"Poisson",rate=1/250,zeroes=T)
 hist(exp.samp, prob=T, xlab="Abundance in the sample")
 lines(0:max(exp.samp),dpoix(0:max(exp.samp),frac=0.05, rate=1/250), col="blue")

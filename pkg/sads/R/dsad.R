@@ -1,21 +1,17 @@
-dsad <- Vectorize(FUN=
-                  function(y,a,lambda){
-                    poi <- function(y,n){
-                      w <- y*log(a*n)-lfactorial(y)-a*n
-                      exp(w)
-                    }
-                    f1 <- function(n){
-                      dexp(n,rate=lambda) * poi(y,n)
-                    }
-					if (y<10){
-						integrate(f1,0,100/max(a,lambda))$value
-					}else if (y<50){
-						k <- 6
-						integrate(f1,0,k*y/(a+lambda))$value
-					}else{
-						k <- 1.9920941
-						integrate(f1,0,k*y/(a+lambda))$value
-					}
-                  },
-                  "y")
-		  
+dsad <- function(y,frac,sad,samp="Poisson",log=FALSE,upper=0.9999,...){
+  qcom <- paste("q",deparse(substitute(sad)),sep="")
+  dcom <- paste("d",deparse(substitute(sad)),sep="")
+  dots <- c(as.name("n"),list(...))
+  uplim <- do.call(qcom,c(upper,list(...)))
+  f1 <- function(z){
+    f2 <- function(n){
+      t1 <- do.call(dcom,dots)
+      t2 <- dpois(z,frac*n)
+      ifelse(t1==0|t2==0,0,t1*t2*1e12)
+    }
+  integrate(f2,0,uplim,rel.tol=sqrt(.Machine$double.eps),subdivisions=500)$value
+  }
+  res <- sapply(y,f1)/(1e12*upper)
+  if(log)log(res) else res
+}
+

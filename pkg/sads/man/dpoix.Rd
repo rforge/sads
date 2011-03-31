@@ -2,7 +2,6 @@
 \alias{dpoix}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Compound Poisson-Exponential Distribution
-
 }
 \description{
 Density for the Poisson-exponential compound probability distribution.
@@ -39,13 +38,12 @@ an abundance of x individuals in a random sample of a fraction frac of
 the community. In the community the species abundances are independent
 random variables that follow an exponential density function.
 
-Hence, a Poisson-exponential
-distribution is a model for species abundances distributions (SAD) under the
-assumptions that (a) species abundances in the community are independent
-identically distributed exponential variables, (b) sampling is a
-Poisson proccess with expected value frac*n, (c) the sampling is with
-replacement, or the fraction sampled is small enough to approximate a
-sample with replacement.
+Hence, a Poisson-exponential distribution is a model for species
+abundances distributions (SAD) under the assumptions that (a) species
+abundances in the community are independent identically distributed
+exponential variables, (b) sampling is a Poisson proccess with expected
+value frac*n, (c) the sampling is with replacement, or the fraction
+sampled is small enough to approximate a sample with replacement.
 
 }
 \value{
