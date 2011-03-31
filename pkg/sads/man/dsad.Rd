@@ -132,9 +132,13 @@ dpois, dnbinom, integrate
 \examples{
 
 ##Poisson-exponential distribution
-## Community sad is a exponential with mean abundance = 10000 individuals
-## About 
-exp.samp <- dsad(S=200,frac=0.05,exp,"Poisson",rate=1/250,zeroes=T)
-hist(exp.samp, prob=T, xlab="Abundance in the sample")
-lines(0:max(exp.samp),dpoix(0:max(exp.samp),frac=0.05, rate=1/250), col="blue")
+## Community sad is a exponential with mean abundance = 1000 individuals
+## Probability for abundances 0 to 50
+x <- 0:50
+y1 <- dsad(x,frac=0.05,exp,samp="Poisson",rate=1/1000)
+## Comparing with the analytical Poisson-exponential
+y2 <- dpoix(x, frac=0.05, rate=1/1000)
+plot(x,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+points(x,y2,pch=3,cex=0.5, type="b")
+legend("topright", c("analytical","numeric"), pch=c(1,3))
 }
