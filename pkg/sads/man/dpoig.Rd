@@ -7,11 +7,11 @@
 Density for the Poisson-gamma compound probability distribution.
 }
 \usage{
-dpoig(x, prob, rate=1, size)
+dpoig(y, prob, rate=1, size)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{y}{
 Vector of (non-negative integer) quantiles.
 }
 \item{prob}{

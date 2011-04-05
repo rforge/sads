@@ -7,11 +7,11 @@
 Density for the Poisson-exponential compound probability distribution.
 }
 \usage{
-dpoix(x, frac, rate, log=FALSE)
+dpoix(y, frac, rate, log=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{y}{
 Vector of (non-negative integer) quantiles.
 }
 \item{frac}{
@@ -31,10 +31,10 @@ where its single parameter, the process mean rate, is frac*n, where n
 is a random variable with exponential distribution. The density function
 is
 
-p(x) = rate*frac^x / (frac + rate)^(x+1)
+p(y) = rate*frac^y / (frac + rate)^(y+1)
 
 In ecology, this distribution gives the probability that a species has
-an abundance of x individuals in a random sample of a fraction frac of
+an abundance of y individuals in a random sample of a fraction frac of
 the community. In the community the species abundances are independent
 random variables that follow an exponential density function.
 

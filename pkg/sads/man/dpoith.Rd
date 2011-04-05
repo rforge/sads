@@ -7,21 +7,21 @@
 Density for the Poisson-exponential compound probability distribution.
 }
 \usage{
-dpoith(x, frac, m=100, M=5000)
+dpoith(y, frac, m=100, M=5000)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
+  \item{y}{
 Vector of (non-negative integer) quantiles.
 }
 \item{frac}{
   Fraction of the population or community sampled (see details)
 }
 \item{m}{
-  Inferior limit of x.
+  Lower limit of y.
 }
 \item{M}{
-  Superior limit of x.
+  Upper limit of y.
 }
 }
 \details{
