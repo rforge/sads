@@ -1,5 +1,5 @@
-library(fAsianOptions)
-library(gtools)
+require(fAsianOptions)
+require(gtools)
 dneth <- function(y, frac, rate, k=2, M=1, m=10) {
    d <- 1/(y*log(M/m))
    b <- (k^k)*gamma(k+y)
@@ -13,5 +13,3 @@ dneth <- function(y, frac, rate, k=2, M=1, m=10) {
    
    d*(b/c*(d1-d2))
 }
-
-dneth(1,0.1,0.01)

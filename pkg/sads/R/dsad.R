@@ -1,4 +1,4 @@
-dsad <- function(y,frac,sad,samp="Poisson",log=FALSE,upper=0.9999,...){
+dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,...){
   qcom <- paste("q",deparse(substitute(sad)),sep="")
   dcom <- paste("d",deparse(substitute(sad)),sep="")
   dots <- c(as.name("n"),list(...))
@@ -14,4 +14,3 @@ dsad <- function(y,frac,sad,samp="Poisson",log=FALSE,upper=0.9999,...){
   res <- sapply(y,f1)/(1e12*upper)
   if(log)log(res) else res
 }
-

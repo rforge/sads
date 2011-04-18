@@ -1,13 +1,13 @@
-\name{dpoith}
-\alias{dpoith}
+\name{dneg}
+\alias{dneg}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Compound Poisson-Exponential Distribution
 }
 \description{
-Density for the Poisson-exponential compound probability distribution.
+Density for the Poisson-gamma compound probability distribution.
 }
 \usage{
-dpoith(y, frac, m=0.1, M=50000)
+dneg(y, frac, rate, k=2, beta=1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,13 +15,21 @@ dpoith(y, frac, m=0.1, M=50000)
 Vector of (non-negative integer) quantiles.
 }
 \item{frac}{
-  Fraction of the population or community sampled (see details)
+  Probability of success in each trial. '0 < prob <= 1'
 }
-\item{m}{
-  Lower limit of y.
+\item{rate}{
+  Vector of (non-negative) rates of the exponential distribution of the
+  sampled population (see details).
 }
-\item{M}{
-  Upper limit of y.
+\item{k}{
+	  target for number of successful trials, or dispersion
+          parameter (the shape parameter of the gamma mixing
+          distribution).  Must be strictly positive, need not be
+          integer.
+}
+\item{beta}{
+  Vector of (non-negative) rates of the exponential distribution of the
+  sampled population (see details).
 }
 }
 \details{

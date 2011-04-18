@@ -3,7 +3,7 @@
 \usepackage[brazil]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{graphicx}
+\usepackage{graphicx,subfigure}
 \usepackage{url}
 \newcommand{\R}{{\sf \,R\,}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -71,7 +71,7 @@ The equivalent function for numerical integration in \R is\footnote{This functio
 
 <<exp, eval=FALSE>>=
 dsad <- Vectorize(FUN=
-                  function(y,a,lambda){
+                  function(y,a=0.05,lambda=1/1000){
                     poi <- function(y,n){
                       w <- y*log(a*n)-lfactorial(y)-a*n
                       exp(w)
@@ -82,11 +82,15 @@ dsad <- Vectorize(FUN=
                     integrate(f1,0,Inf, abs.tol = .Machine$double.eps^0.25/1000000)$value
                   },
                   "y")
+                  
+integrate(dsad,0,Inf)
 @ %def 
 
 The functions seems to give the same results
 
 <<tests>>=
+<<exp>>
+<<dpoix>>
 dsad(0:10,a=0.1,lambda=0.01)
 dpoix(0:10,frac=0.1,rate=0.01)
 @ %def 
@@ -376,7 +380,7 @@ dsad <- Vectorize(FUN=
 @ %def
 \begin{figure}[ht]
   \begin{center}
-<<echo=false,fig=TRUE>>=
+<<cubature,echo=false,fig=TRUE>>=
 j <- 50000
 x <- seq.int(0,j,j*0.01)
 frac <- 10^-1
@@ -395,15 +399,17 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 
 \subsection*{Some aspects of the numerical integration}
 
-One important aspect to verify when dealing with Probability Density Functions - PDFs, is that the sum of probabilities over the entire length is 1. This is tested for both \code{dpoix} and \code{dsad} with the \code{R} function \code{sum}.
+One important aspect to verify when dealing with Probability Density Functions - PDFs, is that the sum of probabilities over the entire length is 1. This is tested for \code{dpoix}:
 
-%<<tests4>>=
-%x <- 0:j
-%y1 <- dpoix(x,frac,rate)
-%y2 <- dsad(x,frac,rate)
-%sum(y1)
-%sum(y2)
-%@
+<<testSum>>=
+dpoix <- function(y, frac=0.05, rate=1/1000, log=FALSE) {  
+    b <- y*log(frac)
+	  m <- log(rate)
+	  n <- (y+1)*log(rate+frac)
+    if(log)b+m-n else exp(b+m-n)
+}
+integrate(dpoix,0,Inf)
+@
 
 
 \subsection*{Compounding with the gamma}
@@ -519,5 +525,64 @@ Some observations:
 \item To check the thoroughly compound solutions of the generic function \code{dsads} against their analytical counterparts (\code{dpoix}, \code{dpoig} \ldots)  
 \item After all checks with Poisson sampling were done and OK, proceed to set the functions for Binomial Sampling (Table 2 of Green \& Plotkin).
 \end{enumerate}
+
+To accomplish the item 5 above, it was measured the difference between the curves, Figure~\ref{fig:dif}:
+
+<<echo=false>>=
+# Parameters of \code{dpoig} redefined to match the parameters of \code{dnbinom}.
+dpoig <- function(y, prob, rate=1, size) {
+  frac <- (1 - prob)/prob
+  shape <- size
+  b <- (frac^y)*(rate^shape)*gamma(y+shape)
+  c <- factorial(y)*gamma(shape)*(frac+rate)^(y+shape)
+  b/c
+}
+@
+
+<<echo=false>>=
+library("zipfR")
+dpoith <- function(y, frac, m=0.1, M=50000) {
+  b <- Igamma(y,frac*m,lower=FALSE) - Igamma(y,frac*M,lower=FALSE)
+  c <- factorial(y)*log(M/m)
+  b/c
+}
+@
+
+\setkeys{Gin}{width=0.48\textwidth}
+
+\begin{figure}[ht]
+  \begin{center}
+  \subfigure[$\code{frac}=0.05$,  $\code{rate}=1/1000$]{
+<<echo=false,fig=TRUE>>=
+y <- 0:150
+y1 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1/1000)
+y2 <- dpoix(y, frac=0.05, rate=1/1000)
+x <- ((y1-y2)^2)^.5
+plot(y,x,ylab="|dsad - dpoix|")
+@
+  }
+  \subfigure[$\code{frac}=0.05$,  $\code{rate}=1/1000$, $\code{prob}=0.5$, $\code{shape}=1$]{
+<<echo=false,fig=TRUE>>=
+y <- 0:150
+y1 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1)
+y2 <- dpoig(y, prob=0.5, rate=1/1000, size=1)
+x <- ((y1-y2)^2)^.5
+plot(y,x,ylab="|dsad - dpoig|")
+@
+  }
+  \subfigure[$\code{frac}=0.05$,  $\code{Theta=c(2,2,2,2)}$]{
+<<echo=false,fig=TRUE>>=
+library(HyperbolicDist)
+y <- 0:150
+y1 <- dsad(y,frac=0.05,hyperb,samp="Poisson",Theta=c(2,2,2,2))
+y2 <- dpoith(y,frac=0.05)
+x <- ((y1-y2)^2)^.5
+plot(y,x,ylab="|dsad - dpoith|")
+@
+  }
+\end{center}
+\caption{Difference between curves.}
+\label{fig:dif}
+\end{figure}
 
 \end{document}

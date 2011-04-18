@@ -7,7 +7,7 @@
 
 }
 \usage{
-dsad(y, frac, sad, samp="poisson", k, log=FALSE, upper=0.9999, ...)
+dsad(y, frac, sad, samp="Poisson", k, log=FALSE, upper=0.9999, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

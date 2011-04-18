@@ -1,5 +1,5 @@
-library(fAsianOptions)
-library(gtools)
+require(gtools)
+require(fAsianOptions)
 dneg <- function(y, frac, rate, k=2, beta=1) {
     s <- length(combinations(k+y-1,k-1)[,1])
     b <- pi*s*(1/sin(pi*(beta-k)))
@@ -17,5 +17,3 @@ dneg <- function(y, frac, rate, k=2, beta=1) {
     
     b/c*(d1-d2)
 }
-
-dneg(100,0.1,0.01)
