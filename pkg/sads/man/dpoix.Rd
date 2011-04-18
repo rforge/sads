@@ -12,13 +12,13 @@ dpoix(y, frac, rate, log=FALSE)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{
-Vector of (non-negative integer) quantiles.
+vector of (non-negative integer) quantiles.
 }
 \item{frac}{
-  Fraction of the population or community sampled (see details)
+  single numeric '0<frac<=1'; fraction of the population or community sampled (see details)
 }
 \item{rate}{
-  Vector of (non-negative) rates of the exponential distribution of the
+  vector of (non-negative) rates of the exponential distribution of the
   sampled population (see details).
 }
 \item{log}{
@@ -27,29 +27,35 @@ Vector of (non-negative integer) quantiles.
 }
 \details{
 A compound Poisson-exponential distribution is a Poisson probability distribution
-where its single parameter, the process mean rate, is frac*n, where n
-is a random variable with exponential distribution. The density function
-is
+where its single parameter lambda, is frac*n, where n
+is a random variable with exponential distribution. Thus, the expected value and variance are E[X] =
+Var[X] = frac*n . The density function is
 
 p(y) = rate*frac^y / (frac + rate)^(y+1)
 
-In ecology, this distribution gives the probability that a species has
-an abundance of y individuals in a random sample of a fraction frac of
-the community. In the community the species abundances are independent
+(Green & Plotkin 2007). For x = 0, 1, 2, ... . In ecology, this distribution gives the probability that a species has
+an abundance of x individuals in a random sample of a fraction 'frac' of the community. In the community the species abundances are independent
 random variables that follow an exponential density function.
 
 Hence, a Poisson-exponential distribution is a model for species
-abundances distributions (SAD) under the assumptions that (a) species
+abundances distributions (SAD) in a sample taken from a community under the assumptions that (a) species
 abundances in the community are independent identically distributed
 exponential variables, (b) sampling is a Poisson proccess with expected
-value frac*n, (c) the sampling is with replacement, or the fraction
-sampled is small enough to approximate a sample with replacement.
+value 'frac*n', (c) individuals are sampled with replacement, or the
+fraction of total individuals sampled is small enough to approximate a
+sample with replacement. See Engen (1977) and Alonso et al. (2008) for critic evaluations.
 
 }
 \value{
 (log) density of the (zero-truncated) density
 }
 \references{
+  Alonso, D. and Ostling, A., and Etienne, R. S. 2008 The implicit
+  assumption of symmetry and the species abundance
+  distribution. \emph{Ecology Letters, 11}: 93-105.
+
+  Engen, S. 1977. Comments on two different approaches to the analysis
+  of species frequency data. \emph{Biometrics, 33}: 205-213.
 
   Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
   and Sons.

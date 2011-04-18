@@ -7,13 +7,13 @@
 
 }
 \usage{
-dsad(y, frac, sad, samp="Poisson", k, log=FALSE, upper=0.9999, ...)
+dsad(y, frac, sad, samp="poisson", k, log=FALSE, upper=0.9999, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{y}{
-  vector of (non-negative integer) quantiles. For sads modelling, the
-  values are the number of individuals of each species in the sample
+  vector of (non-negative integer) quantiles. For  modelling species abundance
+  distributions (SADs), the values are the counts of individuals of each species in the sample
 }
 \item{frac}{
 single numeric '0<frac<=1'; fraction of the community sampled
@@ -24,8 +24,10 @@ name; root name of community sad distribution - e.g., 'lnorm' for the lognormal 
 }
 
 \item{samp}{
-  matched character; sampling process (Poisson or negative
-  binomial). Currently only Poisson implemented.
+  a character string indicating the sampling process (Poisson or
+  negative binomial). One of '"pois"'
+  (default) or '"nbinom"', can be abbreviated. Currently only Poisson
+  sampling is implemented.
 }
 
 \item{k}{
@@ -38,25 +40,25 @@ when binomial negative sampling is implemented.
 }
 
 \item{upper}{
-Proportion of the community sad used to define the upper limit of the integration. '0>upper<=1',  see details.
+proportion of the community species abundance distribution used to define the upper limit of the integration. '0>upper<=1',  see details.
 }
 
 \item{...}{
 parameters to be passed to the probability function defined
-by the argument sad
+by the argument 'sad'
 }
 }
 \details{
 This function returns the density probability of a Poisson or Negative
 Binomial distribution that have their expected value distributed according another
-probability density. These expected values correspond to the parameters 'lambda'
+continuous probability density. These expected values correspond to the parameters 'lambda'
 for the Poisson and 'mu' for the negative binomial.
 
 In ecology these compound distributions are used to describe
-the abundance distributions of species in samples taken from biological communities.
+the abundance distributions of species (SADs) in samples taken from biological communities.
 The expected species abundances in the sampled community follow a
 probability distribution given by the argument 'sad'. A fraction 'frac' of
-the community is sampled, thus the expected abundance in the sample of each
+the community is sampled with replacement, thus the expected abundance in the sample of each
 species is frac*n, where n is the species' expected abundance in the
 community.
 
@@ -67,7 +69,7 @@ only the Poisson sampling is implemented.
 
 In general terms, this function return Poisson or Negative
 Binomial probabilities densities where the parameter that correspond to
-the mean (=expected value of the variable) follows a probability
+the mean (= expected value of the variable) follows a probability
 distribution given by the argument 'sad'.  Some of these compound
 distributions are well-known models for sads (species abundance distributions), like the poisson-lognormal, or the
 poisson-gamma distributions. The poisson-gamma compounding results in
@@ -81,23 +83,22 @@ sample is
 
 integral_0^Inf g(n) f(y|n) dn
 
-Function dsad uses numerical integration through function integrate to solve this
-expression. To avoid errors for large values of y, the upper limit of
+(Pielou 1977, Green & Plotkin 2007). Function 'dsad' uses numerical integration through function 'integrate' to solve this
+expression. To avoid errors for large values of 'y', the upper limit of
 integration is substituted by the quantile of g(n) at the probability
-level given by the
-argument 'upper'. The default value is 0.9999, thus the upper limit of
+level given by the argument 'upper'. The default value is 0.9999, thus the upper limit of
 the numerical integration correspond to the abundance value that
 encompasses 99.99\% of the species in the community. Although for many
 integration problems the use of finite limit values should be avoided
-(see help for integrate), in the present case this procedure resulted in
+(see help for 'integrate'), in the present case this procedure resulted in
 best approximation to analytical values (see examples below)
 
-These compound probability distributions can be used as sad models under
+These compound probability distributions can be used as SAD models under
 three key assumptions: (a) species abundances in the community are independent identically distributed
 variables that follow a theoretical distribution given by the argument
-'sad', (b) sampling is a Poisson or negative binomial proccess with expected
-value 'frac*n', (c) the sampling is with replacement, or the fraction
-sampled is small enough to approximate a sample with replacement. See
+'sad'; (b) sampling is a Poisson or negative binomial proccess with expected
+value frac*n, where n are the abundances in the community (c); individuals are sampled with replacement, or the
+fraction of total individuals sampled is small enough to approximate a sample with replacement. See
 Engen (1977) and Alonso et al. (2008) for critic evaluations.
 }
 \value{
@@ -126,13 +127,16 @@ Paulo I. Prado & Cristiano Strieder
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-dpois, dnbinom, integrate
+  dpoix, dpoig, ... for densities of compound distributions for SADs
+  using analytical given by Green & Plotkin (2007)
+  dpois, dnbinom, integrate
 }
 
 \examples{
 
 ##Poisson-exponential distribution
 ## Community sad is a exponential with mean abundance = 1000 individuals
+## 5\% of the community sampled
 ## Probability for abundances 0 to 50
 x <- 0:50
 y1 <- dsad(x,frac=0.05,exp,samp="Poisson",rate=1/1000)
