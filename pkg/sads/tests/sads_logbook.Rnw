@@ -56,7 +56,7 @@ The equation \ref{eq:integral} solves to:
 
 Using logarithms in the intermediary calculations to avoid overflow, we can define this function in \R as
 
-<<dpoix>>=
+<<dpoix, eval=FALSE>>=
 dpoix <- function(x, frac, rate, log=FALSE) {
 	  b <- x*log(frac)
 	  m <- log(rate)
@@ -69,7 +69,7 @@ dpoix <- function(x, frac, rate, log=FALSE) {
 The equivalent function for numerical integration in \R is\footnote{This function must be passed to \code{Vectorize} to make \code{integrate} work with more than one  value of \code{y}}:
 
 
-<<exp>>=
+<<exp, eval=FALSE>>=
 dsad <- Vectorize(FUN=
                   function(y,a,lambda){
                     poi <- function(y,n){
@@ -152,7 +152,7 @@ legend("topright", c("analytical","numeric"), pch=c(1,3))
 \label{fig:abs.tol}
 \end{figure}
 
-<<echo=false>>=
+<<echo=false, eval=FALSE>>=
 dsad <- Vectorize(FUN=
                   function(y,a,lambda){
                     poi <- function(y,n){
@@ -197,7 +197,7 @@ dpoix(c(200,20000),0.1,0.00001)
 For ranges out of the cited above, then the value of \code{k}, or even the entire solution, may be defined more consistently. This result can be improved, for wide ranges of \code{frac}, \code{rate} and \code{y}, if we specify 
 the upper limit of integration in an another alternative manner. This time the idea is to split the total range of any parameter, \code{y} for example, in two or more parts and then specify the numerical integration for each part, as is shown below.
 
-<<exp2>>=
+<<exp2, eval=FALSE>>=
 dsad <- Vectorize(FUN=
                   function(y,a,lambda){
                     poi <- function(y,n){
