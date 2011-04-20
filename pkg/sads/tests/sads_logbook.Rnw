@@ -557,8 +557,8 @@ dpoith <- function(y, frac, m=0.1, M=50000) {
 y <- 0:150
 y1 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1/1000)
 y2 <- dpoix(y, frac=0.05, rate=1/1000)
-x <- ((y1-y2)^2)^.5
-plot(y,x,ylab="|dsad - dpoix|")
+x <- (y1-y2)/y2
+plot(y,x,ylab="(dsad - dpoix)/dpoix")
 @
   }
   \subfigure[$\code{frac}=0.05$,  $\code{rate}=1/1000$, $\code{prob}=0.5$, $\code{shape}=1$]{
@@ -566,8 +566,8 @@ plot(y,x,ylab="|dsad - dpoix|")
 y <- 0:150
 y1 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1)
 y2 <- dpoig(y, prob=0.5, rate=1/1000, size=1)
-x <- ((y1-y2)^2)^.5
-plot(y,x,ylab="|dsad - dpoig|")
+x <- (y1-y2)/y2
+plot(y,x,ylab="(dsad - dpoig)/dpoig")
 @
   }
   \subfigure[$\code{frac}=0.05$,  $\code{Theta=c(2,2,2,2)}$]{
@@ -576,8 +576,8 @@ library(HyperbolicDist)
 y <- 0:150
 y1 <- dsad(y,frac=0.05,hyperb,samp="Poisson",Theta=c(2,2,2,2))
 y2 <- dpoith(y,frac=0.05)
-x <- ((y1-y2)^2)^.5
-plot(y,x,ylab="|dsad - dpoith|")
+x <- y1-y2/y2
+plot(y,x,ylab="(dsad - dpoith)/dpoith")
 @
   }
 \end{center}
