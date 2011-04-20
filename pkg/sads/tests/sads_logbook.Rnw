@@ -530,9 +530,7 @@ To accomplish the item 5 above, it was measured the difference between the curve
 
 <<echo=false>>=
 # Parameters of \code{dpoig} redefined to match the parameters of \code{dnbinom}.
-dpoig <- function(y, prob, rate=1, size) {
-  frac <- (1 - prob)/prob
-  shape <- size
+dpoig <- function(y, frac, rate, shape) {
   b <- (frac^y)*(rate^shape)*gamma(y+shape)
   c <- factorial(y)*gamma(shape)*(frac+rate)^(y+shape)
   b/c
@@ -565,7 +563,7 @@ plot(y,x,ylab="(dsad - dpoix)/dpoix")
 <<echo=false,fig=TRUE>>=
 y <- 0:150
 y1 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1)
-y2 <- dpoig(y, prob=0.5, rate=1/1000, size=1)
+y2 <- dpoig(y,frac=0.05, rate=1/1000, shape=1)
 x <- (y1-y2)/y2
 plot(y,x,ylab="(dsad - dpoig)/dpoig")
 @
