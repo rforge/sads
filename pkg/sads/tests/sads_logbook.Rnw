@@ -515,6 +515,7 @@ Some observations:
 \item arguments to be passed to the community distribution choosen by \code{sad} vary, and are all under \code{...}. They should be named.
 \item Old functions removed from the directory
 \end{itemize}
+
 \section*{To Do List}
 
 \begin{enumerate}
@@ -572,7 +573,7 @@ plot(y,x,ylab="(dsad - dpoig)/dpoig")
 <<echo=false,fig=TRUE>>=
 library(HyperbolicDist)
 y <- 0:150
-y1 <- dsad(y,frac=0.05,hyperb,samp="Poisson",Theta=c(2,2,2,2))
+y1 <- dsad(y,frac=0.05,trunc,samp="Poisson",spec="hyperb",a=50,b=100,Theta=c(2,2,2,2))
 y2 <- dpoith(y,frac=0.05)
 x <- y1-y2/y2
 plot(y,x,ylab="(dsad - dpoith)/dpoith")
