@@ -1,5 +1,5 @@
 dpoig <- function(y, frac, rate, shape) {
-  b <- (frac^y)*(rate^shape)*gamma(y+shape)
-  c <- factorial(y)*gamma(shape)*(frac+rate)^(y+shape)
-  b/c
+  b <- y*log(frac)+shape*log(rate)+lgamma(y+shape)
+  c <- lfactorial(y)+lgamma(shape)+(y+shape)*log(frac+rate)
+  exp(b-c)
 }
