@@ -1,4 +1,3 @@
-library(fAsianOptions)
 dnex <- function(y, frac, rate, k=0.5) {
     b <- rate*k*kummerM(1+y,2-k,k*rate/frac)
     c <- frac*(k-1)

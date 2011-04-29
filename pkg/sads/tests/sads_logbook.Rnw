@@ -531,6 +531,24 @@ To accomplish the item 5 above, it was measured the difference between the curve
 
 <<echo=false>>=
 # Parameters of \code{dpoig} redefined to match the parameters of \code{dnbinom}.
+qtrunc <- function(p, spec, a = -Inf, b = Inf, ...) {
+  tt <- p
+  G <- get(paste("p", spec, sep = ""), mode = "function")
+  Gin <- get(paste("q", spec, sep = ""), mode = "function")
+  tt <- Gin(G(a, ...) + p*(G(b, ...) - G(a, ...)), ...)
+  return(tt)
+}
+dtrunc <- function(x, spec, a = -Inf, b = Inf, ...) {
+  tt <- rep(0, length(x))
+  g <- get(paste("d", spec, sep = ""), mode = "function")
+  G <- get(paste("p", spec, sep = ""), mode = "function")
+  tt[x>=a & x<=b] <- g(x[x>=a&x<=b], ...)/(G(b, ...) - G(a, ...))
+  return(tt)
+}
+@
+
+<<echo=false>>=
+# Parameters of \code{dpoig} redefined to match the parameters of \code{dnbinom}.
 dpoig <- function(y, frac, rate, shape) {
   b <- (frac^y)*(rate^shape)*gamma(y+shape)
   c <- factorial(y)*gamma(shape)*(frac+rate)^(y+shape)
