@@ -1,4 +1,4 @@
-dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,...){
+dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,trunc=0,...){
   qcom <- paste("q",deparse(substitute(sad)),sep="")
   dcom <- paste("d",deparse(substitute(sad)),sep="")
   dots <- c(as.name("n"),list(...))
@@ -11,6 +11,9 @@ dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,...){
     }
   integrate(f2,0,uplim,rel.tol=sqrt(.Machine$double.eps),subdivisions=500)$value
   }
-  res <- sapply(y,f1)/(1e12*upper)
-  if(log)log(res) else res
+  f <- function(y) {
+     res <- sapply(y,f1)/(1e12*upper)
+     if(log) log(res) else res
+  }
+  f(y)/(1-f(trunc))
 }

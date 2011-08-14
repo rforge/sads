@@ -7,25 +7,27 @@
 Density for the Poisson-gamma compound probability distribution.
 }
 \usage{
-dpoig(y, prob, rate=1, size)
+dpoig(y, frac, rate, shape, trunc=0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{
 Vector of (non-negative integer) quantiles.
 }
-\item{prob}{
+\item{frac}{
   Probability of success in each trial. '0 < prob <= 1'
 }
 \item{rate}{
   Vector of (non-negative) rates of the exponential distribution of the
   sampled population (see details).
 }
-\item{size}{
-	  target for number of successful trials, or dispersion
-          parameter (the shape parameter of the gamma mixing
-          distribution).  Must be strictly positive, need not be
+\item{shape}{
+	  The shape parameter of the gamma mixing
+          distribution.  Must be strictly positive, need not be
           integer.
+}
+\item{trunc}{
+  The most used option is to truncate at zero, since species with zero abundance usually are not known.
 }
 }
 \details{

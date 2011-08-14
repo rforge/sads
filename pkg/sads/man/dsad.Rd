@@ -7,7 +7,7 @@
 
 }
 \usage{
-dsad(y, frac, sad, samp="Poisson", k, log=FALSE, upper=0.9999, ...)
+dsad(y, frac, sad, samp="Poisson", k=0.5, log=FALSE, upper=0.9999, trunc=0, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +41,10 @@ when binomial negative sampling is implemented.
 
 \item{upper}{
 proportion of the community species abundance distribution used to define the upper limit of the integration. '0>upper<=1',  see details.
+}
+
+\item{trunc}{
+  The most used option is to truncate at zero, since species with zero abundance usually are not known.
 }
 
 \item{...}{

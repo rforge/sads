@@ -7,7 +7,7 @@
 Density for the Poisson-exponential compound probability distribution.
 }
 \usage{
-dpoith(y, frac, m=0.1, M=50000)
+dpoith(y, frac, m=1, M=50, trunc=0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,9 @@ Vector of (non-negative integer) quantiles.
 }
 \item{M}{
   Upper limit of y.
+}
+\item{trunc}{
+  The most used option is to truncate at zero, since species with zero abundance usually are not known.
 }
 }
 \details{
