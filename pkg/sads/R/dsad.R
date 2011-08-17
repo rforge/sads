@@ -6,7 +6,11 @@ dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,trunc=0,
   f1 <- function(z){
     f2 <- function(n){
       t1 <- do.call(dcom,dots)
-      t2 <- dpois(z,frac*n)
+      if(samp=="Poisson"){
+        t2 <- dpois(z,frac*n)
+      }else if(samp=="NegBinom"){
+        t2 <- dnbinom(z, size = 1, prob = 1/2)
+      }
       ifelse(t1==0|t2==0,0,t1*t2*1e12)
     }
   integrate(f2,0,uplim,rel.tol=sqrt(.Machine$double.eps),subdivisions=500)$value
@@ -17,3 +21,5 @@ dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,trunc=0,
   }
   f(y)/(1-f(trunc))
 }
+
+dsad(2,1,sad=exp)
