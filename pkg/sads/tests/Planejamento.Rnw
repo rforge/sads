@@ -1,0 +1,556 @@
+\documentclass{article}
+%\documentclass{amsart}
+\usepackage{geometry}
+\geometry{letterpaper}        
+%\usepackage[latin1]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx, subfigure}
+\usepackage{url}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\newcommand{\R}{{\sf \,R\,}}
+\newcommand{\code}[1]{\texttt{#1}}
+\title{\normalsize Pacote sads - Planejamento Etapa 1}
+% \author{\small Paulo Inácio Prado  and Cristiano Strieder}
+
+\date{\vskip -7ex \normalsize {\color{Gray} \today}}
+%\setlength{\textwidth}{6.5in}
+\SweaveOpts{eval=T, keep.source=T} 
+%\VignetteIndexEntry{Errata corrige to 1st edition of the companion book} 
+\begin{document}
+\maketitle
+
+\subfigtopskip=-10pt
+\subfigcapskip=-10pt
+\subfigbottomskip=-5pt
+
+\renewcommand{\labelenumi}{\Roman{enumi}.}
+\renewcommand{\labelenumii}{\arabic{enumii}.}
+\renewcommand{\labelenumiii}{(\roman{enumiii})}
+
+\setlength{\parindent}{10pt} 
+\setlength{\parskip}{2ex}
+
+\thispagestyle{empty} 
+
+\topmargin 0.0in
+\headheight 0.0in  
+\headsep 0.0in
+\textheight 9.0in 
+
+<<dd3 ,echo=false>>=
+library("R.utils")
+library("poilog")
+sourceDirectory("/Users/cstrieder/Dropbox/USP/SVN/sads/pkg/sads/R/")
+@
+
+\setkeys{Gin}{width=0.48\textwidth}
+
+\noindent 1. Códigos das PDFs
+
+\begin{enumerate}
+
+  \item dsad
+    
+    \begin{enumerate}
+    
+      \item implementar amostragem binomial negativa
+      
+        {\color{blue} Implementada, ver rev 67.
+        }
+             
+<<dsad_cumsum_exp>>=
+dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,trunc=0,...){
+  qcom <- paste("q",deparse(substitute(sad)),sep="")
+  dcom <- paste("d",deparse(substitute(sad)),sep="")
+  dots <- c(as.name("n"),list(...))
+  uplim <- do.call(qcom,c(upper,list(...)))
+  f1 <- function(z){
+    f2 <- function(n){
+      t1 <- do.call(dcom,dots)
+      if(samp=="Poisson"){
+        t2 <- dpois(z,frac*n)
+      }else if(samp=="NegBinom"){
+        t2 <- dnbinom(z, size = 1, prob = 1/2)
+      }
+      ifelse(t1==0|t2==0,0,t1*t2*1e12)
+    }
+  integrate(f2,0,uplim,rel.tol=sqrt(.Machine$double.eps),subdivisions=500)$value
+  }
+  f <- function(y) {
+     res <- sapply(y,f1)/(1e12*upper)
+     if(log) log(res) else res
+  }
+  f(y)/(1-f(trunc))
+}
+@
+
+      \item testar se soma cumulativa é sempre equivalente ao argumento upper
+      
+       {\color{blue} A Soma cumulativa tende ao valor do argumento \code{upper}, Figura \ref{fig:cumsum_dsad}. O valor é o mesmo para as distribuições obtidas a partir da \code{dpoix} e \code{dpoig}.
+       }
+       
+<<dsad_cumsum_exp>>=
+  y <- 1:150
+  y2 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1/1000)
+  x <- cumsum(y2)
+  round(x[length(y)],4)
+@
+         
+<<dsad_cumsum_gamma>>=
+  y2 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1)
+  x <- cumsum(y2)
+  round(x[length(y)],4)
+@
+
+\vskip -5ex
+\begin{figure}[H]
+  \begin{center}
+<<dsad_cumsum_figure, echo=false,fig=TRUE>>=
+  v <- list(1:100,1:150,1:200,1:250,1:300,1:350,1:400,1:450,1:500,1:550)
+  cum <- list(1,1,1,1,1)
+  for (i in 1:length(v)) {
+    y2 <- dsad(v[[i]],frac=0.05,exp,samp="Poisson",rate=1/1000)
+    x <- cumsum(y2)
+    cum[i] <- x[length(x)]
+    v[i] <- length(v[[i]])
+  }
+  plot(v, cum, xlab="size of y", ylab="cumsum", ylim=range(cum), cex=0.8)
+@
+  \end{center}
+  \vskip -20pt
+\caption{A soma cumulativa tende ao valor do argumetno \code{upper}.}
+\label{fig:cumsum_dsad}
+\end{figure}
+
+ 
+      \item para as distribuições em que há pdist, testar desigualdade de Massart
+      
+        {\color{red} To be done.
+        }
+      
+    \end{enumerate}
+    
+    
+  \item Soluções analíticas com amostragem Poisson
+  
+    \begin{enumerate}
+    
+      \item dpoix
+      
+        \begin{enumerate}
+        
+          \item testar contra dsad para:
+          
+            \begin{enumerate}
+        
+              \item  1e-6 < frac < 1
+              
+              {\color{blue} A Figura \ref{fig:dpoix_dsad} exemplifica que ambas as curvas, analítica e numérica, são semelhantes para os valores de \code{frac} e \code{rate} considerados. Enquanto que na Figura \ref{fig:dpoix_dsad_error} é mostrada a discrepância entre as duas curvas para estes parâmetros. Entretanto é preciso verificar esta discrepância para a faixa de valores de \code{frac} e \code{rate} indicada acima. Como não podemos fazer um plot desta situação para visualizar a diferença relativa, escolhemos alguns valores dos parâmetros para testar. Para 1e-1~<\code{frac}~<~1 observamos um resultado semelhante ao anterior, já quando \code{frac}=1e-2 a diferenca relativa aumenta para 4e+05, Figuras \ref{fig:dpoix_dsad_frac} e \ref{fig:dpoix_dsad_error_frac}. O mesmo ocorre para valores menores de \code{frac}.
+              }
+
+	            \item	1e-4 <= rate <=1
+              
+              {\color{blue} Fazendo \code{rate}=1e-4 a diferença relativa é da ordem de 1e-4. Mas aumentando para \code{rate}=1e-2 a discrepância cresce para 4e25 e da mesma forma para valores maiores de \code{rate}, Figuras \ref{fig:dpoix_dsad_rate} e \ref{fig:dpoix_dsad_error_rate}.
+              }
+
+            \end{enumerate}
+            
+\begin{figure}
+  \begin{center}
+  \subfigure[\code{frac}=0.05 e \code{rate}=1/1000]{
+<<test1, echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=0.05, rate=1/1000)
+  y2 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1/1000)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad}
+  }
+  \subfigure[\code{frac}=0.05 e \code{rate}=1/1000]{
+<<test2, echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error}
+  }\\ % ----------------------------------------------------------frac
+  \subfigure[\code{frac}=1e-2 e \code{rate}=1/1000]{
+<<test3, echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=1e-2, rate=1/1000)
+  y2 <- dsad(y,frac=1e-2,exp,samp="Poisson",rate=1/1000)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad_frac}
+  }
+  \subfigure[\code{frac}=1e-2 e \code{rate}=1/1000]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error_frac}
+  }\\ % ----------------------------------------------------------rate
+  \subfigure[\code{frac}=0.05 e \code{rate}=1]{
+<<dd2,echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=0.05, rate=1)
+  y2 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad_rate}
+  }
+  \subfigure[\code{frac}=0.05 e \code{rate}=1]{
+<<dd1,echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error_rate}
+  }
+ \end{center}
+\caption{\code{dpoix vs dsad}.}
+\end{figure}
+
+          \item testar se soma cumulativa equivale a upper
+       
+<<dsad_cumsum>>=
+  y <- 0:150
+  y1 <- dpoix(y, frac=0.05, rate=1/1000)
+  x <- cumsum(y1)
+  round(x[length(y)],4)
+@
+ 
+        \end{enumerate}
+      
+      \item dpoig
+      
+        \begin{enumerate}
+        
+          \item testar contra dsad para:
+          
+            \begin{enumerate}
+        
+              \item  1 < shape/rate <= 1e4
+              
+              {\color{blue} Na Figura \ref{fig:dpoig_dsad_shape} é exemplificado que ambas as curvas, analítica e numérica, são semelhantes para os valores de \code{frac}, \code{rate} e \code{shape} considerados e na Figura \ref{fig:dpoig_dsad_shape_error} é mostrada a discrepância.
+            }
+            {\color{red} Considerar a razão \code{shape/rate}?
+            }
+
+              \item	1e-3 < shape < 3
+              
+              {\color{blue} A Figura \ref{fig:dpoig_dsad} mostra a curva obtida quando \code{shape}=2 e a respectiva discrepância, Figura \ref{fig:dpoig_dsad}. Aumentando o valor de shape até 3 o valor da discrepância manten-se da ordem de -1e-4. Por outro lado, se diminuirmos o valor de \code{shape}, tomando \code{shape}=1e-1 ainda obtemos a diferença relativa da ordem de -1e-4. Mas esta diferença cresce até 1.2e+13 quando \code{shape}=1e-3.
+            }
+          
+            \end{enumerate}
+          
+            
+\begin{figure}
+  \begin{center}
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=1]{
+<<ddd, echo=false, fig=TRUE>>=
+  y <- 0:150
+  y1 <- dpoig(y,frac=0.05, rate=1/1000, shape=1)
+  y2 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoig_dsad}
+  }
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=1]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoig)/dpoig")
+@
+  \label{fig:dpoig_dsad_error}
+  }\\ % ----------------------------------------------------------shape+
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=2]{
+<<echo=false,fig=TRUE>>=
+  y1 <- dpoig(y,frac=0.05, rate=1/1000, shape=2)
+  y2 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=2)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoig_dsad_shape}
+  }
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=2]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoig)/dpoig")
+@
+  \label{fig:dpoig_dsad_shape_error}
+  }\\ % ----------------------------------------------------------shape-
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=1e-3]{
+<<echo=false,fig=TRUE>>=
+  y1 <- dpoig(y,frac=0.05, rate=1/1000, shape=1e-3)
+  y2 <- dsad(y,frac=0.05,gamma,samp="Poisson",rate=1/1000,shape=1e-3)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoig_dsad_shape}
+  }
+  \subfigure[\code{frac}=0.05, \code{rate}=1 e \code{shape}=1e-3]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoig)/dpoig")
+@
+  \label{fig:dpoig_dsad_shape_error}
+  }
+\end{center}
+\caption{\code{dpoig vs dsad}.}
+\end{figure}
+     
+          \item Verificar resultados contra a binomial negativa
+          
+          {\color{blue} Figura \ref{fig:dpoig_dnbinom}.}{\color{red} Qual o valor de \code{rate} na \code{dpoig}?}
+        
+\begin{figure}
+  \begin{center}
+  \subfigure[\code{frac}=1, \code{rate}=(1-prob)/prob e \code{shape}=1]{
+<<echo=false,fig=TRUE>>=
+  mu <- 1/100
+  size <- 1/2
+  prob <- size/(size+mu)
+  y1 <- dpoig(y,frac=1, rate=(1-prob)/prob, shape=size)
+  y2 <- dnbinom(y, size, mu)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("dpoig","dnbinom"), pch=c(1,3))
+@
+  \label{fig:dpoig_dnbinom}
+  }
+  \subfigure[\code{frac}=1, \code{rate}=(1-prob)/prob e \code{shape}=1]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dpoig - dnbinom)/dnbinom")
+@
+  \label{fig:dpoig_dnbinom_error}
+  }
+\end{center}
+\caption{\code{dpoig vs dnbinom}.}
+\end{figure}
+ 
+ 
+        \end{enumerate}
+      
+      \item Poisson -lognormal: pacote poilog
+      
+      \begin{enumerate}
+        
+          \item Testar contra dsad Poisson + lognormal contra a dpoilog do pacote poilog para os parametros:
+          
+          {\color{blue} Abaixo é mostrada a saída produzida pelas funções \code{dpoilog} e \code{dsad}. A Figura \ref{fig:dsad_vs_dpoilog} mostra a comparação entre as duas.
+          }
+          
+<<dsad_vs_dpoilog>>=
+  n <- 1:5
+  mu <- 2
+  sig <- 1
+  dpoilog(n, mu, sig)
+  dsad(n,frac=1,lnorm,samp="Poisson",meanlog=mu,sdlog=sig)
+@
+     
+\begin{figure}
+  \begin{center}
+  \subfigure[\code{frac}=1, \code{mu}=2 e \code{sig}=1.]{
+<<dsad_vs_dpoilog_fig, echo=false,fig=TRUE>>=
+  y1 <- dpoilog(y, mu, sig)
+  y2 <- dsad(y,frac=1,lnorm,samp="Poisson",meanlog=mu,sdlog=sig)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("dpoilog","dsad"), pch=c(1,3))
+@
+  \label{fig:dsad_vs_dpoilog}
+  }
+  \subfigure[\code{frac}=1, \code{mu}=2 e \code{sig}=1.]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dpoilog - dsad)/dsad")
+@
+  \label{fig:dsad_vs_dpoilog1_error}
+  }\\ % ----------------------------------------------------------1
+  \subfigure[\code{frac}=1, \code{mu}=1.6 e \code{sig}=1.]{
+<<dsad_vs_dpoilog_fig1, echo=false,fig=TRUE>>=
+  y1 <- dpoilog(y, mu=1.5, sig=1)
+  y2 <- dsad(y,frac=1,lnorm,samp="Poisson",meanlog=1.5,sdlog=1)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("dpoilog","dsad"), pch=c(1,3))
+@
+  \label{fig:dsad_vs_dpoilog1}
+  }
+  \subfigure[\code{frac}=1, \code{mu}=1.6 e \code{sig}=1.]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dpoilog - dsad)/dsad")
+@
+  \label{fig:dsad_vs_dpoilog1_error}
+  }\\ % ----------------------------------------------------------2
+  \subfigure[\code{frac}=1, \code{mu}=2 e \code{sig}=1.]{
+<<dsad_vs_dpoilog_fig2, echo=false,fig=TRUE>>=
+  y1 <- dpoilog(y, mu, sig=0.8)
+  y2 <- dsad(y,frac=1,lnorm,samp="Poisson",meanlog=mu,sdlog=0.8)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("dpoilog","dsad"), pch=c(1,3))
+@
+  \label{fig:dsad_vs_dpoilog2}
+  }
+  \subfigure[\code{frac}=1, \code{mu}=2 e \code{sig}=1.]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dpoilog - dsad)/dsad")
+@
+  \label{fig:dsad_vs_dpoilog2_error}
+  }
+ \end{center}
+\caption{\code{dpoilog vs dsad}.}
+\end{figure}
+
+            \begin{enumerate}
+            
+              \item  1<mu<7
+              
+              {\color{blue} Para 1.7<\code{mu}<6.5 a diferença relativa fica em torno de -0.0001, aumentando fora deste intervalo, Figura \ref{fig:dsad_vs_dpoilog1_error}.
+              }
+              
+              \item  0.01<sigma<3
+              
+              {\color{blue} Para 1<\code{sigma}<2 a diferença relativa fica em torno de -0.0001, aumentando fora deste intervalo, Figura \ref{fig:dsad_vs_dpoilog2_error}.
+              }
+ 
+              \item 1e3 < mu+($sigma^2$)/2 <1e4
+          
+            \end{enumerate}
+          
+          \item Testar rsad contra rpoilog com os mesmo parametros, e
+          
+            \begin{enumerate}
+        
+              \item  1e-6 < frac < 1 (Pensar o que comparar)
+                      
+<<rsad_vs_rpoilog>>=
+  S <- 10
+  rsad(S,frac=1,lnorm,"Poisson",n=2,zeroes=TRUE)
+  rpoilog(S,mu,sig,keep0=TRUE)
+@
+          
+            \end{enumerate}
+          
+        \end{enumerate}
+      
+      \item dpoith
+      
+        \begin{enumerate}
+        
+              \item  Criar funções d,p,q da hyperbolica truncada em M:
+              
+                \begin{enumerate}
+          
+                  \item  Criar uma pdf para a hyperbolica truncada para parametro m (sensus G\&P) = 1: dth=1/(n*ln(M)) para 1<=n<=M; sendp dth = 0 em outros casos
+                  
+                  \item Criar a pth para prob acumulada: pth= log(n)/log(M)
+                  
+                  \item Criar a inversa da pth, que é a funcao de quantil: qth=exp(p*log(M)), onde p é a probabilidade acumulada a partir de zero
+                  
+                  \item Testes:
+                  
+                  1.  Integração numérica de dth de 1 a M deve ser um
+                  
+	                2.	Integração numérica de dth de 1 a x deve ser igual a pth(x)
+                  
+	                3.	qth(pth(x)) = x
+                  
+                \end{enumerate}
+              
+              \item Testar dsad Poisson + hyperbolica truncada contra a dpoith com os parametros:
+              
+                \begin{enumerate}
+        
+                  \item  1 <= M <=5e3
+          
+                \end{enumerate}
+          
+        \end{enumerate}
+      
+    \end{enumerate}
+    
+    \item Soluções analiticas com amostragem BN: os mesmos procedimentos, para as mesmas sads.
+    
+    \begin{enumerate}
+    
+      \item dpoix
+    
+\begin{figure}
+  \begin{center}
+  \subfigure[\code{frac}=0.05 e \code{rate}=1/1000]{
+<<echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=0.05, rate=1/1000)
+  y2 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1/1000)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric", "oi"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad_new}
+  }
+  \subfigure[\code{frac}=0.05 e \code{rate}=1/1000]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error_new}
+  }\\ % ----------------------------------------------------------frac
+  \subfigure[\code{frac}=1e-2 e \code{rate}=1/1000]{
+<<echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=1e-2, rate=1/1000)
+  y2 <- dsad(y,frac=1e-2,exp,samp="Poisson",rate=1/1000)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad_frac_new}
+  }
+  \subfigure[\code{frac}=1e-2 e \code{rate}=1/1000]{
+<<echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error_frac_new}
+  }\\ % ----------------------------------------------------------rate
+  \subfigure[\code{frac}=0.05 e \code{rate}=1]{
+<<dd2,echo=false,fig=TRUE>>=
+  y1 <- dpoix(y, frac=0.05, rate=1)
+  y2 <- dsad(y,frac=0.05,exp,samp="Poisson",rate=1)
+  plot(y,y1, xlab="y", ylab="prob", ylim=range(c(y1,y2)), cex=0.8)
+  points(y,y2,pch=3,cex=0.5, type="b")
+  legend("topright", c("analytical","numeric"), pch=c(1,3))
+@
+  \label{fig:dpoix_dsad_rate_new}
+  }
+  \subfigure[\code{frac}=0.05 e \code{rate}=1]{
+<<dd1,echo=false,fig=TRUE>>=
+  x <- (y1-y2)/y2
+  plot(y,x,ylab="(dsad - dpoix)/dpoix")
+@
+  \label{fig:dpoix_dsad_error_rate_new}
+  }
+ \end{center}
+\caption{\code{dpoix vs dsad}.}
+\end{figure}
+    
+    \end{enumerate}
+ 
+    
+    \item Testes finais: definir testes gerais e como colocá-los no diretório \code{\\tests}, e aplicá-los (ver também apresentação de Scott et al, e ver se há artigos deles.
+    
+\end{enumerate}
+
+\end{document}
