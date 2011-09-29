@@ -1,54 +1,62 @@
 \name{dpoig}
 \alias{dpoig}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compound Poisson-Exponential Distribution
+\title{Compound Poisson-Gamma Distribution
 }
 \description{
 Density for the Poisson-gamma compound probability distribution.
 }
 \usage{
-dpoig(y, frac, rate, shape, trunc=0)
+dpoig(y, frac, rate, shape, trunc=0, log=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{
-Vector of (non-negative integer) quantiles.
+vector of (non-negative integer) quantiles.
 }
 \item{frac}{
-  Probability of success in each trial. '0 < prob <= 1'
+  single numeric '0<frac<=1'; fraction of the population or community sampled (see details)
 }
 \item{rate}{
-  Vector of (non-negative) rates of the exponential distribution of the
-  sampled population (see details).
+  vector of (non-negative) rates of the gamma distribution of the
+  sampled population (see details). Must be stricly positive.
 }
 \item{shape}{
-	  The shape parameter of the gamma mixing
-          distribution.  Must be strictly positive, need not be
-          integer.
+  the shape parameter of the gamma distribution of the
+  sampled population (see details).  Must be positive.
 }
 \item{trunc}{
-  The most used option is to truncate at zero, since species with zero abundance usually are not known.
+  truncation point. The most used option is to truncate at zero, since
+  species with zero abundance usually are not known. Default value NULL
+  means no truncation
+}
+
+\item{log}{
+  logical; if TRUE, probabilities p are given as log(p)
 }
 }
 \details{
-A compound Poisson-exponential distribution is a Poisson probability distribution
+A compound Poisson-gamma distribution is a Poisson probability distribution
 where its single parameter, the process mean rate, is frac*n, where n
-is a random variable with exponential distribution. The density function
-is
-
-p(x) = rate*frac^x / (frac + rate)^(x+1)
+is a random variable with gamma distribution. The density function
+is given by Green & Plotkin (2007) 
 
 In ecology, this distribution gives the probability that a species has
 an abundance of x individuals in a random sample of a fraction frac of
 the community. In the community the species abundances are independent
-random variables that follow an exponential density function.
+random variables that follow an gamma density function.
 
-Hence, a Poisson-exponential distribution is a model for species
+Hence, a Poisson-gamma distribution is a model for species
 abundances distributions (SAD) under the assumptions that (a) species
 abundances in the community are independent identically distributed
-exponential variables, (b) sampling is a Poisson proccess with expected
+gamma variables, (b) sampling is a Poisson proccess with expected
 value frac*n, (c) the sampling is with replacement, or the fraction
 sampled is small enough to approximate a sample with replacement.
+
+The Poisson-gamma distribution is also known as the Negative Binomial
+distribution. The function dpoig is provided to express the Negative
+Binomial explicity as a compound distribution. The Fisher logseries (Fisher 1943) is a limiting case
+where the dispersion parameter of the Negative Binomial tends to zero.
 
 }
 \value{
@@ -56,10 +64,14 @@ sampled is small enough to approximate a sample with replacement.
 }
 \references{
 
+  Fisher, R.A, Corbert, A.S. and Williams, C.B. (1943) The Relation between the number of species and the number of individuals in a random sample of an animal population. The Journal of Animal Ecology, Vol. 12, No. 1. (May, 1943), pp. 42-58.
+
+Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
+   species abundances. \emph{Ecology Letters 10}:1037--1045
+   
   Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
   and Sons.
   
-  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling species abundances. \emph{Ecology Letters 10}:1037--1045
 }
 \author{
 Paulo I. Prado & Cristiano Strieder
@@ -71,5 +83,5 @@ Paulo I. Prado & Cristiano Strieder
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-dexp, dpois
+dgamma, dpois, dnbinom
 }

@@ -1,10 +1,10 @@
 \name{dnex}
 \alias{dnex}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compound Poisson-Exponential Distribution
+\title{Compound Negative Binomial-Exponential Distribution
 }
 \description{
-Density for the Poisson-gamma compound probability distribution.
+Density for the Negative Binomial-Exponential probability distribution.
 }
 \usage{
 dnex(y, frac, rate, k)
@@ -15,36 +15,36 @@ dnex(y, frac, rate, k)
 Vector of (non-negative integer) quantiles.
 }
 \item{frac}{
-  Probability of success in each trial. '0 < prob <= 1'
+  single numeric '0<frac<=1'; fraction of the population or community sampled (see details)
 }
 \item{rate}{
   Vector of (non-negative) rates of the exponential distribution of the
   sampled population (see details).
 }
 \item{k}{
-	  target for number of successful trials, or dispersion
-          parameter (the shape parameter of the gamma mixing
-          distribution).  Must be strictly positive, need not be
+	  dispersion parameter of the negative binomial. Must be strictly positive, need not be
           integer.
 }
 }
-\details{
-A compound Poisson-exponential distribution is a Poisson probability distribution
-where its single parameter, the process mean rate, is frac*n, where n
-is a random variable with exponential distribution. The density function
-is
 
-p(x) = rate*frac^x / (frac + rate)^(x+1)
+\details{
+A compound Negative Binomial-exponential distribution is a Negative Binomial probability distribution
+where its expected value is frac*n, where n is a random variable with exponential distribution. The density function
+is given by Green & Plotkin (2007)
 
 In ecology, this distribution gives the probability that a species has
-an abundance of x individuals in a random sample of a fraction frac of
+an abundance of x individuals in a negative binomial sample of a fraction 'frac' of
 the community. In the community the species abundances are independent
-random variables that follow an exponential density function.
+random variables that follow an exponential density function. Using of a
+negative binomial is justified if individuals of each species are
+aggregated across sampling units. The degree of aggregation depends on
+the argument 'k', which is the dispersion parameter of the negative
+binomial (argument 'size' in dnbinom)
 
-Hence, a Poisson-exponential distribution is a model for species
+Hence, a Negative Binomial-exponential distribution is a model for species
 abundances distributions (SAD) under the assumptions that (a) species
 abundances in the community are independent identically distributed
-exponential variables, (b) sampling is a Poisson proccess with expected
+exponential variables, (b) sampling is a Negative Binomial proccess with expected
 value frac*n, (c) the sampling is with replacement, or the fraction
 sampled is small enough to approximate a sample with replacement.
 
@@ -69,5 +69,5 @@ z
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-dexp, dpois
+dexp, dpois, dnbinom
 }
