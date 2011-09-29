@@ -3,7 +3,7 @@
 \alias{sads}
 \docType{package}
 \title{
-Modeling Species Abundance Distribution 
+Modeling Species Abundance Distributions 
 }
 \description{
 Likelihood-based fit and selection of models for species abundance distributions
@@ -12,26 +12,31 @@ Likelihood-based fit and selection of models for species abundance distributions
 \tabular{ll}{
 Package: \tab sads\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 0.1\cr
 Date: \tab 2011-02-02\cr
-License: \tab What license is it under?\cr
+License: \tab gpl \cr
 LazyLoad: \tab yes\cr
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
+Tools to fit hierachical models for species abundance
+distributions (sads). These models include the theoretical sads in the
+community and the sampling process that generated the observed abundance values.
+
 }
 \author{
-Who wrote it
+Paulo Inácio Prado & Cristiano Strieder
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Maintainer: P.I. Prado  <prado@ib.usp.br>
 ~~ The author and/or maintainer of the package ~~
 }
 \references{
-~~ Literature or other references for background information ~~
+Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
+species abundances. \emph{Ecology Letters 10}:1037--1045
 }
 
-\keyword{ package }
+\keyword{ species abundance distributions, ecology, environmetrics,
+  maximum likelihood estimation }
 \seealso{
-z
+vegan-package, poilog-package, untb-package
 }
 

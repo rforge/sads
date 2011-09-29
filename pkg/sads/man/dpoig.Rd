@@ -65,7 +65,7 @@ sampled is small enough to approximate a sample with replacement.
 Paulo I. Prado & Cristiano Strieder
 }
 \note{
-z
+
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
