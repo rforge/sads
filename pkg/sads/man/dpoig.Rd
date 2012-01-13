@@ -64,13 +64,13 @@ where the dispersion parameter of the Negative Binomial tends to zero.
 }
 \references{
 
-  Fisher, R.A, Corbert, A.S. and Williams, C.B. (1943) The Relation between the number of species and the number of individuals in a random sample of an animal population. The Journal of Animal Ecology, Vol. 12, No. 1. (May, 1943), pp. 42-58.
+ Fisher, R.A, Corbert, A.S. and Williams, C.B. (1943) The Relation between the number of species and the number of individuals in a random sample of an animal population. \emph{The Journal of Animal Ecology, 12(1)}: 42--58.
 
-Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
+  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
    species abundances. \emph{Ecology Letters 10}:1037--1045
    
-  Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
-  and Sons.
+   Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
+   and Sons.
   
 }
 \author{
