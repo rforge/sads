@@ -46,8 +46,8 @@ fit.logser( x, size , rich )
   fit the logseries distribution, given a vector of abundances, or ,
   alternatively, the number of individuals and species in the sample. Alonso et al. (2008,
   supplementary material) showed that this recipe gives the maximum
-  likelihood estimate of Fisher's alpha. Hence, the function also
-  calculates the log-likelihood anda Akaike information index for the
+  likelihood estimate of Fisher's alpha. The function also
+  calculates the log-likelihood and Akaike information index for the
   fit.
 
   Fitting is done through numerical optmization with the 'uniroot'
