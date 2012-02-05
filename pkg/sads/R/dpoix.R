@@ -9,9 +9,10 @@ dpoix <- function(y, frac, rate, trunc=0, log=FALSE) {
         b <- y*log(frac)
         m <- log(rate)
         n <- (y+1)*log(rate+frac)
-        if(log) b+m-n else exp(b+m-n)
+        exp(b+m-n)
       }
-      if(!is.null(trunc)) f(y)/(1-sum(f(0:trunc))) else f(y)
+      if(!is.null(trunc)) samp <- f(y)/(1-sum(f(0:trunc))) else samp <- f(y)
+      if(log)samp else log(samp)
     }
   }
        
