@@ -12,7 +12,7 @@ dpoix <- function(y, frac, rate, trunc=0, log=FALSE) {
         exp(b+m-n)
       }
       if(!is.null(trunc)) samp <- f(y)/(1-sum(f(0:trunc))) else samp <- f(y)
-      if(log)samp else log(samp)
+      if(!log)samp else log(samp)
     }
   }
        
