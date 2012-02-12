@@ -1,13 +1,13 @@
 \name{dsad}
 \alias{dsad}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Compound Distributions from Poisson or Negative Binomial Sampling}
+\title{Numeric approximation to Compound Distributions from Poisson or Negative Binomial Sampling}
 \description{Density probability of a Poisson (or Negative Binomial) distribution with
   expected value (parameters 'lambda' or 'mu') distributed as a continuous random variable
 
 }
 \usage{
-dsad(y, frac, sad, samp="Poisson", k=0.5, log=FALSE, upper=0.9999, trunc=0, ...)
+dsad(y, frac, sad, samp="Poisson", k=0.5, log=FALSE, upper=0.9999, trunc=NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -44,7 +44,7 @@ proportion of the community species abundance distribution used to define the up
 }
 
 \item{trunc}{
-  The most used option is to truncate at zero, since species with zero abundance usually are not known.
+  non-negative integer; truncation point of the compund distribution (see details). 
 }
 
 \item{...}{
@@ -56,7 +56,8 @@ by the argument 'sad'
 This function returns the density probability of a Poisson or Negative
 Binomial distribution that have their expected value distributed according another
 continuous probability density. These expected values correspond to the parameters 'lambda'
-for the Poisson and 'mu' for the negative binomial.
+for the Poisson and 'mu' for the negative binomial. The resulting
+compound distribution is discrete.
 
 In ecology these compound distributions are used to describe
 the abundance distributions of species (SADs) in samples taken from biological communities.
@@ -85,7 +86,7 @@ abundance n in the community, the
 general expression for the probability distribution of abundances in the
 sample is
 
-integral_0^Inf g(n) f(y|n) dn
+f(y) = integral_0^Inf g(n) f(y|n) dn
 
 (Pielou 1977, Green & Plotkin 2007). Function 'dsad' uses numerical integration through function 'integrate' to solve this
 expression. To avoid errors for large values of 'y', the upper limit of
@@ -104,6 +105,10 @@ variables that follow a theoretical distribution given by the argument
 value frac*n, where n are the abundances in the community (c); individuals are sampled with replacement, or the
 fraction of total individuals sampled is small enough to approximate a sample with replacement. See
 Engen (1977) and Alonso et al. (2008) for critic evaluations.
+
+Setting a value to 'trunc' truncates the probability distribution at
+this value, that is probabilities will be calculated as
+f(y)/(1-f(y)). For species-abundance distributions the most used option is to truncate at zero, since species with zero abundance usually are not known.
 }
 \value{
 vector of (log) probabilities

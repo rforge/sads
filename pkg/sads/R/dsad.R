@@ -19,7 +19,6 @@ dsad <- function(y,frac,sad,samp="Poisson",k=0.5,log=FALSE,upper=0.9999,trunc=0,
      res <- sapply(y,f1)/(1e12*upper)
      if(log) log(res) else res
   }
-  f(y)/(1-f(trunc))
+  if(is.null(trunc))f(y)
+  else f(y)/(1-f(trunc))
 }
-
-dsad(2,1,sad=exp)
