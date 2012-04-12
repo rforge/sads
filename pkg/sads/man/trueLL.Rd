@@ -76,6 +76,7 @@ x <- round(rlnorm(500,meanlog=3,sdlog=0.5),1)
 library(MASS)
 logLik(fitdistr(x,"lognormal"))
 ## Which is the sum of log of densities
-sum(dlnorm(x,mean(log(x)),sd(log(x)),log=T))
+sum( dlnorm(x, meanlog=mean(log(x)), sdlog=sd(log(x)), log=TRUE) )
 ## Correct log-likelihood
-trueLL(x,lnorm,precision=0.1,meanlog=mean(log(x)),sdlog=sd(log(x)))
+trueLL(x, lnorm, precision=0.1, meanlog=mean(log(x)), sdlog=sd(log(x)))
+}

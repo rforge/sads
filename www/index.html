@@ -22,17 +22,16 @@
 </div>
 
 <P>
-Written by: P. I. K. L Prado, C. Strieder
+Written by: Paulo I. Prado
 
 <P>
-Work in progress, planning to publish a first version January 2012
+Work in progress, planning to publish a first version August 2012
 <P>
-<b>Motivation:</b> 
-<br>
+<h3>Motivation</h3> 
 Species abundance distributions (SADs) are one of the basic patterns of ecological communities. The empirical distributions are traditionally modelled through probability distributions. Hence, the maximum likelihood method can be used to fit and compare competing models for SADs. A proper model for SADs is hierarchical: it should take into account not only the abundances in the community but also the sampling process. This can be done by mixing two probability distributions, which results in a new distribution. 
 <br>
 <P>
-<b>Features:</b>
+<h3>Features</h3>
 <ul> 
 	<li> Classic SAD models: geometric, logseries, lognormal, brokenstick </li>
 	<li> Numeric methods to create hierarchic models through compound or mixed distributions.</li>
@@ -40,17 +39,33 @@ Species abundance distributions (SADs) are one of the basic patterns of ecologic
 </ul>
 <br>
 
-<b>Installation:</b> 
+<h3>Installation</h3>
+<b>Download from svn and build:</b> 
 <P>
-	install.packages("sads",repos="http://R-Forge.R-project.org")
+<ol>
+  <li> Install <a href="http://svnbook.red-bean.com/index.en.html">SVN</a> </li>
+  <li> Optionally you can install graphical interfaces: <a href="http://tortoisesvn.tigris.org/">Tortoise</a> (Windows), <a href="http://rabbitvcs.org/">Rabbit</a> (Linux), <a href="http://www.lachoseinteractive.net/en/community/subversion/svnx/features/">svnX</a> (Mac)</li>
+  <li>In a directory created for your local copy of the package, type: <br>
+  <CODE> svn checkout svn://scm.r-forge.r-project.org/svnroot/sads/</CODE></li>
+  <li>Move to the sads/pkg/ subdirectory</li>
+  <li>Build a binary typing:<br>
+    <CODE>R CMD build sads</CODE></li>
+ <li>Run R and install the package binary</li>
+</ol>
+  
+</P>
+<b>Dowload and install nightly binary:</b> 
+<P>
+Please note that nightly binaries may be a little outdated. To install these binaries just type in R: <br>  
+<CODE> > install.packages("sads",repos="http://R-Forge.R-project.org")</CODE>
 </P>
 <br>
 
-<b>Project links:</b>
+<h3>Project links</h3>
 <ul> 
 	<li><a href="http://r-forge.r-project.org/projects/sads/">Project page</a> at R-Forge (bugtracker, mailing list, svn)</li>
 	<li><a href="https://r-forge.r-project.org/tracker/?atid=2012&group_id=494&func=browse">Bugtracker</a></li>
-        <li><a href="http://ecologia.ib.usp.br/let/doku.php?id=engl:projects:sads">Research Project page</a> at our Lab Site/li>
+        <li><a href="http://ecologia.ib.usp.br/let/doku.php?id=engl:projects:sads">Research Project page</a> at our Lab Site</li>
 </ul>
 
 
