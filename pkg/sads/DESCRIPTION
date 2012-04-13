@@ -1,8 +1,8 @@
 Package: sads
 Type: Package
 Title: Modelling Species Abundance Distributions
-Version: 0.1.82
-Date: 2011-04-12
+Version: 0.1.83
+Date: 2011-04-13
 Author: Paulo I. Prado
 Maintainer: Paulo <prado@ib.usp.br>
 Depends: R (>= 2.0.0), gtools, fAsianOptions, zipfR
