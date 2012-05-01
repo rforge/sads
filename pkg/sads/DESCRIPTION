@@ -1,11 +1,11 @@
 Package: sads
 Type: Package
 Title: Modelling Species Abundance Distributions
-Version: 0.1.83
+Version: 0.2.01 (Itirapina)
 Date: 2011-04-13
 Author: Paulo I. Prado
 Maintainer: Paulo <prado@ib.usp.br>
-Depends: R (>= 2.0.0), gtools, fAsianOptions, zipfR
-Description: Fit and compare models of species abundance dsitributions.
+Depends: R (>= 2.0.0), gtools, fAsianOptions, zipfR, bbmle, poilog, MASS
+Description: Maximun likelihood tools to fit and compare models of species abundance distributions.
 License: GPL-2
 LazyLoad: yes

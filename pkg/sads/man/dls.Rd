@@ -1,12 +1,12 @@
-\name{dlr}
-\alias{dlr}
+\name{dls}
+\alias{dls}
 \title{Fisher's Logseries Distribution
 }
 \description{
 Density for the Fisher's logseries probability distribution.
 }
 \usage{
-dlr( x, N , alpha)
+dls( x, N , alpha, log=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -59,7 +59,7 @@ dlr( x, N , alpha)
 }
 
 \value{
-(log) density of the (zero-truncated) density
+(log) density of the density
 }
 \references{
 
@@ -75,13 +75,12 @@ dlr( x, N , alpha)
   Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling species abundances. \emph{Ecology Letters 10}:1037--1045
 }
 \author{
-Paulo I. Prado & Cristiano Strieder
+Paulo I. Prado
 }
 \note{
 z
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 dpois, dnbinom, dpoig, fit.logser
