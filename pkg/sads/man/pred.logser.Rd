@@ -58,7 +58,7 @@ e at least two of these values, an error message is returned.
 
 \value{
   A (vector) of expected number of species to each abundance provided by
-  argument 'x'}
+  argument 'x'
 }
 
 \references{
@@ -76,7 +76,7 @@ Paulo I. Prado
 }
 
 \seealso{
-'dpoig', 'dls', 'uniroot', 'fit.logser', fishers.alpha in package untb and 'fisherfit'
+dpoig, dls, uniroot, fit.logser, fishers.alpha in package untb and fisherfit
 in package vegan. 
 }
 
