@@ -1,0 +1,15 @@
+# Export all names
+exportPattern(".")
+
+# Import all packages listed as Imports or Depends
+import(
+  gtools,
+  fAsianOptions,
+  zipfR,
+  bbmle,
+  MASS,
+  poilog
+  )
+## Explicit classes and methods export (Probably redundant, check)
+#exportClasses(fitsad,rad,octav)
+#exportMethods(plot, points)
