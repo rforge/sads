@@ -1,16 +1,16 @@
-fitlogser <- function(x=NULL,size=NULL,rich=NULL,...){
-  if(!is.null(x)){
+fitlogser <- function(x, size, rich, ...){
+  if(!missing(x)){
     S <- length(x)
     N <- sum(x)
-    if(!is.null(size)|!is.null(rich)){
+    if(!missing(size)|!missing(rich)){
       warning(paste("Model fitted with size = ",N," and rich = ",S," \n calculated from supplied abundances"))
     }
   }
-  if(is.null(x)&!is.null(size)&!is.null(rich)){
+  if(missing(x)&!missing(size)&!missing(rich)){
     S <- rich
     N <- size
   }
-  if(is.null(x)&is.null(size)&is.null(rich)){
+  if(missing(x)&missing(size)&missing(rich)){
     stop("Please provide size and species number or a vector of species abundances")
   }
   f1 <- function(a) {
@@ -19,7 +19,7 @@ fitlogser <- function(x=NULL,size=NULL,rich=NULL,...){
   sol <- uniroot(f1, interval = c(1/N, N))
   alfa=sol$root
   X <- N/(N+alfa)
-  if(!is.null(x)){
+  if(!missing(x)){
     LL <- function(alpha)-sum(dls(x,N,alpha,log=T),...)
     result <- mle2(LL,start=list(alpha=alfa),data=list(x=x))
     new("fitsad",result, sad="ls")

@@ -1,24 +1,24 @@
-\name{fit.logser}
-\alias{fit.logser}
+\name{fitlogser}
+\alias{fitlogser}
 \title{Fits Fisher's Logseries Distribution}
 \description{
-Given a vector of species abundances or the total number of
-species and individuals in a sample, fits Fisher's logseries distribution
-by maximum likelihood.
+Fits Fisher's logseries distribution
+by maximum likelihood, from a vector of species abundances or from the total number of
+species and individuals in a sample.
 }
 \usage{
-fit.logser( x, size , rich )
+fitlogser( x, size , rich )
 }
 
 \arguments{
   \item{x}{
-    Vector of (non-negative integer) abundances of species in a sample.
+    vector of (non-negative integer) abundances of species in a sample.
   }
   \item{size}{
-    Total number of individuals in the sample. Ignored if x is supplied.
+    total number of individuals in the sample. Ignored if x is supplied.
   }
   \item{rich}{
-    Total number of species in the sample. Ignored if x is supplied
+    total number of species in the sample. Ignored if x is supplied
   }
 }
 
@@ -52,23 +52,15 @@ fit.logser( x, size , rich )
 
   Fitting is done through numerical optmization with the 'uniroot'
   function, following the code of the function 'fishers.alpha' of the
-  untb package. After that, the fitted value of the alpha parameter is
-  use to get the Log-likelihood the logseries density
-  function 'dls'. 
+  untb package. After that, if abundances were supplied, the fitted value of the alpha parameter is
+  use to get the Log-likelihood from the logseries density
+  function 'dls', using the 'mle2' function from bbmle package. The
+  resulting object is of the class 'fitsad' which inherits from 'mle2'
+  class and thus has methods for extraction of AIC, coeficients and so on (see fitsad-class help). 
 }
 
 \value{
-  A named list with components
-  \item{summary}{
-    named list with components 'N' and 'S' that give the number of
-    individuals and species in the sample; 'alpha' and 'X' give the estimated
-    value of Fisher's alpha and X parameter (see details); 'LogLik' and
-    'AIC' give the log-likelihood and Akaike Information Index for the
-    fitted logseries.
-  }
-  \item{sol}{
-    list returned by the function 'uniroot'
-  }
+  An object fo class 'fitsad'.
 }
 
 \references{
@@ -94,6 +86,6 @@ Paulo I. Prado
 
 
 \seealso{
-'dpoig', 'dls', 'uniroot'; fishers.alpha in package untb and 'fisherfit'
-in package vegan for other functions to fit Fisher's logseries. 
+  'fitsad-class','dpoig', 'dls', 'uniroot'; fishers.alpha in package untb and
+  'fisherfit' in package vegan for other functions to fit Fisher's logseries. 
 }

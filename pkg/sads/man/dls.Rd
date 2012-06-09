@@ -1,25 +1,36 @@
 \name{dls}
 \alias{dls}
+\alias{pls}
 \title{Fisher's Logseries Distribution
 }
 \description{
-Density for the Fisher's logseries probability distribution.
+Density and distribution function for the Fisher's logseries probability distribution.
 }
 \usage{
 dls( x, N , alpha, log=FALSE)
+pls(q, N, alpha, lower.tail=TRUE, log.p=FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{x}{
-    Vector of (non-negative integer) quantiles. Usually a vector of
+    vector of (non-negative integer) quantiles. Usually a vector of abundances of species in a sample.
+  }
+  \item{q}{vector of (non-negative integer) quantiles. Usually a vector of
     abundances of species in a sample.
   }
+  \item{N}{
+    sample size. Usually the total number of individuals in the sample (see details).
+  }
   \item{alpha}{
-    Fisher's alpha parameter (see details)
+    Fisher's alpha parameter (see details).
   }
-  \item{log}{
-    logical; if TRUE, probabilities p are given as log(p)
+  \item{log, log.p}{
+    logical; if TRUE, probabilities p are given as log(p).
   }
+  \item{lower.tail}{
+    logical; if TRUE (default), probabilities are P[X <= x],
+    otherwise, P[X > x].
+    }
 }
 
 \details{
@@ -53,13 +64,14 @@ dls( x, N , alpha, log=FALSE)
   Hence, a logseries distribution is a model for species
   abundances distributions (SAD) under the assumptions that (a) species
   abundances in the community are independent identically distributed
-  logseries variables, (b) sampling is a Poisson proccess, (c) the
-  sampling is with replacement, or the fraction
+  logseries variables, (b) sampling is a Poisson proccess, (c)
+  sampling is done with replacement, or the fraction
   sampled is small enough to approximate a sample with replacement.
 }
 
 \value{
-(log) density of the density
+'dls' gives the (log) density of the density, 'pls' gives the (log)
+distribution function.
 }
 \references{
 
@@ -77,10 +89,6 @@ dls( x, N , alpha, log=FALSE)
 \author{
 Paulo I. Prado
 }
-\note{
-z
-}
-
 
 \seealso{
 dpois, dnbinom, dpoig, fit.logser
