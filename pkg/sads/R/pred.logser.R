@@ -1,5 +1,5 @@
 pred.logser=function(x,alpha,size,rich){
-  if(is.null(alpha)&is.null(size)&is.null(rich)){
+  if(missing(alpha)&missing(size)&missing(rich)){
     stop("Please provide at least two of these: alpha, size, rich")
   }
   if(missing(alpha)){
