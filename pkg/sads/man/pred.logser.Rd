@@ -7,7 +7,7 @@ species and individuals in a sample, returns the number of
 species for each abundance value expected by the Fisher's logseries model
 }
 \usage{
-pred.logser(x, alpha=NULL, size=NULL, rich=NULL)
+pred.logser(x, alpha, size, rich)
 }
 
 \arguments{

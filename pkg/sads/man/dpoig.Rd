@@ -76,11 +76,6 @@ where the dispersion parameter of the Negative Binomial tends to zero.
 \author{
 Paulo I. Prado & Cristiano Strieder
 }
-\note{
-
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 dgamma, dpois, dnbinom
