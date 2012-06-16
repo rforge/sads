@@ -7,7 +7,7 @@ by maximum likelihood, from a vector of species abundances or from the total num
 species and individuals in a sample.
 }
 \usage{
-fitlogser( x, size , rich )
+fitlogser( x, size , rich, ... )
 }
 
 \arguments{
@@ -20,6 +20,9 @@ fitlogser( x, size , rich )
   \item{rich}{
     total number of species in the sample. Ignored if x is supplied
   }
+  \item{...}{
+    further arguments to be passed to mle2
+    }
 }
 
 \details{

@@ -1,4 +1,4 @@
-dls <- function(x, N, alpha, log=F){
+dls <- function(x, N, alpha, log=FALSE){
   if(any(x<1))stop("at least one x less than one")
   if(any(!is.wholenumber(x))) stop("at least one non-integer x")
   X<-N/(N+alpha)

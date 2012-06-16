@@ -24,11 +24,11 @@ community and the sampling process that generated the observed abundance values.
 
 }
 \author{
-Paulo Inácio Prado & Cristiano Strieder
+Paulo I Prado & Cristiano Strieder
 
 Maintainer: P.I. Prado  <prado@ib.usp.br>
-~~ The author and/or maintainer of the package ~~
 }
+
 \references{
 Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
 species abundances. \emph{Ecology Letters 10}:1037--1045

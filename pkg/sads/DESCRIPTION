@@ -1,12 +1,12 @@
 Package: sads
 Type: Package
 Title: Modelling Species Abundance Distributions
-Version: 0.2.03
-Date: 2011-05-18
+Version: 0.2.04
+Date: 2011-06-16
 Author: Paulo I. Prado
 Maintainer: Paulo I. Prado <prado@ib.usp.br>
-Depends: R (>= 2.0.0), gtools, fAsianOptions, zipfR, bbmle, poilog, MASS
-Description: Maximun likelihood tools to fit and compare models of species abundance distributions.
+Depends: MASS, bbmle, gtools, fAsianOptions, zipfR, poilog
+Imports: methods, graphics
+Description: Maximum likelihood tools to fit and compare models of species abundance distributions.
 License: GPL-2
-Collate: dls.R dneg.R dneth.R dnex.R dpoig.R dpoilog.R dpoith.R dpoix.R dsad.R dth.R fitlogser.R fitpoilog.R fitsad.R is.wholenumber.R octavpred.R octav.R plotprofmle.R plot.fitsadlist.R pls.R ppoilog.R pred.logser.R pth.R qth.R radplot.R radpred.R rad.R rsad.R sads-classes.R sads-methods.R trueLL.R 
 LazyLoad: yes

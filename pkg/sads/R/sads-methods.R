@@ -1,3 +1,4 @@
+setGeneric("points")
 setMethod("plot","rad",
           function(x,...){
             dots <- list(...)

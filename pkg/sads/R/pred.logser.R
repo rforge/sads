@@ -1,11 +1,11 @@
-pred.logser=function(x,alpha=NULL,size=NULL,rich=NULL){
+pred.logser=function(x,alpha,size,rich){
   if(is.null(alpha)&is.null(size)&is.null(rich)){
     stop("Please provide at least two of these: alpha, size, rich")
   }
-  if(is.null(alpha)){
-    alpha <- fit.logser(size=size,rich=rich)$summary["alpha"]
+  if(missing(alpha)){
+    alpha <- as.numeric(coef(fitlogser(size=size,rich=rich)))
   }
-  if(is.null(size)){
+  if(missing(size)){
     size <- alpha*exp(rich/alpha) - alpha
   }
   X <- size/(alpha + size)

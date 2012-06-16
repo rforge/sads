@@ -19,7 +19,7 @@ plotprofmle <- function(mleobj, nseg=7, ratio=log(8), which=NULL )
 		plot(interpol, 
 			type="l", 
 			xlab=varname, 
-			ylab="Log-Verossimilhança Negativa Relativa",
+			ylab="Negative Log-Likelihood",
 			col="red",
 		)
 		x.verint = interpol$x[ interpol$y <= ratio ]

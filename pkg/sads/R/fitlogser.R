@@ -20,8 +20,8 @@ fitlogser <- function(x, size, rich, ...){
   alfa=sol$root
   X <- N/(N+alfa)
   if(!missing(x)){
-    LL <- function(alpha)-sum(dls(x,N,alpha,log=T),...)
-    result <- mle2(LL,start=list(alpha=alfa),data=list(x=x))
+    LL <- function(alpha)-sum(dls(x,N,alpha,log=T))
+    result <- mle2(LL,start=list(alpha=alfa),data=list(x=x),...)
     new("fitsad",result, sad="ls")
   }
   else new("fitsad",coef=c(alpha=alfa),fullcoef=c(alpha=alfa),sad="ls")
