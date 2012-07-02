@@ -1,7 +1,7 @@
 radpred <- function(x,sad,coef,...){
   psad <- paste("p",sad,sep="")
   if(missing(coef))dots <- list(...)
-  else dots <- coef
+  else dots <- c(coef, list(...)
   if(sad=="ls"&!"N"%in%names(dots)) dots$N <- sum(x)
   S <- length(x)
   y <- 1:max(x)
