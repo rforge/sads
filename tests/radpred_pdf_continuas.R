@@ -8,16 +8,6 @@ radpredc <- function(x, sad, coef,...){
   qsad <- get(paste("q", deparse(substitute(sad)), sep=""), mode = "function")
   S <- length(x)
   Y <- ppoints(S)## Gerando os dados
-(x1 <- rlnorm(100,meanlog=0.5,sdlog=1))
-##Ajuste
-x1.fit <- fitdistr(x1,"lognormal")
-## Pegando coeficientes
-x1.cf <- coef(x1.fit)
-(x1.radpred <- radpredc(x1,lnorm,coef=as.list(x1.cf)))
-## Grafico rank-abund com observados e esperados
-x1.rad <- rad(x1) ## gera tabela com ranks e abund observadas
-plot(x1.rad) ## plota
-points(x1.radpred) ## Adiciona a linha
   ab <- do.call(qsad,c(list(p=Y,lower.tail=F),dots))
   new("rad",data.frame(rank=1:S, abund=ab))
 }

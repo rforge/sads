@@ -1,6 +1,6 @@
 radpredc <- function(x, sad, coef,...){
   if(missing(coef))dots <- list(...)
-  else dots <- c(coef, list(...)
+  else dots <- c(coef, list(...))
   qsad <- get(paste("q", deparse(substitute(sad)), sep=""), mode = "function")
   S <- length(x)
   Y <- ppoints(S)
