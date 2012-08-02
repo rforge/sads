@@ -1,12 +1,14 @@
 library(sads); library(VGAM) #distrb. zipf (dzipf, pzipf)
-source("trunc.R")
-source("qls.R")
-source("qpoilog.R")
-source("qzipf.R")
+source("../pkg/sads/R/trunc.R")
+source("../pkg/sads/R/qls.R")
+source("../pkg/sads/R/qpoilog.R")
+source("../pkg/sads/R/qzipf.R")
 
-source("dpoilog2.R")
-source("ppoilog2.R")
-source("qpoilog2.R")
+source("../pkg/sads/R/dpoilog2.R")
+source("../pkg/sads/R/ppoilog2.R")
+source("../pkg/sads/R/qpoilog2.R")
+source("../pkg/sads/R/ppoilog2.R")
+source("../pkg/sads/R/ppoilog4.R")
 #a diferenca das funcoes poilog2 para as funcoes poilog e a opcao de truncagem
 
 # teste trunc, dtrunc, ptrunc e qtrunc
@@ -175,13 +177,23 @@ points(q, p1, col=2, pch="*")
 
 ### ppoilog e dpoilog sem opcao de truncagem
 x<- 0:20
+
+
 dpoilog2(x, mu = 1, sig = 1)
 dtrunc("poilog2", x, mu = 1, sig = 1)
 trunc("dpoilog2", x, mu = 1, sig = 1)
 
 dtrunc("poilog2", x, mu = 1, sig = 1, trunc = 0)
 trunc("dpoilog2", x, mu = 1, sig = 1, trunc = 0)
-#undebug(dtrunc)
+
+dpoilog2(x, mu = 1, sig = 1)
+dtrunc("poilog2", x, mu = 1, sig = 1, trunc=0)
+t1 <- trunc("ppoilog4", x, mu = 1, sig = 1, trunc=2)
+t2 <- trunc("ppoilog2", x, mu = 1, sig = 1, trunc=2)
+plot(t1,t2)
+abline(0,1, col="red")
+
+##undebug(dtrunc)
 
 q<-0:20
 ppoilog2(q, mu = 1, sig = 1)
@@ -275,6 +287,7 @@ q<-1:1000
 system.time(d1<-ppoilog(q, 10, 13))  # media de 5.464
 system.time(d2<-ppoilog2(q, 10, 13)) # media de 5.397
 system.time(d3<-ppoilog3(q, 10, 13)) # media de 0.188
+system.time(d4<-ppoilog4(q, 10, 13)) # media de 0.188
 
 q<-1:10
 trunc("ppoilog", q, mu=10, sig=13, trunc=2)
