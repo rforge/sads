@@ -1,0 +1,2 @@
+S	 J	 Theta	 Std_Theta	 I	 Std_I	 m	 Std_m	 loglike_min	 Theta_Ewens	 loglike_Ewens	 Theta2	 Std_Theta2	 I2	 Std_I2	 m2	 Std_m2	 loglike_min2
+240	15609	43.1623	3.07934	16846.4	11887.7	0.519079	0.176156	257.336	40.1465	258.343	2726.45	3258.28	42.3393	3.01834	0.00270533	0.000192339	258.266
