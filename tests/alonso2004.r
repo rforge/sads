@@ -3,9 +3,9 @@ library(bbmle)
 library(untb)
 library(MASS)
 library(sads)
-##Equacao A4: probabilidade de n individuos na amostra de tamanho J,
+##Equacao A5: probabilidade de n individuos na amostra de tamanho J,
 ## dados abund proporcional de x na metacomunidade, e probabilidade de migracao m
-alonsoA4 <- function(n,J,m,x){
+alonsoA5 <- function(n,J,m,x){
   gama <- m*(J-1)/(1-m)
   nu <- J+gama*(1-x)
   lambda <- gama*x
@@ -16,7 +16,7 @@ alonsoA4 <- function(n,J,m,x){
 ## Equacao 10: n esperado de especies com n individuos na amostra
 alonso10 <- function(n,J,m,theta,...){
   f1 <- function(x,N){
-    alonsoA4(n=N,J,m,x)*((1-x)^(theta-1))/x
+    alonsoA5(n=N,J,m,x)*((1-x)^(theta-1))/x
   }
   f2 <- function(N){
   integrate(f1,lower=0, upper=1, N=N,...)$value
@@ -32,9 +32,10 @@ return(mean(x)*(b-a))
 }
 
 ## Equacao 10 com integrador Monte Carlo: n esperado de especies com n individuos na amostra
+## MUITO LENTO não use
 alonso10b <- function(n,J,m,theta,...){
   f1 <- function(x,N){
-    alonsoA4(n=N,J,m,x)*((1-x)^(theta-1))/x
+    alonsoA5(n=N,J,m,x)*((1-x)^(theta-1))/x
   }
   f2 <- function(N){
   mc.integral(f1,a=0, b=1,N=N,...)
