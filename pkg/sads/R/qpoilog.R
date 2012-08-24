@@ -15,8 +15,8 @@ qpoilog<-function(p, mu, sig, S=30){
   for (i in 1:length(p)){
     U1 <- p[i]
     U2 <- round(runif(1, min=1, max=S))
-    if(U1 <= ppoilog(1, mu, sig)){
-      d[i] <- 1
+    if(U1 <= ppoilog(0, mu, sig)){
+      d[i] <- 0
     } else if(U1 >= 0.999999999999999999){
       d[i] <- Inf
     } else{

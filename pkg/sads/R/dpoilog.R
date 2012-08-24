@@ -1,10 +1,9 @@
-dpoilog <- function(x, mu, sig, trunc=0, log = FALSE){
-  if(!is.null(trunc)){
-    if(any(x<=trunc)) stop("at least one x larger than truncation value")
-    iconst <- 1-sum(poilog::dpoilog(0:trunc, mu=mu, sig=sig))
-  }
-  else iconst <- 1
-  y <- (poilog::dpoilog(x, mu, sig))/iconst
-  if(log) return(log(y))
+dpoilog <- function(x, mu, sig, log = FALSE){
+  if (!all(is.finite(c(mu, sig)))) stop("all parameters should be finite")
+  if (sig <= 0) stop("sig must be larger than zero")
+  if (any(x < 0)) stop("at least one x less than zero")
+  if (any(!is.wholenumber(x))) stop("all x must be integers")
+  y <- poilog::dpoilog(x, mu, sig)
+  if (log) return(log(y))
   else return(y)
 }

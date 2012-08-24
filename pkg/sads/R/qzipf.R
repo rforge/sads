@@ -1,5 +1,11 @@
-qzipf<-function(p, N, s){
-  d<-NULL
+qzipf <- function(p, N, s){
+  if (length(N) > 1 | length(s) > 1) stop("vectorization of N and s is currently not implemented")
+  if (!all(is.finite(c(N, s)))) stop("all parameters should be finite")
+  if (N <= 0)  stop("N must be larger than zero")
+  if (s <= 0)  stop("s must be larger than zero")
+  if (any(x < 0)) stop("at least one x less than zero")
+  if (any(!is.wholenumber(x))) stop("at least one non-integer x or all x must be integers")
+  d <- NULL
   busca <- function(U1, U2){
     repeat{
       tt <- pzipf(U2, N, s)
@@ -7,7 +13,7 @@ qzipf<-function(p, N, s){
       a1 <- U2
       U2 <- ifelse(tt<U1, U2+1, U2)
       a2 <- U2
-      if(pzipf(min(a1, a2), N, s) < U1 & U1 <= pzipf(max(a1, a2), N, s)){
+      if (pzipf(min(a1, a2), N, s) < U1 & U1 <= pzipf(max(a1, a2), N, s)){
         return(max(a1, a2))
       }
     }
@@ -15,11 +21,11 @@ qzipf<-function(p, N, s){
   for (i in 1:length(p)){
     U1 <- p[i]
     U2 <- round(runif(1, min=1, max=N)) #problemas no max
-    if(U1 <= pzipf(0, N, s)){
+    if (U1 <= pzipf(0, N, s)){
       d[i] <- 0
-    } else if(U1 >= 0.999999999999999999){
+    } else if (U1 >= 0.999999999999999999){
       d[i] <- Inf
-    } else{
+    } else {
       d[i] <- busca(U1, U2)
     }
   }
