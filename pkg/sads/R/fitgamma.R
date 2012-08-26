@@ -4,8 +4,14 @@ fitgamma <- function(x, trunc, start.value, ...){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if(missing(start.value)){
-    ka <- mean(x)/sd(x)
-    theta <- ka^2
+    ka <- (mean(x)/sd(x))^2
+    theta <- var(x)/mean(x)
+    kahat <- function(k, dados){
+      eq <- length(dados)*(log(k) - log(mean(dados)) - digamma(k)) + sum(log(dados))
+      eq
+    }
+    ka <- uniroot(kahat, interval = c(min(theta, ka), max(theta, ka)), dados = x)$root
+    theta <- mean(x)/ka
   } else{
     ka <- start.value[1]
     theta <-start.value[2]
@@ -15,7 +21,7 @@ fitgamma <- function(x, trunc, start.value, ...){
   } else {
     LL <- function(shape, scale) -sum(trunc("dgamma", x, shape, scale, trunc = trunc, log = TRUE))
   }  
-  result <- mle2(LL, start = list(shape = ka, scale = theta), method="SANN")
-  result <- mle2(LL, start = as.list(result@coef), data = list(x = x), ...)
+  #result <- mle2(LL, start = list(shape = ka, scale = theta), method="SANN")
+  result <- mle2(LL, start = list(shape = ka, scale = theta), data = list(x = x), ...)
   new("fitsad", result, sad="gamma", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

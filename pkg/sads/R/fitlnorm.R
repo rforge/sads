@@ -5,7 +5,7 @@ fitlnorm <- function(x, trunc, start.value, ...){
   }
   if(missing(start.value)){
     meanlog <- sum(log(x))/length(x)
-    sdlog <- sqrt((sum(log(x)-meanlog)^2)/length(x))
+    sdlog <- sqrt(sum((log(x) - meanlog)^2)/(length(x) - 1))
   } else{
     meanlog <- start.value[1]
     sdlog <-start.value[2]
@@ -15,7 +15,7 @@ fitlnorm <- function(x, trunc, start.value, ...){
   } else {
     LL <- function(meanlog, sdlog) -sum(trunc("dlnorm", x, meanlog, sdlog, trunc = trunc, log = TRUE))
   }  
-  result <- mle2(LL, start = list(meanlog = meanlog, sdlog = sdlog), method="SANN")
-  result <- mle2(LL, start = as.list(result@coef), data = list(x = x), ...)
+  #result <- mle2(LL, start = list(), method="SANN")
+  result <- mle2(LL, start = list(meanlog = meanlog, sdlog = sdlog), data = list(x = x), ...)
   new("fitsad", result, sad="lnorm", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

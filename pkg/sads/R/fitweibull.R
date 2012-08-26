@@ -6,6 +6,10 @@ fitweibull <- function(x, trunc, start.value, ...){
   if(missing(start.value)){
     ka <- 1
     theta <- mean(x)
+    for(i in 1:100){
+      theta <- (sum(x^ka)/length(x))^(1/ka)
+      ka <- length(x)/(sum(x^ka * log(x)) - sum(log(x))/theta)
+    }
   } else{
     ka <- start.value[1]
     theta <-start.value[2]
@@ -15,7 +19,6 @@ fitweibull <- function(x, trunc, start.value, ...){
   } else {
     LL <- function(shape, scale) -sum(trunc("dweibull", x, shape, scale, trunc = trunc, log = TRUE))
   }  
-  result <- mle2(LL, start = list(shape = ka, scale = theta), method="SANN")
-  result <- mle2(LL, start = as.list(result@coef), data = list(x = x), ...)
+  result <- mle2(LL, start = list(shape = ka, scale = theta), data = list(x = x), ...)
   new("fitsad", result, sad="weibull", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }
