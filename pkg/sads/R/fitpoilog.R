@@ -1,9 +1,7 @@
 fitpoilog <- function(x, trunc, ...){
   dots <- list(...)
   if (!missing(trunc)){
-    if (min(x)<=trunc){
-      stop("truncation point should be lower than the lowest data value")
-    }
+    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if (missing(trunc)){
     pl.par <- poilogMLE(x, startVals = c(mu = mean(log(x)) + log(0.5), sig = sd(log(x))), zTrunc = F)$par
