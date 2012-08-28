@@ -1,5 +1,6 @@
 ## Para instalar o pacote sads (se o arquivo tar.gz estiver em outro diretorio indique no primeiro argumento)
-install.packages("sads_0.2.03.tar.gz", repos=NULL)# funcionou em linux, creio q nao em outros sistemas
+install.packages("/home/paulo/work/pesquisa/diversidade/projeto_SAD/codigos/sads_0.2.05.tar.gz"
+                 , repos=NULL)# funcionou em linux, creio q nao em outros sistemas
 ## Carregue os pacotes
 library(sads)
 library(untb)

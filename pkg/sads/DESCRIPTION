@@ -1,11 +1,11 @@
 Package: sads
 Type: Package
 Title: Modelling Species Abundance Distributions
-Version: 0.2.04
-Date: 2011-06-16
-Author: Paulo I. Prado
+Version: 0.2.05
+Date: 2012-08-27
+Author: Paulo I. Prado and Murilo Dantas Miranda
 Maintainer: Paulo I. Prado <prado@ib.usp.br>
-Depends: MASS, bbmle, gtools, fAsianOptions, zipfR, poilog
+Depends: MASS, bbmle, poilog
 Imports: methods, graphics
 Description: Maximum likelihood tools to fit and compare models of species abundance distributions.
 License: GPL-2

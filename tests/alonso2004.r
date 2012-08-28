@@ -3,6 +3,7 @@ library(bbmle)
 library(untb)
 library(MASS)
 library(sads)
+library(vegan)
 ##Equacao A5: probabilidade de n individuos na amostra de tamanho J,
 ## dados abund proporcional de x na metacomunidade, e probabilidade de migracao m
 alonsoA5 <- function(n,J,m,x){

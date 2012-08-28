@@ -4,10 +4,10 @@
 }
 \description{
 Calculates the correct likelihood for independent observations of a
-continuous variable that follows a given density function.
+continuous variable that follows a given (truncated) density function.
 }
 \usage{
-trueLL(x, dens, precision=1, log=TRUE,...)
+trueLL(x, dens, precision=1, trunc, log=TRUE,...)
 }
 \arguments{
   \item{x}{
@@ -22,6 +22,14 @@ distribution.
 \item{precision}{
   positive number; measurement precision of the observed values.
 }
+
+\item{trunc}{
+  real number; value from which the density distribution is
+  truncated. Currently only lower-tail truncation (or right-truncation)
+  is implemented. If this argument is ommited the whole
+  distribution is used (default).
+  }
+
 \item{log}{
 logical; convert probabilities to logs and sum them to get
   log-likelihoods? The log-likelihood value is returned if TRUE and the likelihood
@@ -49,7 +57,7 @@ The (log)likelihood function is often defined as any function
   summed to give the log-likelihood function.
 }
 \value{
-(log)-likelihood for the observations, under the probability density
+(log)-likelihood for the observations, under the (truncated) probability density
 model defined by the argument 'dens' and their parameters, passed
 through the argument '...' .
 }

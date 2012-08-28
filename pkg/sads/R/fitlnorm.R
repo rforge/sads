@@ -4,8 +4,8 @@ fitlnorm <- function(x, trunc, start.value, ...){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if(missing(start.value)){
-    meanlog <- sum(log(x))/length(x)
-    sdlog <- sqrt(sum((log(x) - meanlog)^2)/(length(x) - 1))
+    meanlog <- mean(log(x))
+    sdlog <- sd(log(x))
   } else{
     meanlog <- start.value[1]
     sdlog <-start.value[2]
