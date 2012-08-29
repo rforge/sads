@@ -1,32 +1,16 @@
-ptrunc <- function(f, q, trunc, ...){
-  log.p <- FALSE
-  lower.tail <- FALSE
-  dots <- c(list(...))
-  if("log.p"%in%names(dots)){
-    log.p <- dots$log.p
-    dots$log.p <- FALSE
-  }
-  if("log"%in%names(dots)){
-    log.p <- dots$log
-    dots$log <- FALSE
-  }
-  dots2 <- dots
-  if("lower.tail"%in%names(dots2)){
-    lower.tail <- dots2$lower.tail
-    dots2$lower.tail <- FALSE
-  }
+ptrunc <- function(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE){
   tt <- q
   pf <- get(paste("p", f, sep = ""), mode = "function")
   if(!missing(trunc)){
     aa <- rep(trunc, length(q))
-    tt <- do.call(pf, c(list(q = apply(cbind(q, aa), 1, max)), dots))
+    tt <- do.call(pf, c(list(q = apply(cbind(q, aa), 1, max)), coef,lower.tail=lower.tail))
     if(lower.tail){
-      tt <- tt - do.call(pf, c(list(q = aa), dots))
+      tt <- tt - do.call(pf, c(list(q = aa), coef))
     }
-    tt <- tt/(1 - do.call(pf, c(list(q = aa), dots2)))
+    tt <- tt/(1 - do.call(pf, c(list(q = aa), coef)))
   }
   else{
-    tt <- do.call(pf, c(list(q = q), dots))
+    tt <- do.call(pf, c(list(q = q), coef,lower.tail=lower.tail))
   }
   if(log.p)return(log(tt)) else return(tt)
 }

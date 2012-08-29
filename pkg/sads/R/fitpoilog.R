@@ -1,10 +1,10 @@
-fitpoilog <- function(x, trunc=0, ...){
+fitpoilog <- function(x,trunc, ...){
   dots <- list(...)
   if (!missing(trunc)){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
     else{
       pl.par <- poilogMLE(x, startVals = c(mu = mean(log(x)) + log(0.5), sig = sd(log(x))))$par
-      LL <- function(mu, sig) -sum(trunc("dpoilog", x, mu, sig, trunc = trunc, log = TRUE))
+      LL <- function(mu, sig) -sum(dtrunc("poilog", x=x, coef=list(mu=mu,sig=sig), trunc = trunc, log = TRUE))
       result <-  mle2(LL, start = as.list(pl.par), data = list(x = x), ...)
     }
   }
