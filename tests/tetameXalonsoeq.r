@@ -5,10 +5,10 @@ library(bbmle)
 library(MASS)
 library(poilog)
 
-## A&M equation A4:
+## A&M equation A5:
 ## Probability of a given abundance n in a sample of size J for a species that
 ## has proportional abundance x in a metacommunity and migration probability m
-alonsoA4 <- function(n,J,m,x){
+alonsoA5 <- function(n,J,m,x){
   gama <- m*(J-1)/(1-m)
   nu <- J+gama*(1-x)
   lambda <- gama*x
@@ -17,10 +17,10 @@ alonsoA4 <- function(n,J,m,x){
 }
 
 ## A&M equation 10: expected number of species with abundance =n in a sample of size J
-## This the product of equation A4 and eqution 9, integrated from zero to 1
+## This the product of equation A5 and eqution 9, integrated from zero to 1
 alonso10 <- function(n,J,m,theta,...){
   f1 <- function(x,N){
-    alonsoA4(n=N,J,m,x)*((1-x)^(theta-1))/x
+    alonsoA5(n=N,J,m,x)*((1-x)^(theta-1))/x
   }
   f2 <- function(N){
   integrate(f1,lower=0, upper=1, N=N,...)$value
