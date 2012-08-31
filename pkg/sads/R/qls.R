@@ -1,5 +1,10 @@
-qls<-function(p, N, alpha){
+qls<-function(p, N, alpha, lower.tail = TRUE, log.p = FALSE){
+  if (length(N) > 1) stop("vectorization of N is not implemented")
+  if (!all(is.finite(c(N, alpha)))) stop("all parameters should be finite")
+  if (N <= 0)  stop("N must be larger than zero")
   d<-NULL
+  if (log.p) p <- exp(p)
+  if(!lower.tail) p <- 1 - p
   busca <- function(U1, U2){
     repeat{
       tt <- pls(U2, N, alpha)
