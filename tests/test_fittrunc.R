@@ -1,4 +1,6 @@
-library(sads); library(VGAM) #distrb. zipf (dzipf, pzipf)
+library(sads)
+library(VGAM) #distrb. zipf (dzipf, pzipf)
+library(untb)
 source("../sads/pkg/sads/R/trunc.R")
 source("../sads/pkg/sads/R/dtrunc.R")
 source("../sads/pkg/sads/R/ptrunc.R")
@@ -6,7 +8,7 @@ source("../sads/pkg/sads/R/qtrunc.R")
 source("../sads/pkg/sads/R/dls.R")
 source("../sads/pkg/sads/R/pls.R")
 source("../sads/pkg/sads/R/qls.R")
-source("../sads/pkg/sads/R/fitlogser.R")
+source("../sads/pkg/sads/R/fitls.R")
 source("../sads/pkg/sads/R/dpoilog.R")
 source("../sads/pkg/sads/R/ppoilog.R")
 source("../sads/pkg/sads/R/qpoilog.R")
@@ -15,13 +17,15 @@ source("../sads/pkg/sads/R/dzipf.R")
 source("../sads/pkg/sads/R/pzipf.R")
 source("../sads/pkg/sads/R/qzipf.R")
 source("../sads/pkg/sads/R/fitzipf.R")
-
+source("../sads/pkg/sads/R/dpower.R")
+source("../sads/pkg/sads/R/ppower.R")
+source("../sads/pkg/sads/R/qpower.R")
+source("../sads/pkg/sads/R/fitpower.R")
 
 #source("../sads/pkg/sads/R/dpoilog2.R")
 #source("../sads/pkg/sads/R/ppoilog2.R")
 #source("../sads/pkg/sads/R/ppoilog4.R")
 #source("../sads/pkg/sads/R/qpoilog2.R")
-library(untb)
 setClass("fitsad", representation("mle2", sad="character", trunc="numeric"))
 
 ##################################################################################
@@ -107,8 +111,8 @@ attributes(model2)
 ##com truncagem
 x1 <- samp1[samp1 != 1]
 
-nvl1 = function(alpha) -sum(trunc("dls", x1, N = sum(x1), trunc=1, alpha, log=TRUE))
-nvl1.mle = mle2(nvl1, start=list(alpha = 13)) 
+nvl1 = function(alpha) -sum(dtrunc("ls", x1, coef = as.list(N = sum(x1), alpha = alpha), trunc=1, log=TRUE))
+nvl1.mle = mle2(nvl1, start=list(alpha = 13), data = list(x = x)) 
 summary(nvl1.mle)                            
 logLik(nvl1.mle)
 
@@ -657,7 +661,7 @@ abline(h=1.47503, col="red", lty=2)
 ####################################################################################
 ####### Ajuste Zipf
 ####################################################################################
-dzipf3 <- function(x, N, s, log = F) {
+dzipf <- function(x, N, s, log = F) {
   if (any(x < 1)) warning("the zipf's distribution is not set to zero")
   if (s <= 0) stop("s must be greater than zero")
   if (N < 1) stop("N must be positive integer")
@@ -671,7 +675,7 @@ dzipf3 <- function(x, N, s, log = F) {
   else return(exp(y))
 }
 
-pzipf3 <- function(q, N, s){
+pzipf <- function(q, N, s){
   if (s <= 0) stop("s must be greater than zero")
   if (N < 1) stop("N must be positive integer")
   y <- NULL
@@ -681,7 +685,7 @@ pzipf3 <- function(q, N, s){
   return(exp(y))
 }
 
-fitzipf3 <- function(x, N, trunc = 0, start.value, upper = 20, ...){
+fitzipf <- function(x, N, trunc = 0, start.value, upper = 20, ...){
   if (min(x)<=trunc){
     stop("truncation point should be lower than the lowest data value")
   }
@@ -703,32 +707,45 @@ fitzipf3 <- function(x, N, trunc = 0, start.value, upper = 20, ...){
     sss <- start.value
   }
   if(trunc >= 1){
-    LL <- function(s) -sum(trunc("dzipf3", x, N, s, trunc = trunc, log = TRUE))
+    LL <- function(s) -sum(trunc("dzipf", x, N, s, trunc = trunc, log = TRUE))
     result <-  mle2(LL, start = list(s = sss), data = list(x = x), method = "Brent", lower = 0, upper = upper, ...)
   } else{
     LL <-function(s) sum(x*(((1:N)^s)*(sum(1/(1:N)^s))))
     result <- mle2(LL, start = list(s = sss), data = list(x = x), method="Brent", lower = 0, upper = upper, ...)
-    #LL <- function(s) -sum(dzipf3(x, N, s, log = TRUE))
+    #LL <- function(s) -sum(dzipf(x, N, s, log = TRUE))
     #result <- mle2(LL, start = list(s = sss), data = list(x = x), method="Brent", lower = 0, upper = upper, ...)
   }
   if(abs(as.numeric(result@coef) - upper) < 0.001) warning("Check the upper limit of the function")
   new("fitsad", result, sad="zipf", trunc = trunc)
 }
 
-model1 <- fitzipf3(x1)
-model2 <- fitzipf3(samp1)
+lzipf <- function(s, N) -s*log(1:N) - log(sum(1/(1:N)^s))
+model1 <- fitzipf(samp1)
 summary(model2)
-
 p <- samp1/sum(samp1)
 plot(1:length(p), sort(p, d=T), log="xy")
 lines(1:length(p), exp(lzipf(1.480988, length(p))), col = 2)
-lines(1:length(p), exp(lzipf(1.475812, length(p))), col = 3)
-lines(1:length(p), exp(lzipf(0.954095, length(p))), col = 4)
+lines(1:length(p), exp(lzipf(0.954095, length(p))), col = 3)
+plot(profile(model1))
 
+model2 <- fitzipf(x1)
+summary(model2)
+p <- x1/sum(x1)
+plot(1:length(p), sort(p, d = T))
+lines(1:length(p), exp(lzipf(1.335487, length(p))), col = 2)
+lines(1:length(p), exp(lzipf(0.616874, length(p))), col = 3)
 plot(profile(model2))
 
-fitzipf3(x1, trunc = 1)
+model3 <- fitzipf(x1, trunc = 1)
+summary(model3)
+p <- x1/sum(x1)
+plot(1:length(p), sort(p, d=T))
+lines(1:length(p), exp(lzipf(1.335487, length(p))), col = 2)
+lines(1:length(p), exp(lzipf(0.86503, length(p))), col = 3)
+plot(profile(model3))
 
+
+################################## Outros testes
 LL2 <- function(s) {
   S <- exp(s)
   -sum(dzipf2(samp1, N = length(samp1), S, log=TRUE))
@@ -891,7 +908,7 @@ fitgamma <- function(x, trunc, start.value, ...){
   }
   if(missing(start.value)){
     ka <- mean(x)/sd(x)
-    theta <- ka^2
+    theta <- 0.5/(log(mean(x))-mean(log(x)))
   } else{
     ka <- start.value[1]
     theta <-start.value[2]
@@ -905,6 +922,29 @@ fitgamma <- function(x, trunc, start.value, ...){
   result <- mle2(LL, start = as.list(result@coef), data = list(x = x), ...)
   new("fitsad", result, sad="gamma", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }
+
+ka[1] <- (mean(samp1)/sd(samp1))^2
+theta[1] <- var(samp1)/mean(samp1)
+for(i in 2:100){
+  theta[i] <- mean(samp1)/ka[i-1]
+  ka[i] <- exp(log(mean(samp1)/(prod(samp1)^(1/length(samp1)))) + digamma(ka[i-1]))
+}
+
+thetahat <- (mean(samp1^2) - (mean(samp1))^2)/mean(samp1)
+kahat <- (mean(samp1)^2)/(mean(samp1^2) - (mean(samp1)^2))
+
+kahatfunc <- function(ka, xvec){
+  n <- length(xvec)
+  eq <- -n*digamma(ka)-n*log(mean(xvec))+n*log(ka)+sum(log(xvec));
+  eq;
+}
+
+kahatfunc(0.06215943, samp1)
+kahatfunc(791, samp1)
+karoot <- uniroot(kahatfunc, interval=c(.0621,791), xvec=samp1)
+
+ka <- karoot$root
+theta <- mean(samp1)/ka
 
 fitgamma(samp1)
 attributes(fitgamma(samp1, start = c(0.345477, 0.0070250)))
@@ -1008,3 +1048,68 @@ fitgeom(samp2, start = 0.2821154, trunc = 0, control = list(maxit=1000))
 attributes(fitgeom(x2, trunc = 1))
 fitgeom(x2, start = 0.2893861, trunc = 1)
 fitgeom(x2, start = 0.2893861, trunc = 1, control = list(maxit=1000))
+
+##############################################################################################
+### Power-law/Pareto Distribution
+###############################################################################################
+dpower <- function(x, s, log = FALSE){
+  if (any(x < 1)) warning("the zipf's distribution is not set to zero")
+  if (s <= 0) stop("s must be greater than zero")
+  if (!any(is.wholenumber(x))) warning("x must be integer")
+  y <- NULL
+  for (i in 1:length(x)){
+    if(!is.wholenumber(x[i])) y[i] <- -Inf
+    else y[i] <- -s*log(x[i])-log(zeta(s))
+  }
+  if(log) return(y)
+  else return(exp(y))
+}
+
+dpower(1:10, 2.34)
+dzeta(1:10, 2.34)
+dpower(1:10, 3.34)
+
+dzeta(1:10, 2.34, log = T)
+dpower(1:10, 3.34, log = T)
+
+ppower <- function(q, s){
+  if (s <= 0) stop("s must be greater than zero")
+  y <- NULL
+  for (i in 1:length(q)){
+    y[i] <- log(sum(1/(1:q[i])^s)) - log(zeta(s))
+  }
+  return(exp(y))
+}
+
+plot(1:10, ppower(1:10, 2.34), ylim=c(0, 1))
+lines(1:10, dpower(1:10, 2.34), t="l", col=2)
+
+fitpower <- function(x, trunc, start.value, upper = 20, ...){
+  if (!missing(trunc)){
+    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
+  }
+  if (missing(start.value)){
+    shat <- 2
+  } else{
+    shat <- start.value
+  }
+  if (missing(trunc)){
+    LL <- function(s) -sum(dpower(x, s, log = T))
+  } else{
+    LL <- function(s) -sum(trunc("dpower", x, s, trunc = trunc, log = T))
+  }
+  result <- mle2(LL, start = list(s = shat), data = list(x = x), method = "Brent", lower = 1, upper = upper, ...)
+  if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("check the upper limit of the function")
+  new("fitsad", result, sad = "power", trunc = ifelse(missing(trunc), NaN, trunc))
+}
+
+fitpower(samp1)
+attributes(fitpower(samp1, start = 0.0280350, upper = 1.4))
+fitpower(x1, trunc = 1)
+attributes(fitpower(x1, start = 1.2893861, trunc = 1))
+fitpower(samp1, start = 0.0280350, upper = 1.4)
+
+fitpower(samp2)
+attributes(fitpower(samp2, start = 1.0280350))
+fitpower(x2, trunc = 1)
+attributes(fitpower(x2, start = 1.2893861, trunc = 1))

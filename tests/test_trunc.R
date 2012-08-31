@@ -712,3 +712,229 @@ p<-ppoilog(q, 100, 2)
 qpoilog(p, 100, 2)
 qpoilog2(p, 100, 2)
 qpoilog2(p, 100, 2, mx=100)
+
+#Power
+qpower2<-function(p, s){
+  d<-NULL
+  busca <- function(U1, U2){
+    repeat{
+      tt <- ppower(U2, s)
+      U2 <- ifelse(tt>=U1, U2-1, U2)
+      a1 <- U2
+      U2 <- ifelse(tt<U1, U2+1, U2)
+      a2 <- U2
+      if(ppower(min(a1, a2), s) < U1 & U1 <= ppower(max(a1, a2), s)){
+        return(max(a1, a2))
+      }
+    }
+  }
+  for (i in 1:length(p)){
+    U1 <- p[i]
+    U2 <- round(runif(1, min=1, max=length(p)))
+    if(U1 <= ppower(1, s)){
+      d[i] <- 1
+    } else if (U1 >= 0.999999999999999999){
+      d[i] <- Inf
+    } else{
+      d[i] <- busca(U1, U2)
+    }
+  }
+  return(d)
+}
+
+qpower3<-function(p, s, mx=1600){
+  q  <- 1:mx
+  tt <- p
+  pv <- ppower(q, s)
+  v <- approxfun(pv, q, method="linear") #linear e default
+  for(i in 1:length(tt)){
+    if(tt[i] <= ppower(1, s)){
+      tt[i] <- 1
+    } else if(tt[i] >= 0.999999999999999999){
+      tt[i] <- Inf
+    }else {
+      tt[i] <- ceiling(v(tt[i]))
+    }
+  }
+  return(tt)
+}
+
+p<-seq(0, 1, 0.01)
+system.time(q0<-qpower(p, 2)) #media 2.548
+system.time(q1<-qpower2(p, 2)) #media 2.756
+system.time(q2<-qpower3(p, 2)) #media 0.624
+plot(p, q0)
+points(p, q1, col=2)
+points(p, q2, col=3)
+
+system.time(q1<-qls(p, 100, 2)) #media 6.601
+system.time(q2<-qls2(p, 100, 2)) #media 0.112
+plot(p, q1)
+points(p, q2, col=2)
+
+q<-1:15
+p<-ppower(q, 2)
+qpower(p, 2)
+qpower2(p, 2)
+qpower3(p, 2)
+
+q<-3:15
+p<-ppower(q, 2)
+qpower(p, 2)
+qpower2(p, 2)
+qpower3(p, 2)
+
+q<-1:150
+p<-ppower(q, 2)
+qpower(p, 2)
+qpower2(p, 2)
+qpower3(p, 2)
+
+
+###############################################################################
+## Testes Extras
+###############################################################################
+#p-functions
+q <- 1:20
+pls(q, 100, 3.5)
+pls(q, 100, 3.5, log = T)
+log(pls(q, 100, 3.5))
+
+ppoilog(q, 1, 2)
+ppoilog(q, 1, 2, log = T)
+log(ppoilog(q, 1, 2))
+
+ppower(q, 2)
+ppower(q, 2, log = T)
+log(ppower(q, 2))
+
+pzipf(q, 20, 2)
+pzipf(q, 20, 2, log = T)
+log(pzipf(q, 20, 2))
+
+#q-functions
+q <- 1:20
+p0 <- pls(q, 100, 3.5)
+qls(p0, 100, 3.5)
+p1 <- pls(q, 100, 3.5, log = T)
+qls(p1, 100, 3.5, log = T)
+p0 <- pls(q, 100, 3.5, lower = F)
+qls(p0, 100, 3.5, lower = F)
+p1 <- pls(q, 100, 3.5, lower = F, log = T)
+qls(p1, 100, 3.5, lower = F, log = T)
+
+p0 <- ppoilog(q, 1, 2)
+qpoilog(p0, 1, 2)
+p1 <- ppoilog(q, 1, 2, log = T)
+qpoilog(p1, 1, 2, log = T)
+p0 <- ppoilog(q, 1, 2, lower = F)
+qpoilog(p0, 1, 2, lower = F)
+p1 <- ppoilog(q, 1, 2, lower = F, log = T)
+qpoilog(p1, 1, 2, lower = F, log = T)
+
+p0 <- ppower(q, 2)
+qpower(p0, 2)
+p1 <- ppower(q, 2, log = T)
+qpower(p1, 2, log = T)
+p0 <- ppower(q, 2, lower = F)
+qpower(p0, 2, lower = F)
+p1 <- ppower(q, 2, lower = F, log = T)
+qpower(p1, 2, lower = F, log = T)
+
+p0 <- pzipf(q, 20, 2)
+qzipf(p0, 20, 2)
+p1 <- pzipf(q, 20, 2, log = T)
+qzipf(p1, 20, 2, log = T)
+p0 <- pzipf(q, 20, 2, lower = F)
+qzipf(p0, 20, 2, lower = F)
+p1 <- pzipf(q, 20, 2, lower = F, log = T)
+qzipf(p1, 20, 2, lower = F, log = T)
+
+
+x <- 0:10
+dtrunc("pois", x, coef = 2)
+dpois(x, 2) 
+p1 <- dtrunc("pois", x, coef = 2, log=T)
+dpois(x, 2, log = T)
+
+(q0 <- ptrunc("pois", x, coef = 2))
+ppois(x, 2)
+(q1 <- ptrunc("pois", x, coef = 2, log = T))
+ppois(x, 2, log = T)
+
+qtrunc("pois", q0, lambda = 2)
+qtrunc("pois", q1, lambda = 2)
+qtrunc("pois", q0, lambda = 2, log = T)
+qtrunc("pois", q1, lambda = 2, log = T)
+
+
+#################################################
+### Truncagem
+#################################################
+x <- 1:15
+dtrunc("pois", x, coef = 2)
+dpois(x, 2)
+dtrunc("pois", x, coef = 2, log = T)
+dpois(x, 2, log = T)
+ptrunc("pois", x, coef = 2)
+ppois(x, 2)
+ptrunc("pois", x, coef = 2, log = T)
+ppois(x, 2, log = T)
+dtrunc("pois", x, coef = 2, trunc = 2)
+dtrunc2("pois", x, lambda = 2, trunc = 2)
+dtrunc("pois", x, coef = 2, trunc = 2, log = T)
+dtrunc2("pois", x, lambda = 2, trunc = 2, log = T)
+ptrunc("pois", x, coef = 2, trunc = 2)
+ptrunc2("pois", x, lambda = 2, trunc = 2)
+ptrunc("pois", x, coef = 2, trunc = 2, log = T)
+ptrunc2("pois", x, lambda = 2, trunc = 2, log = T)
+
+x <- seq(-4, 4, 0.5)
+dtrunc("norm", x, coef = list(2, 3))
+dtrunc2("norm", x, 2, 3)
+dnorm(x, 2, 3)
+dtrunc("norm", x, coef = list(2, 3), log = T)
+dnorm(x, 2, 3, log = T)
+ptrunc("norm", x, coef = list(2, 3))
+pnorm(x, 2, 3)
+ptrunc("norm", x, coef = list(2, 3), log = T)
+pnorm(x, 2, 3, log = T)
+dtrunc("norm", x, coef = list(2, 3), trunc = -2)
+dtrunc2("norm", x, 2, 3, trunc = -2)
+dtrunc("norm", x, coef = list(2, 3), trunc = -2, log = T)
+dtrunc2("norm", x, 2, 3, trunc = -2, log = T)
+ptrunc("norm", x, coef = list(2, 3), trunc = -2)
+ptrunc2("norm", x, 2, 3, trunc = -2)
+ptrunc("norm", x, coef = list(2, 3), trunc = -2, log = T)
+ptrunc2("norm", x, 2, 3, trunc = -2, log = T)
+
+
+x <- 1:15
+p1 <- ptrunc("pois", x, coef = 2, lower = T, log = F)
+qtrunc("pois", p1, coef = 2, lower = T, log = F)
+p2 <- ptrunc("pois", x, coef = 2, lower = F, log = F)
+qtrunc("pois", p2, coef = 2, lower = F, log = F)
+p3 <- ptrunc("pois", x, coef = 2, lower = T, log = T)
+qtrunc("pois", p3, coef = 2, lower = T, log = T)
+p4 <- ptrunc("pois", x, coef = 2, lower = F, log = T)
+qtrunc("pois", p4, coef = 2, lower = F, log = T)
+
+x <- 1:15
+p1 <- ptrunc("pois", x, coef = 2, trunc = 3, lower = T, log = F)
+qtrunc("pois", p1, coef = 2, trunc = 3, lower = T, log = F)
+p2 <- ptrunc("pois", x, coef = 2, trunc = 3, lower = F, log = F) #prob
+qtrunc("pois", p2, coef = 2, trunc = 3, lower = F, log = F)
+p3 <- ptrunc("pois", x, coef = 2, trunc = 3, lower = T, log = T)
+qtrunc("pois", p3, coef = 2, trunc = 3, lower = T, log = T)
+p4 <- ptrunc("pois", x, coef = 2, trunc = 3, lower = F, log = T) #prob
+qtrunc("pois", p4, coef = 2, trunc = 3, lower = F, log = T)
+
+x <- seq(-4, 4, 0.5)
+p1 <- ptrunc("norm", x, coef = list(2, 3), trunc = -3, lower = T, log = F)
+qtrunc("norm", p1, coef = list(2, 3), trunc = -3, lower = T, log = F)
+p2 <- ptrunc("norm", x, coef = list(2, 3), trunc = -3, lower = F, log = F) #prob
+qtrunc("norm", p2, coef = list(2, 3), trunc = -3, lower = F, log = F)
+p3 <- ptrunc("norm", x, coef = list(2, 3), trunc = -3, lower = T, log = T)
+qtrunc("norm", p3, coef = list(2, 3), trunc = -3, lower = T, log = T)
+p4 <- ptrunc("norm", x, coef = list(2, 3), trunc = -3, lower = F, log = T) #prob
+qtrunc("norm", p4, coef = list(2, 3), trunc = -3, lower = F, log = T)
