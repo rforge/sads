@@ -17,7 +17,7 @@ fitweibull <- function(x, trunc, start.value, ...){
   if (missing(trunc)){
     LL <- function(shape, scale) -sum(dweibull(x, shape, scale, log = TRUE))
   } else {
-    LL <- function(shape, scale) -sum(trunc("dweibull", x, shape, scale, trunc = trunc, log = TRUE))
+    LL <- function(shape, scale) -sum(dtrunc("weibull", x = x, coef = list(shape, scale), trunc = trunc, log = TRUE))
   }  
   result <- mle2(LL, start = list(shape = ka, scale = theta), data = list(x = x), ...)
   new("fitsad", result, sad="weibull", trunc = ifelse(missing(trunc), NaN, trunc)) 

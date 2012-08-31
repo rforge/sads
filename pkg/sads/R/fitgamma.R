@@ -8,7 +8,6 @@ fitgamma <- function(x, trunc, start.value, ...){
     theta <- var(x)/mean(x)
     kahat <- function(k, dados){
       eq <- length(dados)*(log(k) - log(mean(dados)) - digamma(k)) + sum(log(dados))
-      eq
     }
     ka <- uniroot(kahat, interval = c(min(theta, ka), max(theta, ka)), dados = x)$root
     theta <- mean(x)/ka
@@ -17,11 +16,10 @@ fitgamma <- function(x, trunc, start.value, ...){
     theta <-start.value[2]
   }
   if (missing(trunc)){
-    LL <- function(shape, scale) -sum(dgamma(x, shape, scale, log = TRUE))
+    LL <- function(shape, rate) -sum(dgamma(x, shape, rate, log = TRUE))
   } else {
-    LL <- function(shape, scale) -sum(trunc("dgamma", x, shape, scale, trunc = trunc, log = TRUE))
+    LL <- function(shape, rate) -sum(dtrunc("gamma", x = x, coef = list(shape = shape, rate = rate), trunc = trunc, log = TRUE))
   }  
-  #result <- mle2(LL, start = list(shape = ka, scale = theta), method="SANN")
-  result <- mle2(LL, start = list(shape = ka, scale = theta), data = list(x = x), ...)
+  result <- mle2(LL, start = list(shape = ka, rate = 1/theta), data = list(x = x), ...)
   new("fitsad", result, sad="gamma", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

@@ -13,9 +13,8 @@ fitlnorm <- function(x, trunc, start.value, ...){
   if (missing(trunc)){
     LL <- function(meanlog, sdlog) -sum(dlnorm(x, meanlog, sdlog, log = TRUE))
   } else {
-    LL <- function(meanlog, sdlog) -sum(trunc("dlnorm", x, meanlog, sdlog, trunc = trunc, log = TRUE))
+    LL <- function(meanlog, sdlog) -sum(dtrunc("lnorm", x, coef = list(meanlog = meanlog, sdlog = sdlog), trunc = trunc, log = TRUE))
   }  
-  #result <- mle2(LL, start = list(), method="SANN")
   result <- mle2(LL, start = list(meanlog = meanlog, sdlog = sdlog), data = list(x = x), ...)
   new("fitsad", result, sad="lnorm", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

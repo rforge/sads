@@ -9,10 +9,10 @@ fitnbinom <- function(x, trunc, start.value, ...){
     phat <- start.value
   }
   if (missing(trunc)){
-    LL <- function(prop) -sum(dnbinom(x, size = length(x), prop, log = TRUE))
+    LL <- function(prob) -sum(dnbinom(x, size = length(x), prob, log = TRUE))
   } else{
-    LL <- function(prop) -sum(trunc("dnbinom", x, size = length(x), prop, trunc = trunc, log = TRUE))
+    LL <- function(prob) -sum(dtrunc("nbinom", x = x, coef = list(size = length(x), prob), trunc = trunc, log = TRUE))
   }
-  result <- mle2(LL, start = list(prop = phat), data = list(x = x), method="Brent", upper = 1, lower = 0, ...)
+  result <- mle2(LL, start = list(prob = phat), data = list(x = x), method="Brent", upper = 1, lower = 0, ...)
   new("fitsad", result, sad="nbinom", trunc = ifelse(missing(trunc), NaN, trunc))
 }

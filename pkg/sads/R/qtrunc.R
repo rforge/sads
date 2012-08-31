@@ -1,6 +1,5 @@
 qtrunc <- function(f, p, trunc, coef, lower.tail = TRUE, log.p = FALSE){
   if(log.p) p <- exp(p)
-  df <- get(paste("d", f, sep = ""), mode = "function")
   tt <- p
   pf <- get(paste("p", f, sep = ""), mode = "function")
   qf <- get(paste("q", f, sep = ""), mode = "function")

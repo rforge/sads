@@ -8,9 +8,9 @@ fitgeom <- function(x, trunc, start.value, ...){
     phat <- start.value
   }
   if (missing(trunc)){
-    LL <- function(prob) -sum(dgeom(x, prob, log = T))
+    LL <- function(prob) -sum(dgeom(x, prob, log = TRUE))
   } else{
-    LL <- function(prob) -sum(trunc("dgeom", x, prob, trunc = trunc, log = T))
+    LL <- function(prob) -sum(dtrunc("geom", x = x, coef = prob, trunc = trunc, log = TRUE))
   }
   result <- mle2(LL, start = list(prob = phat), data = list(x = x), method = "Brent", lower = 0, upper = 1, ...)
   new("fitsad", result, sad = "geom", trunc = ifelse(missing(trunc), NaN, trunc))

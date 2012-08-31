@@ -8,9 +8,9 @@ fitpower <- function(x, trunc, start.value, upper = 20, ...){
     shat <- start.value
   }
   if (missing(trunc)){
-    LL <- function(s) -sum(dpower(x, s, log = T))
+    LL <- function(s) -sum(dpower(x, s, log = TRUE))
   } else{
-    LL <- function(s) -sum(trunc("dpower", x, s, trunc = trunc, log = T))
+    LL <- function(s) -sum(dtrunc("power", x = x, coef = s, trunc = trunc, log = TRUE))
   }
   result <- mle2(LL, start = list(s = shat), data = list(x = x), method = "Brent", lower = 1, upper = upper, ...)
   if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
