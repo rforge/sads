@@ -62,6 +62,11 @@ attributes(model1)
 (model2 <- fitls(x2))
 attributes(model2)
 
+## Comparacoes
+relat.error <- function(a,b)abs(as.numeric(a)-as.numeric(b))/as.numeric(a)*100
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
 ##com truncagem
 x1 <- samp1[samp1 != 1]
 nvl1 = function(alpha) -sum(dtrunc("ls", x1, coef = list(N = sum(x1), alpha = alpha), trunc = 1, log=TRUE))
@@ -76,10 +81,15 @@ summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitls
-(tmodel1 <- fitls(x1, trunc = 1, start.value = 13))
-attributes(tmodel1)
-(tmodel2 <- fitls(x2, trunc = 1, start.value = 13))
-attributes(tmodel2)
+(model1 <- fitls(x1, trunc = 1, start.value = 13))
+attributes(model1)
+(model2 <- fitls(x2, trunc = 1, start.value = 13))
+attributes(model2)
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 set.seed(42)
 ## Uma amostra Poisson de uma lognormal
@@ -111,6 +121,11 @@ attributes(model2)
 attributes(model1)
 (model2 <- fitls(x2))
 attributes(model2)
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##com truncagem
 x1 <- samp1[samp1 != 1]
@@ -127,10 +142,16 @@ summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitls
-(tmodel1 <- fitls(x1, trunc = 1, start.value = 13))
-attributes(tmodel1)
-(tmodel2 <- fitls(x2, trunc = 1, start.value = 13))
-attributes(tmodel2)
+(model1 <- fitls(x1, trunc = 1, start.value = 13))
+attributes(model1)
+(model2 <- fitls(x2, trunc = 1, start.value = 13))
+attributes(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitpoilog
@@ -155,6 +176,12 @@ logLik(nvl2.mle)
 attributes(model1)
 (model2 <- fitpoilog(x2))
 attributes(model2)
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 
 ##truncada em zero
 x1 <- samp1               
@@ -177,6 +204,11 @@ attributes(model1)
 (model2 <- fitpoilog(x2, trunc = 0))
 attributes(model2)
 #undebug(fitpoilog2)
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##truncada em um
 x1 <- samp1[samp1 != 1]
@@ -194,12 +226,18 @@ summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitpoilog
-(tmodel1 <- fitpoilog(x1, trunc = 1))
-summary(tmodel1)
-(tmodel1 <- fitpoilog(x1, trunc = 1))
-summary(tmodel1)
-attributes(tmodel1)
-(tmodel2 <- fitpoilog(x2, trunc = 1, method="CG", control = list(maxit = 2000)))
+(model1 <- fitpoilog(x1, trunc = 1))
+summary(model1)
+(model1 <- fitpoilog(x1, trunc = 1))
+summary(model1)
+attributes(model1)
+(model2 <- fitpoilog(x2, trunc = 1, method="CG", control = list(maxit = 2000)))
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 
 ##################################################################################
 ### Testes da fitlnorm
@@ -223,6 +261,12 @@ attributes(model1)
 (model2 <- fitlnorm(x2))
 attributes(model2)
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em zero -> igual a sem truncagem
 x1 <- samp1               
 nvl1 = function(meanlog, sdlog) -sum(dtrunc("lnorm", x1, coef = list(meanlog, sdlog), trunc = 0, log=TRUE))
@@ -242,24 +286,37 @@ attributes(model1)
 (model2 <- fitlnorm(x2, trunc = 0))
 attributes(model2)
 
-##truncada em um
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
+
+##truncada em meio
 x1 <- samp1[samp1 != 1]               
-nvl1 = function(meanlog, sdlog) -sum(dtrunc("lnorm", x1, coef = list(meanlog, sdlog), trunc = 1, log=TRUE))
+nvl1 = function(meanlog, sdlog) -sum(dtrunc("lnorm", x1, coef = list(meanlog, sdlog), trunc = 0.5, log=TRUE))
 nvl1.mle <- mle2(nvl1, start = list(meanlog = mean(log(x2)), sdlog = sd(log(x2))))
 summary(nvl1.mle)                            
 logLik(nvl1.mle)
 
 x2 <- samp2[samp2 != 1]
-nvl2 = function(meanlog, sdlog) -sum(dtrunc("lnorm", x2, coef = list(meanlog, sdlog), trunc = 1, log=TRUE))
+nvl2 = function(meanlog, sdlog) -sum(dtrunc("lnorm", x2, coef = list(meanlog, sdlog), trunc = 0.5, log=TRUE))
 nvl2.mle = mle2(nvl2, start = list(meanlog = mean(log(x2)), sdlog = sd(log(x2))))
 summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitlnorm
-(model1 <- fitlnorm(x1, trunc = 1))
+(model1 <- fitlnorm(x1, trunc = 0.5))
 attributes(model1)
-(model2 <- fitlnorm(x2, trunc = 1))
+(model2 <- fitlnorm(x2, trunc = 0.5))
 attributes(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitgamma
@@ -298,6 +355,12 @@ fitdistr(x1, "gamma")
 attributes(model2)
 fitdistr(x2, "gamma")
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em zero -> igual sem truncagem
 x1 <- samp1               
 nvl1 = function(shape, rate) -sum(dtrunc("gamma", x1, coef = list(shape, rate), trunc = 0, log=TRUE))
@@ -327,9 +390,15 @@ attributes(model1)
 (model2 <- fitgamma(x2, trunc = 0))
 attributes(model2)
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em um
 x1 <- samp1[samp1 != 1]               
-nvl1 = function(shape, rate) -sum(dtrunc("gamma", x1, coef = list(shape, rate), trunc = 1, log=TRUE))
+nvl1 = function(shape, rate) -sum(dtrunc("gamma", x1, coef = list(shape, rate), trunc = 0.5, log=TRUE))
 #chute inicial
 ka <- (mean(x1)/sd(x1))^2
 theta <- var(x1)/mean(x1)
@@ -340,7 +409,7 @@ summary(nvl1.mle)
 logLik(nvl1.mle)
 
 x2 <- samp2[samp2 != 1]
-nvl2 = function(shape, rate) -sum(dtrunc("gamma", x2, coef = list(shape, rate), trunc = 1, log=TRUE))
+nvl2 = function(shape, rate) -sum(dtrunc("gamma", x2, coef = list(shape, rate), trunc = 0.5, log=TRUE))
 #chute inicial
 ka <- (mean(x2)/sd(x2))^2
 theta <- var(x2)/mean(x2)
@@ -351,10 +420,16 @@ summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitgamma
-(model1 <- fitgamma(x1, trunc = 1, method = "CG", control = list(maxit = 1000)))
+(model1 <- fitgamma(x1, trunc = 0.5, method = "CG", control = list(maxit = 1000)))
 attributes(model1)
-(model2 <- fitgamma(x2, trunc = 1))
+(model2 <- fitgamma(x2, trunc = 0.5))
 attributes(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitgeom
@@ -378,6 +453,12 @@ attributes(model1)
 (model2 <- fitgeom(x2))
 attributes(model2)
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em zero
 x1 <- samp1               
 nvl1 = function(prob) -sum(dtrunc("geom", x1, coef = prob, trunc = 0, log=TRUE))
@@ -397,6 +478,12 @@ attributes(model1)
 (model2 <- fitgeom(x2, trunc = 0))
 attributes(model2)
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em um
 x1 <- samp1[samp1 != 1]               
 nvl1 = function(prob) -sum(dtrunc("geom", x1, coef = prob, trunc = 1, log=TRUE))
@@ -415,6 +502,12 @@ logLik(nvl2.mle)
 attributes(model1)
 (model2 <- fitgeom(x2, trunc = 1))
 attributes(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitnbinom
@@ -438,6 +531,12 @@ attributes(model1)
 (model2 <- fitnbinom(x2))
 attributes(model2)
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em um
 x1 <- samp1[samp1 != 1]               
 nvl1 = function(prob) -sum(dtrunc("nbinom", x1, coef = list(size = length(x1), prob), trunc = 1, log=TRUE))
@@ -458,6 +557,12 @@ attributes(model1)
 (model2 <- fitnbinom(x2, trunc = 1))
 attributes(model2)
 summary(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitpower
@@ -481,7 +586,13 @@ attributes(model1)
 (model2 <- fitpower(x2))
 attributes(model2)
 
-##truncada em zero
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
+##truncada em um
 x1 <- samp1[samp1 != 1]               
 nvl1 = function(s) -sum(dtrunc("power", x1, coef = s, trunc = 1, log=TRUE))
 nvl1.mle <- mle2(nvl1, start = list(s = 2), method="Brent", upper = 20, lower = 1)
@@ -501,6 +612,12 @@ attributes(model1)
 (model2 <- fitpower(x2, trunc = 1))
 attributes(model2)
 summary(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
 
 ##################################################################################
 ### Testes da fitweibull
@@ -540,6 +657,12 @@ fitdistr(x1, "weibull")
 attributes(model2)
 fitdistr(x2, "weibull")
 
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))
+
 ##truncada em zero -> igual sem truncagem
 x1 <- samp1               
 nvl1 = function(shape, scale) -sum(dtrunc("weibull", x1, coef = list(shape, scale), trunc = 0, log=TRUE))
@@ -572,9 +695,9 @@ attributes(model1)
 (model2 <- fitweibull(x2, trunc = 0))
 attributes(model2)
 
-##truncada em zero -> igual sem truncagem
+##truncada em meio
 x1 <- samp1[samp1 != 1]               
-nvl1 = function(shape, scale) -sum(dtrunc("weibull", x1, coef = list(shape, scale), trunc = 1, log=TRUE))
+nvl1 = function(shape, scale) -sum(dtrunc("weibull", x1, coef = list(shape, scale), trunc = 0.5, log=TRUE))
 ka <- 1
 theta <- mean(x1)
 for(i in 1:100){
@@ -586,7 +709,7 @@ summary(nvl1.mle)
 logLik(nvl1.mle)
 
 x2 <- samp2[samp2 != 1]
-nvl2 = function(shape, scale) -sum(dtrunc("weibull", x2, coef = list(shape, scale), trunc = 1, log=TRUE))
+nvl2 = function(shape, scale) -sum(dtrunc("weibull", x2, coef = list(shape, scale), trunc = 0.5, log=TRUE))
 #chute inicial
 ka <- 1
 theta <- mean(x2)
@@ -599,7 +722,13 @@ summary(nvl2.mle)
 logLik(nvl2.mle)
 
 ###teste com funcao fitweibull
-(model1 <- fitweibull(x1, trunc = 1))
+(model1 <- fitweibull(x1, trunc = 0.5))
 attributes(model1)
-(model2 <- fitweibull(x2, trunc = 1))
+(model2 <- fitweibull(x2, trunc = 0.5))
 attributes(model2)
+
+## Comparacoes
+relat.error(logLik(nvl1.mle),logLik(model1))
+relat.error(logLik(nvl2.mle),logLik(model2))
+relat.error(coef(nvl1.mle),coef(model1))
+relat.error(coef(nvl2.mle),coef(model2))

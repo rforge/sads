@@ -5,6 +5,8 @@ exportPattern(".")
 #       plotprofmle,pls,ppoilog,ppower,pth,ptrunc,pzipf,qls,qpoilog,qth,qtrunc,qzipf,radpred,rad, trueLL,trunc)
 ## Import specific functions from graphics used by new methods
 importFrom("graphics",plot, points)
+## Import a single function from VGAM
+importFrom("VGAM",zeta)
 ## Explicit classes and methods export
 exportClasses(fitsad,fitsadlist,rad,octav)
 exportMethods(plot, points)
