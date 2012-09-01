@@ -42,7 +42,7 @@ qpoilog( p, mu, sig, S=30)
  A compound Poisson-lognormal distribution is a Poisson probability distribution
 where its single parameter lambda, is a random variable with lognormal distribution The density function is 
 
-(exp(x*mu + x^2*sig/2)*(2*pi*sig)^(-1/2))/x! * g(y)
+p(x) = (exp(x*mu + x^2*sig/2)*(2*pi*sig)^(-1/2))/x! * g(y)
 
 where g(y) =
 int_-infty^infty exp(-exp(y))*exp(((-y-mu-x*sig)^2)/(2*sig)) dy
