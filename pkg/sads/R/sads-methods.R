@@ -20,8 +20,8 @@ setMethod("points","rad",
 
 setMethod("plot","octav",
           function(x,...){
-            barplot(height=x$Freq, space=0, ylab="Frequency", xlab="Abundance class",...)
-            axis(1, at=x$octave, labels=x$upper)
+            x.hist<-rep(as.integer(as.character(x$octave)), as.integer(as.character(x$Freq)))
+            hist(x.hist, col="gray", main="", ylab= "Frequency", xlab="Abundance class", breaks=c((min(as.integer(as.character(x$octave)))-1), as.integer(as.character(x$octave))), ...)
           }
           )
 
@@ -30,7 +30,7 @@ setMethod("points","octav",
             dots <- list(...)
             if(!"type"%in%names(dots)) dots$type="b"
             if(!"col"%in%names(dots)) dots$col="blue"
-            X <- c(0,as.integer(as.character(x$octave)))
+            X <- c((min(as.integer(as.character(x$octave)))-1), as.integer(as.character(x$octave)))
             X <- X[-length(X)]+diff(X)/2
             do.call(points,c(list(x=X,y=x$Freq),dots))
           }

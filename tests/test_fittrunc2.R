@@ -21,6 +21,12 @@ source("../sads/pkg/sads/R/dpower.R")
 source("../sads/pkg/sads/R/ppower.R")
 source("../sads/pkg/sads/R/qpower.R")
 source("../sads/pkg/sads/R/fitpower.R")
+source("../sads/pkg/sads/R/fitgamma.R")
+source("../sads/pkg/sads/R/fitweibull.R")
+source("../sads/pkg/sads/R/fitlnorm.R")
+source("../sads/pkg/sads/R/fitgeom.R")
+source("../sads/pkg/sads/R/fitnbinom.R")
+
 
 #source("../sads/pkg/sads/R/dpoilog2.R")
 #source("../sads/pkg/sads/R/ppoilog2.R")
