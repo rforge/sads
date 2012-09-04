@@ -7,7 +7,7 @@ Calculates the correct likelihood for independent observations of a
 continuous variable that follows a given (truncated) density function.
 }
 \usage{
-trueLL(x, dens, precision=1, trunc, log=TRUE,...)
+trueLL(x, dens, dec.places=0, trunc, log=TRUE,...)
 }
 \arguments{
   \item{x}{
@@ -19,8 +19,10 @@ e.g., 'lnorm' for the lognormal distribution; 'gamma' for the gamma
 distribution.
 }
 
-\item{precision}{
-  positive number; measurement precision of the observed values.
+\item{dec.places}{
+  positive integer; number of decimal places used in the measurement of
+  the observed values. Observed values will be rounded to this number of
+  decimals. This argument defines the measurement precision, see details. 
 }
 
 \item{trunc}{
@@ -31,7 +33,7 @@ distribution.
   }
 
 \item{log}{
-logical; convert probabilities to logs and sum them to get
+  logical; convert probabilities to logs and sum them to get
   log-likelihoods? The log-likelihood value is returned if TRUE and the likelihood
   value if FALSE (quickly tends to zero as number of observation increases).
 }
@@ -40,19 +42,24 @@ named arguments to be passed to the probability function defined by the argument
 }
 }
 \details{
-The (log)likelihood function is often defined as any function
+  The (log)likelihood function is often defined as any function
   proportional to the (sum) product of probability density of the observations. In its original
   formulation, however, the likelihood is proportional to the product of
-  probabilities, not probabilities densities (Lindsey 1999, Fisher 1922). For
-  continuous variables these probabilities are calculated through
-  integration of the probability density from x-D to x+D, where x is the
-  observed value and D is half the measurement precision. The likelihood
-  function is thus any function proportional to
+  probabilities, not probabilities densities (Lindsey 1999, Fisher
+  1922). For  continuous variables these probabilities are calculated through
+  integration of the probability density function in an interval. For
+  observed values of continuous variables, this interval is defined by
+  the measurement precision. 
+  The likelihood function is thus any function proportional to
   
   prod ( integral_(x-D)^(x+D) f(x) dx )
 
-  where D is precision/2, x the value of each observation and f(x) the
-  density function. Because products of probabilities quickly tends to
+  where x is the observed value, f(x) the
+  density function and D is half the measurement precision:
+
+  D = 10^(-'dec.places')/2
+  
+  Because products of probabilities quickly tends to
   zero, probabilities are usually converted to their logs and them
   summed to give the log-likelihood function.
 }
@@ -62,19 +69,19 @@ model defined by the argument 'dens' and their parameters, passed
 through the argument '...' .
 }
 \references{
-Fisher, R.A. 1922. On the mathematical foundations of theoretical
-statistics. \emph{Phil. Trans. R. Soc. Lond. A 222}: 309--368.
-
-Lindsey, J.K. 1999. Some stattistical heresies. \emph{The Statistician
-  48}(1): 1--40.
+  Fisher, R.A. 1922. On the mathematical foundations of theoretical
+  statistics. \emph{Phil. Trans. R. Soc. Lond. A 222}: 309--368.
+  
+  Lindsey, J.K. 1999. Some stattistical heresies. \emph{The Statistician
+    48}(1): 1--40.
 }
 \author{
-Paulo I. Prado
+  Paulo I. Prado
 }
 
 
 \seealso{
-logLik in the package MASS
+  logLik in the package MASS
 }
 
 \examples{
@@ -86,5 +93,5 @@ logLik(fitdistr(x,"lognormal"))
 ## Which is the sum of log of densities
 sum( dlnorm(x, meanlog=mean(log(x)), sdlog=sd(log(x)), log=TRUE) )
 ## Correct log-likelihood
-trueLL(x, lnorm, precision=0.1, meanlog=mean(log(x)), sdlog=sd(log(x)))
+trueLL(x, lnorm, dec.places=1, meanlog=mean(log(x)), sdlog=sd(log(x)))
 }

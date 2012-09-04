@@ -1,12 +1,12 @@
 library(sads)
-library(bbmle)
-library(poilog)
+#library(bbmle)
+#library(poilog)
 library(untb)
 
 ## Ajustes e graficos passo a passo
 ## Uma mostra Poisson de uma lognormal
 set.seed(1913)
-samp1 <- rsad(100, frac=0.15, sad=lnorm, samp="Poisson", meanlog=3, sdlog=2)
+samp1 <- rsad(200, frac=0.15, sad=lnorm, samp="Poisson", meanlog=3, sdlog=2)
 ## O mesmo com uma amostra da logserie com mesma riqueza e total de individuos
 samp2 <- fisher.ecosystem(N=sum(samp1), S=length(samp1), nmax=sum(samp1))
 
@@ -14,7 +14,7 @@ samp2 <- fisher.ecosystem(N=sum(samp1), S=length(samp1), nmax=sum(samp1))
 
 ## Amostra 1
 ## Poilog
-samp1.pln <- fitpoilog(samp1, trunc = 0)
+samp1.pln <- fitpoilog(samp1,trunc=0)
 ## Logserie
 samp1.ls <- fitls(samp1)
 ## Gamma
@@ -24,11 +24,11 @@ samp1.pw <- fitpower(samp1)
 
 ## Amostra 2
 ## Poilog
-samp2.pln <- fitpoilog(samp2)
+samp2.pln <- fitpoilog(samp2, trunc=0)
 ## ajuste à logserie
 samp2.ls <- fitls(samp2)
 ## Gamma
-samp2.gm <- fitgamma(samp2)
+samp2.gm <- fitgamma(samp2, trunc=0.5)
 ## Power
 samp2.pw <- fitpower(samp2)
 
@@ -62,11 +62,36 @@ radpred2 <- function(object,...){
   new("rad", data.frame(rank=1:S, abund=ab))
 }
 
+## Nova versao radpred2 com funcao de quantil: muuuito lenta
+radpred2 <- function(object,...){
+  dots <- list(...)
+  S <- length(object@data$x)
+  y <- ppoints(S)
+  if(!is.na(object@trunc)){
+    if(object@sad=="ls") 
+      X <- do.call(qtrunc, c(list(object@sad, p = y, coef = list(alpha = object@coef, N = sum(object@data$x)), lower.tail=F, trunc = object@trunc), dots))
+    else
+      X <- do.call(qtrunc, c(list(object@sad, p = y, coef = as.list(object@coef), lower.tail=F, trunc = object@trunc), dots))
+  }else {
+    qsad <- get(paste("q", object@sad, sep=""), mode = "function")
+    if(object@sad=="ls")
+      X <- do.call(qsad, c(list(p = y, lower.tail = F, alpha = object@coef, N = sum(object@data$x)), dots))
+    else
+      X <- do.call(qsad, c(list(p = y, lower.tail = F), as.list(object@coef), dots))
+  }
+  
+##  if(is.na(ab[1]) & !any(is.na(ab[-1]))){
+##    ab[1] <- sum(object@data$x) - sum(ab[-1])
+##  }
+  #X[1] <- 
+  new("rad", data.frame(rank=1:S, abund=X))
+}
+
 ## Amostra de uma lognormal##
 ## Esperados para as rank-plot com lista de coeficientes
-samp1.pl.rad <- radpred(x=samp1, sad="poilog", coef=as.list(samp1.pln@coef))
-samp1.ls.rad <- radpred(x=samp1, sad="ls", coef=as.list(samp1.ls@coef))
-samp1.gm.rad <- radpred(x=samp1, sad="gamma", coef=as.list(samp1.gm@coef))
+samp1.pl.rad <- radpred(x=samp1, sad="poilog", coef=as.list(coef(samp1.pln)))
+samp1.ls.rad <- radpred(x=samp1, sad="ls", coef=as.list(coef(samp1.ls)))
+samp1.gm.rad <- radpred(x=samp1, sad="gamma", coef=as.list(coef(samp1.gm)))
 samp1.pw.rad <- radpred(x=samp1, sad="power", coef=as.list(samp1.pw@coef))
 plot(rad(samp1), ylim=c(1, 500), main="Rad1 - samp1")
 points(samp1.pl.rad)
@@ -87,6 +112,23 @@ points(samp1.pw.rad2, col="purple")
 legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
 #undebug(radpred2)
 
+## Sample 2
+samp2.pl.rad2 <- radpred2(samp2.pln)
+samp2.ls.rad2 <- radpred2(samp2.ls)
+samp2.gm.rad2 <- radpred2(samp2.gm)
+samp2.pw.rad2 <- radpred2(samp2.pw)
+plot(rad(samp2), ylim=c(1, 500), main="Rad2 - samp2")
+points(samp2.pl.rad2)
+points(samp2.ls.rad2, col="red")
+points(samp2.gm.rad2, col="green")
+points(samp2.pw.rad2, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+## Estranho: a log-serie tem AIC similar a gamma, mas o fit parece mto pior
+AIC(samp2.ls)
+AIC(samp2.gm)
+## Conferindo quantis
+(S <- length(samp2))
+Sp <- ppoints(S)
 ## truncagem em um
 x1 <- samp1[samp1 != 1]
 x2 <- samp2[samp2 != 1]

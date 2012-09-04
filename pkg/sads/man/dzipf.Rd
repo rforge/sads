@@ -75,6 +75,6 @@ Paulo I. Prado and Murilo Dantas Miranda
 }
 
 \seealso{
-dpois, dlnorm; dzipf and rzipf in zipf package; rsad for random
-generation, fitzipf for maximum likelihood estimation.
+dpois, dlnorm; dzipf and rzipf in zipfR package; rsad for random
+generation fitzipf for maximum likelihood estimation in the context of species abundance distributions.
 }
