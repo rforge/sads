@@ -26,7 +26,7 @@ radpredt <- function(object, x, sad, coef, trunc,...){
     }
   }else{
     S <- length(object@data$x)
-    if (object@sad == "ls" || object@sad == "geom" || object@sad == "nbinom"|| object@sad == "zipf"|| object@sad == "power"|| object@sad == "poilog"){
+    if (object@distr == "D"){
       y <- 1:max(object@data$x)
       if(!is.na(object@trunc)){
         if(object@sad=="ls") 
@@ -45,7 +45,7 @@ radpredt <- function(object, x, sad, coef, trunc,...){
       if(is.na(ab[1]) & !any(is.na(ab[-1]))){
         ab[1] <- sum(object@data$x) - sum(ab[-1])
       }
-    }else if(object@sad == "gamma" || object@sad == "lnorm" || object@sad == "weibull"){
+    }else if(object@distr == "C"){
       Y <- ppoints(S)
       if(!is.na(object@trunc)){
         ab <- do.call(qtrunc, c(list(object@sad, p = Y, coef = as.list(object@coef), lower.tail=F, trunc = object@trunc), dots))

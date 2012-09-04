@@ -24,5 +24,5 @@ fitweibull <- function(x, trunc, start.value, trueLL = FALSE, dec.places = 0, ..
     warning("informe the precision in your data")
     result@min <- -trueLL(x = x, dens = "weibull", coef = result@coef, trunc, dec.places = dec.places, log = TRUE, ...)
   }
-  new("fitsad", result, sad="weibull", trunc = ifelse(missing(trunc), NaN, trunc)) 
+  new("fitsad", result, sad="weibull", distr = "C", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

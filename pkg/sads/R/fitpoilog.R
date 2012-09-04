@@ -13,5 +13,5 @@ fitpoilog <- function(x, trunc, ...){
     LL <- function(mu, sig) -sum(dpoilog(x, mu, sig, log = TRUE))
     result <-  mle2(LL, start = as.list(pl.par), data = list(x = x), ...)
   }
-  new("fitsad", result, sad="poilog", trunc = ifelse(missing(trunc), NaN, trunc))
+  new("fitsad", result, sad="poilog", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
 }

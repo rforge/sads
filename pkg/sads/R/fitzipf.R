@@ -11,18 +11,16 @@ fitzipf <- function(x, N, trunc, start.value, upper = 20, ...){
     lzipf <- function(s, N) -s*log(1:N) - log(sum(1/(1:N)^s))
     opt.f <- function(s) sum((log(p) - lzipf(s, length(p)))^2)
     opt <- optimize(opt.f, c(0.5, length(p)))
-    print(opt)
     sss <- opt$minimum
   }else{
     sss <- start.value
   }
   if(missing(trunc)){
     LL <- function(s) -sum(dzipf(x, N, s, log = TRUE))
-    result <- mle2(LL, start = list(s = sss), data = list(x = x), method="Brent", lower = 0, upper = upper, ...)
   } else{
-    LL <- function(s) -sum(trunc("dzipf", x, N, s, trunc = trunc, log = TRUE))
-    result <-  mle2(LL, start = list(s = sss), data = list(x = x), method = "Brent", lower = 0, upper = upper, ...)
+    LL <- function(s) -sum(dtrunc("zipf", x = x, coef = list(N = N, s = s), trunc = trunc, log = TRUE))
   }
+  result <-  mle2(LL, start = list(s = sss), data = list(x = x), method = "Brent", lower = 0, upper = upper, ...)
   if(abs(as.numeric(result@coef) - upper) < 0.001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
-  new("fitsad", result, sad="zipf", trunc = ifelse(missing(trunc), NaN, trunc))
+  new("fitsad", result, sad="zipf", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
 }

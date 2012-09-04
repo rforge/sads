@@ -22,7 +22,7 @@ qzipf <- function(p, N, s, lower.tail = TRUE, log.p = FALSE){
     if (U1 <= pzipf(1, N, s)){
       d[i] <- 1
     } else if (U1 >= 0.999999999999999999){
-      d[i] <- Inf
+      d[i] <- N
     } else {
       d[i] <- busca(U1, U2)
     }
