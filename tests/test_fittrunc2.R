@@ -26,13 +26,17 @@ source("../sads/pkg/sads/R/fitweibull.R")
 source("../sads/pkg/sads/R/fitlnorm.R")
 source("../sads/pkg/sads/R/fitgeom.R")
 source("../sads/pkg/sads/R/fitnbinom.R")
+source("../sads/pkg/sads/R/octav.R")
+source("../sads/pkg/sads/R/sads-methods.R")
+source("../sads/pkg/sads/R/sads-classes.R")
 
+setClass("fitsad", representation("mle2", sad="character", trunc="numeric"))
 
 #source("../sads/pkg/sads/R/dpoilog2.R")
 #source("../sads/pkg/sads/R/ppoilog2.R")
 #source("../sads/pkg/sads/R/ppoilog4.R")
 #source("../sads/pkg/sads/R/qpoilog2.R")
-setClass("fitsad", representation("mle2", sad="character", trunc="numeric"))
+
 
 set.seed(2012)
 ## Uma amostra Poisson de uma lognormal

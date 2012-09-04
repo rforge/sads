@@ -14,13 +14,13 @@ samp2 <- fisher.ecosystem(N=sum(samp1), S=length(samp1), nmax=sum(samp1))
 
 ## Amostra 1
 ## Poilog
-samp1.pln <- fitpoilog(samp1)
+samp1.pln <- fitpoilog(samp1, trunc = 0)
 ## Logserie
 samp1.ls <- fitls(samp1)
 ## Gamma
-samp1.gm <- fitgamma(samp1)
+samp1.gm <- fitgamma(samp1, trunc = 0)
 ## Power
-samp1.pw <- fitpower(samp1) # funcao zeta esta em VGAM
+samp1.pw <- fitpower(samp1)
 
 ## Amostra 2
 ## Poilog
@@ -161,7 +161,7 @@ samp1.pl.octav <- octavpred(x=samp1, sad="poilog", coef=as.list(samp1.pln@coef))
 samp1.ls.octav <- octavpred(x=samp1, sad="ls", coef=as.list(samp1.ls@coef))
 samp1.gm.octav <- octavpred(x=samp1, sad="gamma", coef=as.list(samp1.gm@coef))
 samp1.pw.octav <- octavpred(x=samp1, sad="power", coef=as.list(samp1.pw@coef))
-plot(octav(samp1), ylim=c(0, 25), main= "Oct1 - samp1")
+plot(octav(samp1), ylim=c(0, 25))
 points(samp1.pl.octav)
 points(samp1.ls.octav, col="red")
 points(samp1.gm.octav, col="green")
@@ -172,7 +172,7 @@ samp1.pl.octav2 <- octavpred2(samp1.pln)
 samp1.ls.octav2 <- octavpred2(samp1.ls)
 samp1.gm.octav2 <- octavpred2(samp1.gm)
 samp1.pw.octav2 <- octavpred2(samp1.pw)
-plot(octav(samp1), ylim=c(0, 25), main= "Oct2 - samp1")
+plot(octav(samp1), ylim=c(0, 25))
 points(samp1.pl.octav2)
 points(samp1.ls.octav2, col="red")
 points(samp1.gm.octav2, col="green")
@@ -185,7 +185,7 @@ x1.pl.octav <- octavpred(x=x1, sad="poilog", coef=as.list(x1.pln@coef))
 x1.ls.octav <- octavpred(x=x1, sad="ls", coef=as.list(x1.ls@coef))
 x1.gm.octav <- octavpred(x=x1, sad="gamma", coef=as.list(x1.gm@coef))
 x1.pw.octav <- octavpred(x=x1, sad="power", coef=as.list(x1.pw@coef))
-plot(octav(x1), ylim=c(0, 35), main= "Oct1 - x1")
+plot(octav(x1), ylim=c(0, 35))
 points(x1.pl.octav)
 points(x1.ls.octav, col="red")
 points(x1.gm.octav, col="green")
@@ -196,7 +196,7 @@ x1.pl.octav2 <- octavpred2(x1.pln)
 x1.ls.octav2 <- octavpred2(x1.ls)
 x1.gm.octav2 <- octavpred2(x1.gm)
 x1.pw.octav2 <- octavpred2(x1.pw)
-plot(octav(x1), ylim=c(0, 35), main= "Oct2 - x1")
+plot(octav(x1), ylim=c(0, 35))
 points(x1.pl.octav2)
 points(x1.ls.octav2, col="red")
 points(x1.gm.octav2, col="green")
@@ -404,7 +404,7 @@ samp1.pw.radt <- radpredt(samp1.pw)
 plot(rad(samp1), ylim=c(1, 500), main="Radt - samp1")
 points(samp1.pl.radt)
 points(samp1.ls.radt, col="red")
-points(samp1.pw.radt, col="green")
+points(samp1.pw.radt, col="purple")
 legend("topright", c("Poisson-lognormal", "Logseries", "Power"), lty=1, col=c("blue","red", "purple"))
 
 ##com truncagem
@@ -414,12 +414,22 @@ x1.pw.radt <- radpredt(x1.pw)
 plot(rad(samp1), ylim=c(1, 500), main="Radt - x1")
 points(x1.pl.radt)
 points(x1.ls.radt, col="red")
-points(x1.pw.radt, col="green")
-legend("topright", c("Poisson-lognormal", "Logseries", "Power"), lty=1, col=c("blue","red", "green"))
+points(x1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Power"), lty=1, col=c("blue","red", "purple"))
+
+#dada pelo usuario
+us.pl.radt <- radpredt(x = samp1, coef=c(0.8782991, 2.4773384), sad = "poilog")
+us.ls.radt <- radpredt(x = samp1, coef=c(sum(samp1), 14.86564), sad = "ls")
+us.pw.radt <- radpredt(x = samp1, coef=c(1.379446), sad = "power")
+plot(rad(samp1), ylim=c(1, 500), main="Radt - samp1")
+points(us.pl.radt)
+points(us.ls.radt, col="red")
+points(us.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Power"), lty=1, col=c("blue","red", "purple"))
 
 
 octavpred2 <- function(object, oct, ...){
-  dots <- c(list(...))
+  dots <- list(...)
   S <- length(object@data$x)
   if(missing(oct)){
     oct <- 1:(ceiling(max(log2(object@data$x)))+1)
@@ -486,6 +496,7 @@ legend("topleft", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red",
 
 bes.hist<-rep(as.integer(as.character(bes.oct$octave)), as.integer(as.character(bes.oct$Freq)))
 hist(bes.hist, col="gray", main="", ylab= "Frequency", xlab="Abundance class", breaks=c(min(as.integer(as.character(bes.oct$octave)))-1, as.integer(as.character(bes.oct$octave))))
+
 points(bes.ln.octav2)
 points(bes.gm.octav2, col="red")
 points(bes.we.octav2, col = "green")
@@ -493,6 +504,113 @@ legend("topleft", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red",
 
 plot(octav(en.b))
 plot(octav(en.b), ylim=c(0, 5+max(c(octav(en.b)$Freq, bes.ln.octav2$Freq, bes.gm.octav2$Freq, bes.we.octav2$Freq))))
+
+#com truncagem
+bes.ln.octav2t <- octavpred2(bes.lnt)
+bes.gm.octav2t <- octavpred2(bes.gmt)
+bes.we.octav2t <- octavpred2(bes.wet)
+bes.octt <- octav(en.bt)
+Xt <- c((min(as.integer(as.character(bes.octt$octave)))-1), as.integer(as.character(bes.octt$octave)))
+Xt <- Xt[-length(Xt)]+diff(Xt)/2
+plot(Xt, bes.octt$Freq, type="h", ylim=c(0, max(bes.octt$Freq)), xlab="Abundance class", ylab="Frequency")
+points(bes.ln.octav2t)
+points(bes.gm.octav2t, col="red")
+points(bes.we.octav2t, col = "green")
+legend("topright", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
+bes.histt<-rep(as.integer(as.character(bes.octt$octave)), as.integer(as.character(bes.octt$Freq)))
+hist(bes.histt, col="gray", breaks=c((min(as.integer(as.character(bes.octt$octave)))-1), as.integer(as.character(bes.octt$octave))))
+points(bes.ln.octav2t)
+points(bes.gm.octav2t, col="red")
+points(bes.we.octav2t, col = "green")
+legend("topright", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
+plot(octav(en.bt))
+plot(octav(en.bt), ylim=c(0, max(c(octav(en.bt)$Freq, bes.ln.octav2t$Freq, bes.gm.octav2t$Freq, bes.we.octav2t$Freq))))
+
+#OCTAVPREDT
+#DISCRETA
+#sem truncagem
+samp1.pl.octavt <- octavpredt(samp1.pln)
+samp1.ls.octavt <- octavpredt(samp1.ls)
+samp1.gm.octavt <- octavpredt(samp1.gm)
+samp1.pw.octavt <- octavpredt(samp1.pw)
+plot(octav(samp1), ylim=c(0, 25))
+points(samp1.pl.octavt)
+points(samp1.ls.octavt, col="red")
+points(samp1.gm.octavt, col="green")
+points(samp1.pw.octavt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+us.pl.octavt <- octavpredt(x = samp1, coef =c(0.8782991, 2.4773384), sad ="poilog", trunc = 0)
+us.ls.octavt <- octavpredt(x = samp1, coef =c(sum(samp1), 14.86564), sad = "ls")
+us.gm.octavt <- octavpredt(x = samp1, coef =c(0.47375785, 0.01467221), sad = "gamma", trunc = 0)
+us.pw.octavt <- octavpredt(x = samp1, coef = 1.379446, sad = "power")
+plot(octav(samp1), ylim=c(0, 25))
+points(us.pl.octavt)
+points(us.ls.octavt, col="red")
+points(us.gm.octavt, col="green")
+points(us.pw.octavt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+#com truncagem
+x1.pl.octavt <- octavpredt(x1.pln)
+x1.ls.octavt <- octavpredt(x1.ls)
+x1.gm.octavt <- octavpredt(x1.gm)
+x1.pw.octavt <- octavpredt(x1.pw)
+plot(octav(x1), ylim=c(0, 25))
+points(x1.pl.octavt)
+points(x1.ls.octavt, col="red")
+points(x1.gm.octavt, col="green")
+points(x1.pw.octavt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+x1.us.pl.octavt <- octavpredt(x = x1, coef =c(1.635917, 2.135059), sad ="poilog", trunc = 1)
+x1.us.ls.octavt <- octavpredt(x = x1, coef =c(sum(x1), 14.39427), sad = "ls", trunc = 1)
+x1.us.gm.octavt <- octavpredt(x = x1, coef =c(0.170643892, 0.007949086), sad = "gamma", trunc = 1)
+x1.us.pw.octavt <- octavpredt(x = x1, coef = 1.444122, sad = "power", trunc =1)
+plot(octav(x1), ylim=c(0, 25))
+points(x1.us.pl.octavt)
+points(x1.us.ls.octavt, col="red")
+points(x1.us.gm.octavt, col="green")
+points(x1.us.pw.octavt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+
+#CONTINUA
+#sem truncagem
+bes.ln.octav2 <- octavpred2(bes.ln)
+bes.gm.octav2 <- octavpred2(bes.gm)
+bes.we.octav2 <- octavpred2(bes.we)
+bes.oct <- octav(en.b)
+X <- c((min(as.integer(as.character(bes.oct$octave)))-1), as.integer(as.character(bes.oct$octave)))
+X <- X[-length(X)]+diff(X)/2
+plot(X, bes.oct$Freq, type="h", ylim=c(0, max(bes.octt$Freq)) , xlab="Abundance class", ylab="Frequency")
+points(bes.ln.octav2)
+points(bes.gm.octav2, col="red")
+points(bes.we.octav2, col = "green")
+legend("topleft", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
+bes.hist<-rep(as.integer(as.character(bes.oct$octave)), as.integer(as.character(bes.oct$Freq)))
+hist(bes.hist, col="gray", main="", ylab= "Frequency", xlab="Abundance class", breaks=c(min(as.integer(as.character(bes.oct$octave)))-1, as.integer(as.character(bes.oct$octave))))
+
+points(bes.ln.octav2)
+points(bes.gm.octav2, col="red")
+points(bes.we.octav2, col = "green")
+legend("topleft", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
+plot(octav(en.b))
+plot(octav(en.b), ylim=c(0, 5+max(c(octav(en.b)$Freq, bes.ln.octav2$Freq, bes.gm.octav2$Freq, bes.we.octav2$Freq))))
+
+bes.ln.octavt <- octavpredt(bes.ln, coef=c(-1.759404, 2.066396), sad = "lnorm")
+bes.gm.octavt <- octavpredt(bes.gm, coef=c(0.4471375,0.6119233), sad= "gamma")
+bes.we.octavt <- octavpredt(bes.we, coef=c(0.5711702,0.4705112), sad="weibull")
+plot(octav(en.b))
+points(bes.ln.octavt)
+points(bes.gm.octavt, col="red")
+points(bes.we.octavt, col = "green")
+legend("topleft", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
 
 #com truncagem
 bes.ln.octav2t <- octavpred2(bes.lnt)

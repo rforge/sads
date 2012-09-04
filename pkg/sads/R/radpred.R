@@ -1,4 +1,4 @@
-radpred <- function(x,sad,coef,...){
+radpred <- function(x, sad, coef,...){
   psad <- paste("p",sad,sep="")
   if(missing(coef))dots <- list(...)
   else dots <- c(coef, list(...))

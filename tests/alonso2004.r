@@ -6,24 +6,33 @@ library(sads)
 library(vegan)
 ##Equacao A5: probabilidade de n individuos na amostra de tamanho J,
 ## dados abund proporcional de x na metacomunidade, e probabilidade de migracao m
-alonsoA5 <- function(n,J,m,x){
+alonsoA5 <- function(n, J, m, x){
   gama <- m*(J-1)/(1-m)
   nu <- J+gama*(1-x)
   lambda <- gama*x
-  y <- lchoose(J,n)+lgamma(n+gama*x)-lgamma(gama*x)+lgamma(nu-n)-lgamma(nu-J)+lgamma(lambda+nu-J)-lgamma(lambda+nu)
+  y <- lchoose(J, n)+lgamma(n+lambda)-lgamma(lambda)+lgamma(nu-n)-lgamma(nu-J)+lgamma(lambda+nu-J)-lgamma(lambda+nu)
   exp(y)
 }
 
+gama <- 0.77*(100-1)/(1-0.77)
+lambda <- gama*1:10
+nu <- 100+gama*(1-1:10)
+alonsoA5(n=1, J=10, m=0.77, x = 5)
+
+"alonsoA5" 
+.C("alonsoA5", 1, 10, 0.77, 5)
+
 ## Equacao 10: n esperado de especies com n individuos na amostra
-alonso10 <- function(n,J,m,theta,...){
-  f1 <- function(x,N){
-    alonsoA5(n=N,J,m,x)*((1-x)^(theta-1))/x
+alonso10 <- function(n, J, m, theta, ...){
+  f1 <- function(x, N){
+    alonsoA5(n=N, J, m, x)*((1-x)^(theta-1))/x
   }
   f2 <- function(N){
-  integrate(f1,lower=0, upper=1, N=N,...)$value
-}
+    integrate(f1, lower=0, upper=1, N=N,...)$value
+  }
   theta*sapply(n,f2)
 }
+
 ## Integrador Monte-Carlo (de Jones et al Scientific Simulation using R)
 mc.integral <- function(ftn, a, b, n=1e4, ...) {
 # Monte-Carlo integral of ftn over [a, b] using a sample of size n
@@ -45,8 +54,15 @@ alonso10b <- function(n,J,m,theta,...){
 }
 
 ## equacao 14: pdf
-alonso14 <- function(n,J,m,theta, log=FALSE,...){
-  all.values <- alonso10(1:J,J,m,theta,...)
+alonso14 <- function(n, J, m, theta, log = FALSE,...){
+  all.values <- alonso10(1:J, J, m, theta,...)
+  lprobs <- log(all.values[n])-log(sum(all.values))
+  if(log) lprobs
+  else exp(lprobs)
+}
+
+alonso14 <- function(n, J, m, theta, log = TRUE,...){
+  all.values <- alonso10(1:J, J, m, theta,...)
   lprobs <- log(all.values[n])-log(sum(all.values))
   if(log) lprobs
   else exp(lprobs)
@@ -55,8 +71,8 @@ alonso14 <- function(n,J,m,theta, log=FALSE,...){
 system.time((teste <- alonso10(1:100,J=100,m=0.77,theta=40)))
 sum(teste)
 system.time((teste2 <- alonso10b(1:100,J=100,m=0.77,theta=40)))## MUUUUITO mais lento
-(alonso14(n=1:5,J=15000,m=0.77, theta=41))# problema de convergencia
-plot(teste,teste2)
+(alonso14(n=1:5, J=1500, m=0.77, theta=41))# problema de convergencia
+plot(teste, teste2)
 abline(0,1)## integrador MC tem problemas com valores altos
 
 ## Teste com um conjunto de dados
@@ -77,6 +93,7 @@ teste <- mle2(L1,start=list(M=0.67,T=6.1), skip.hessian=TRUE,method="L-BFGS-B",
 summary(teste) ## funfou!
 logLik(teste)
 cf <- coef(teste)
+
 ## Grafico de oitavas
 library(sads)
 plot(octav(ARN82.eN.dec78))
@@ -110,13 +127,13 @@ data(moths)
 sum(moths)
 length(moths)
 L2 <- function(M,T){
-  -sum(alonso14(moths,J=sum(moths),m=M,theta=T,log=TRUE,
+  -sum(alonso14(moths, J=sum(moths),m=M, theta=T, log=TRUE,
                 rel.tol = sqrt(.Machine$double.eps), 
                 subdivisions = 500))
 }
 
 ## com bounded values e sem hessiana
-teste2 <- mle2(L2,start=list(M=0.77,T=41), skip.hessian=TRUE,method="L-BFGS-B",
+teste2 <- mle2(L2, start=list(M=0.77,T=41), skip.hessian=TRUE, method="L-BFGS-B",
               lower=c(M=0.001,T=20), upper=c(M=0.9999,T=50)) 
 summary(teste2) ## valor de m bem diferente do reportado por alonso
 

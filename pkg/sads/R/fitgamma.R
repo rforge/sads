@@ -1,7 +1,7 @@
-fitgamma <- function(x, trunc, start.value, ...){
+fitgamma <- function(x, trunc, start.value, trueLL = FALSE, dec.places = 0, ...){
   dots <- list(...)
   if (!missing(trunc)){
-    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
+    if (min(x)<=trunc) stop("truncation point should , be lower than the lowest data value")
   }
   if(missing(start.value)){
     ka <- (mean(x)/sd(x))^2
@@ -21,5 +21,9 @@ fitgamma <- function(x, trunc, start.value, ...){
     LL <- function(shape, rate) -sum(dtrunc("gamma", x = x, coef = list(shape = shape, rate = rate), trunc = trunc, log = TRUE))
   }  
   result <- mle2(LL, start = list(shape = ka, rate = 1/theta), data = list(x = x), ...)
+  if(trueLL){
+    warning("informe the precision in your data")
+    result@min <- -trueLL(x = x, dens = "gamma", coef = result@coef, trunc, dec.places = dec.places, log = TRUE, ...)
+  }
   new("fitsad", result, sad="gamma", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

@@ -1,4 +1,4 @@
-fitweibull <- function(x, trunc, start.value, ...){
+fitweibull <- function(x, trunc, start.value, trueLL = FALSE, dec.places = 0, ...){
   dots <- list(...)
   if (!missing(trunc)){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
@@ -20,5 +20,9 @@ fitweibull <- function(x, trunc, start.value, ...){
     LL <- function(shape, scale) -sum(dtrunc("weibull", x = x, coef = list(shape, scale), trunc = trunc, log = TRUE))
   }  
   result <- mle2(LL, start = list(shape = ka, scale = theta), data = list(x = x), ...)
+  if(trueLL){
+    warning("informe the precision in your data")
+    result@min <- -trueLL(x = x, dens = "weibull", coef = result@coef, trunc, dec.places = dec.places, log = TRUE, ...)
+  }
   new("fitsad", result, sad="weibull", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }
