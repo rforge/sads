@@ -56,13 +56,6 @@ setMethod("lines","octav",
           }
 )
 
-setMethod("qqplot","fitsad",
-          function(object,...){
-            x.hist <- rep(as.integer(as.character(x$octave)), as.integer(as.character(x$Freq)))
-            hist(x.hist, col = "gray", main = "", ylab = "Frequency", xlab = "Abundance class", breaks = c((min(as.integer(as.character(x$octave)))-1), as.integer(as.character(x$octave))), ...)
-          }
-)
-
 setMethod("plot","fitsad",
           function(object, which=c("octaves","rad"), ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
             y <- object@data$x

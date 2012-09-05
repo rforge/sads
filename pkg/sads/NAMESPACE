@@ -9,7 +9,7 @@ importFrom("graphics",plot, points)
 importFrom("VGAM",zeta)
 ## Explicit classes and methods export
 exportClasses(fitsad,fitsadlist,rad,octav)
-exportMethods(plot, points)
+exportMethods(plot, points, lines)
 ## From bbmle package
 #importClassesFrom(stats4,mle)
 #importFrom(stats4,coef,confint,logLik,BIC,summary,profile,vcov,AIC, update, plot)

@@ -1,8 +1,8 @@
 Package: sads
 Type: Package
 Title: Modelling Species Abundance Distributions
-Version: 0.2.05
-Date: 2012-08-27
+Version: 0.2.06
+Date: 2012-09-04
 Author: Paulo I. Prado and Murilo Dantas Miranda
 Maintainer: Paulo I. Prado <prado@ib.usp.br>
 Depends: MASS, bbmle, poilog
