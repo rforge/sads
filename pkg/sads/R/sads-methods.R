@@ -1,13 +1,25 @@
 setGeneric("points")
+
 setMethod("plot", "rad",
           function(x, ...){
             dots <- list(...)
-            dots$log <- "y"
+            if(!"log" %in% names(dots)) dots$log <- "y"
             if(!"xlab" %in% names(dots)) dots$xlab = "Species Rank"
             if(!"ylab" %in% names(dots)) dots$ylab = "Species Abundance"
-            do.call(plot, c(list(x = x[, 1], y = x[, 2]), dots)) 
+            if(!"frame.plot" %in% names(dots)) dots$frame.plot = TRUE
+            if(!"axes" %in% names(dots)){ 
+              do.call(plot, c(list(x = x[, 1], y = x[, 2], axes=FALSE), dots))
+              axis(2)
+              sc <- axisTicks(range(x[, 1]),nint=10,log=FALSE)
+              sc[sc==0] <- 1
+              axis(1,at=sc)
+            }
+            if("axes" %in% names(dots)){ 
+              do.call(plot, c(list(x = x[, 1], y = x[, 2]), dots))
+            }
+            
           }
-          )
+            )
 
 setMethod("points", "rad",
           function(x, ...){
@@ -29,8 +41,24 @@ setMethod("lines", "rad",
 
 setMethod("plot","octav",
           function(x,...){
+            dots <- list(...)
             x.hist <- rep(as.integer(as.character(x$octave)), as.integer(as.character(x$Freq)))
-            hist(x.hist, col = "gray", main = "", ylab = "Frequency", xlab = "Abundance class", breaks = c((min(as.integer(as.character(x$octave)))-1), as.integer(as.character(x$octave))), ...)
+            if(!"col" %in% names(dots)) dots$col = "gray"
+            if(!"main" %in% names(dots)) dots$main = ""
+            if(!"ylab" %in% names(dots)) dots$ylab = "N of species"
+            if(!"xlab" %in% names(dots)) dots$xlab = "Abundance class"
+            if(!"axes" %in% names(dots)){ 
+              do.call(hist, c(list(x=x.hist,
+                   breaks = c((min(as.integer(as.character(x$octave)))-1),as.integer(as.character(x$octave))),
+                                   axes=FALSE),dots))
+              axis(2)
+              n <- as.numeric(as.character(x[,1]))
+              axis(1,at=n[seq(1,length(x[,1]),2)],
+                   labels=x[seq(1,length(x[,1]),2),2])
+            }
+            else
+              do.call(hist, c(list(x=x.hist,
+                   breaks = c((min(as.integer(as.character(x$octave)))-1),as.integer(as.character(x$octave)))),dots))
           }
           )
 
@@ -57,7 +85,8 @@ setMethod("lines","octav",
 )
 
 setMethod("plot","fitsad",
-          function(object, which=c("octaves","rad"), ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
+          function(x, which=c("octaves","rad"), ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
+            object <- x
             y <- object@data$x
             cf <- as.list(object@coef)
             oct.df <- octav(y)

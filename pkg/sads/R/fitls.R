@@ -1,4 +1,4 @@
-fitls <- function(x, size, rich, trunc, start.value, upper = 20, ...){
+fitls <- function(x, size, rich, trunc, start.value, upper = length(x), ...){
   if (!missing(x)){
     S <- length(x)
     N <- sum(x)

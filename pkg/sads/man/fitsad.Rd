@@ -27,19 +27,18 @@ fitweibull(x, trunc, start.value, trueLL, dec.places, ...  )
 fitzipf(x, trunc, start.value, ...  )
 }
 \arguments{
-  \item{x} {vector of (positive integer) quantiles. In the context of
+  \item{x}{vector of (positive integer) quantiles. In the context of
     sads, some abundance measurement (e.g., number of individuals,
     biomass) of species in a sample or ecological assemblage.
   }
   \item{trunc}{
   }
   \item{start.value}{
-    }
+  }
   \item{trueLL}{
   }
   \item{dec.places}{
   }
-  
 }
 
 \value{

@@ -78,7 +78,8 @@ distribution function, 'qpoilog' gives the quantile function.
 
   ppoilog does the cumulative sum of poilog::dpoilog.
 
-  qpoilog uses the ... method to approximate numerically quantiles using poilog::dpoilog.
+  qpoilog uses the ... method to approximate numerically quantiles using
+  poilog::dpoilog, and is extremely slow for a large number of quantiles.
 }
 
 \references{

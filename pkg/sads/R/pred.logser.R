@@ -3,7 +3,7 @@ pred.logser=function(x,alpha,size,rich){
     stop("Please provide at least two of these: alpha, size, rich")
   }
   if(missing(alpha)){
-    alpha <- as.numeric(coef(fitlogser(size=size,rich=rich)))
+    alpha <- as.numeric(coef(fitls(size=size,rich=rich)))
   }
   if(missing(size)){
     size <- alpha*exp(rich/alpha) - alpha
