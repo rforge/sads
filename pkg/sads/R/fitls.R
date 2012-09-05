@@ -1,17 +1,7 @@
-fitls <- function(x, size, rich, trunc, start.value, upper = length(x), ...){
+fitls <- function(x, trunc, start.value, upper = length(x), ...){
   if (!missing(x)){
     S <- length(x)
     N <- sum(x)
-    if (!missing(size)| !missing(rich)){
-      warning(paste("Model fitted with size = ", N, " and rich = ", S, " \n calculated from supplied abundances"))
-    }
-  }
-  if (missing(x) & !missing(size) & !missing(rich)){
-    S <- rich
-    N <- size
-  }
-  if (missing(x) & missing(size) & missing(rich)){
-    stop("Please provide size and species number or a vector of species abundances")
   }
   if (missing(start.value)){
     f1 <- function(a) {
@@ -38,5 +28,4 @@ fitls <- function(x, size, rich, trunc, start.value, upper = length(x), ...){
     if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
     new("fitsad", result, sad = "ls", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
   }
-  else new("fitsad", coef = c(alpha = alfa), fullcoef = c(alpha = alfa), sad = "ls", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
 }

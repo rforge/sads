@@ -9,6 +9,6 @@ qqsad <- function(object, ...){
     qsad <- get(paste("q", object@sad, sep=""), mode = "function")
     q <- do.call(qsad, c(list(p = p), as.list(object@coef), dots))
   }
-  plot(q, rank)
+  plot(q, rank, main = "Q-Q plot", xlab="Theoretical Quantile", ylab="Sample Quantiles")
   abline(0, 1, col = "red", lty = 2)
 }
