@@ -1,14 +1,18 @@
-octavpredt <- function(object, x, sad, coef, trunc, oct, ...){
-  dots <- c(list(...))
-  if (!missing(sad) && !missing(x) && !missing(coef)){
-    S <- length(x)
-    if(missing(oct)){
-      oct <- 1:(ceiling(max(log2(x)))+1)
-      if(any(x < 1)){
-        octlower <- ceiling(min(log2((x)))+1):0
-        oct <- c(octlower, oct)
+octavpredt <- function(object, x, sad, coef, trunc, oct, S,...){
+  dots <- list(...)
+  if (!missing(sad) && !missing(coef)){
+    if(!missing(x)){
+      S <- length(x)
+      if(missing(oct)){
+        oct <- 1:(ceiling(max(log2(x)))+1)
+        if(any(x < 1)){
+          octlower <- ceiling(min(log2((x)))+1):0
+          oct <- c(octlower, oct)
+        }
       }
-    }
+    }else if(!missing(oct)){
+      oct <- 1:oct
+    }else stop("inform x or oct")
     n <- 2^(oct-1)
     if(!missing(trunc)){
         Y <- do.call(ptrunc, c(list(sad, q = n, coef = as.list(coef), trunc = trunc), dots))
