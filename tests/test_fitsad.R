@@ -42,6 +42,8 @@ qpareto(p, 0.8091838, 1.5, lower = F, log = T)
 fitmand(x1, trunc = 1)
 
 fitpareto(x1, trunc = 1)
+fitnbinom(samp1)
+fitnbinom(samp2)
 
 ####FITSADS
 #Discretas
@@ -67,9 +69,24 @@ fitsads(x1, "gamma", trunc = 1)
 ####QQSAD
 ## Poilog
 qqsad(samp1.pln)
+qqsad2(samp1.pln)
 ## Logserie
 qqsad(samp1.ls)
+qqsad2(samp1.ls)
 ## Gamma
 qqsad(samp1.gm)
+qqsad2(samp1.gm)
 ## Power
 qqsad(samp1.pw)
+qqsad2(samp1.pw)
+
+####PPSAD
+## Poilog
+ppsad(samp1.pln)
+## Logserie
+ppsad(samp1.ls)
+## Gamma
+ppsad(samp1.gm)
+## Power
+ppsad(samp1.pw)
+

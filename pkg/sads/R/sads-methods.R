@@ -88,19 +88,11 @@ setMethod("plot","fitsad",
           function(x, which=c("octaves","rad"), ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
             object <- x
             y <- object@data$x
-            cf <- as.list(object@coef)
-            tr <- object@trunc
             oct.df <- octav(y)
             rad.df <- rad(y)
-            if(!is.na(object@trunc))
-              oct.pred <- octavpredt(x = y, sad = object@sad, coef = cf, trunc = tr, ...)
-            else
-              oct.pred <- octavpredt(x = y, sad = object@sad, coef = cf, ...)
+            oct.pred <- octavpredt(y)
             oct.ymax <- max(c(oct.df[, 3], oct.pred[, 3]), na.rm = TRUE)
-            if(!is.na(object@trunc))
-              rad.pred <- radpredt(x = y, sad=object@sad, coef=cf, trunc = tr, ...)
-            else
-              rad.pred <- radpredt(x = y, sad=object@sad, coef=cf, ...)
+            rad.pred <- radpredt(y)
             rad.ylim <- range(c(rad.df[, 2], rad.pred[, 2]), na.rm = TRUE)
             if (ask) {
               oask <- devAskNewPage(TRUE)

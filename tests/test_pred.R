@@ -21,6 +21,8 @@ samp1.ls <- fitls(samp1)
 samp1.gm <- fitgamma(samp1, trunc = 0)
 ## Power
 samp1.pw <- fitpower(samp1)
+## Negative Binomial
+samp1.nb <- fitnbinom(samp1, trunc=0, start.value=c(100, 100))
 
 ## Amostra 2
 ## Poilog
@@ -105,7 +107,7 @@ samp1.ls.rad2 <- radpred2(samp1.ls)
 samp1.gm.rad2 <- radpred2(samp1.gm)
 samp1.pw.rad2 <- radpred2(samp1.pw)
 plot(rad(samp1), ylim=c(1, 500), main="Rad2 - samp1")
-points(samp1.pl.rad2)
+points(samp1.pl.rad)
 points(samp1.ls.rad2, col="red")
 points(samp1.gm.rad2, col="green")
 points(samp1.pw.rad2, col="purple")
@@ -683,3 +685,90 @@ points(bes.ln.octavtt)
 points(bes.gm.octavtt, col="red")
 points(bes.we.octavtt, col = "green")
 legend("topright", c("Lognormal", "Gamma", "Weibull"), lty=1, col=c("blue","red", "green"))
+
+
+############Teste radpredt
+## Amostra 1
+## Poilog
+samp1.pln <- fitpoilog(samp1, trunc = 0)
+## Logserie
+samp1.ls <- fitls(samp1)
+## Gamma
+samp1.gm <- fitgamma(samp1, trunc = 0)
+## Power
+samp1.pw <- fitpower(samp1)
+
+AICtab(samp1.pln, samp1.ls, samp1.gm, samp1.pw, nobs=length(samp1), base=T, weights=T)
+
+##objeto
+samp1.pl.radt <- radpredt(samp1.pln)
+samp1.ls.radt <- radpredt(samp1.ls)
+samp1.gm.radt <- radpredt(samp1.gm)
+samp1.pw.radt <- radpredt(samp1.pw)
+plot(rad(samp1), ylim=c(1, 500), main="Objetos")
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+##dados
+samp1.pl.radt <- radpredt(x = samp1, sad="poilog", coef=samp1.pln@coef, trunc = 0)
+samp1.ls.radt <- radpredt(x = samp1, sad="ls", coef=c(sum(samp1.ls@data$x), samp1.ls@coef))
+samp1.gm.radt <- radpredt(x = samp1, sad="gamma", coef=samp1.gm@coef, trunc = 0)
+samp1.pw.radt <- radpredt(x = samp1, sad="power", coef=samp1.pw@coef)
+plot(rad(samp1), ylim=c(1, 500), main="Dados")
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+##teoricos
+samp1.pl.radt <- radpredt(sad="poilog", coef=samp1.pln@coef, trunc = 0, S = length(samp1), A=sum(samp1))
+samp1.ls.radt <- radpredt(sad="ls", coef=c(sum(samp1.ls@data$x), samp1.ls@coef), S = length(samp1), A=sum(samp1))
+samp1.gm.radt <- radpredt(sad="gamma", coef=samp1.gm@coef, trunc = 0, S = length(samp1), A=sum(samp1))
+samp1.pw.radt <- radpredt(sad="power", coef=samp1.pw@coef, S = length(samp1), A = sum(samp1))
+plot(rad(samp1), ylim=c(1, 500), main="Teoricos")
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+##########Octavpredt
+##objeto
+samp1.pl.radt <- octavpredt(samp1.pln)
+samp1.ls.radt <- octavpredt(samp1.ls)
+samp1.gm.radt <- octavpredt(samp1.gm)
+samp1.pw.radt <- octavpredt(samp1.pw)
+plot(octav(samp1))
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+##dados
+samp1.pl.radt <- octavpredt(x = samp1, sad="poilog", coef=samp1.pln@coef, trunc = 0)
+samp1.ls.radt <- octavpredt(x = samp1, sad="ls", coef=c(sum(samp1.ls@data$x), samp1.ls@coef))
+samp1.gm.radt <- octavpredt(x = samp1, sad="gamma", coef=samp1.gm@coef, trunc = 0)
+samp1.pw.radt <- octavpredt(x = samp1, sad="power", coef=samp1.pw@coef)
+plot(octav(samp1))
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
+
+##teoricos
+samp1.pl.radt <- octavpredt(sad="poilog", coef=samp1.pln@coef, trunc = 0, S = length(samp1), oct = ceiling(max(log2(samp1)))+1)
+samp1.ls.radt <- octavpredt(sad="ls", coef=c(sum(samp1.ls@data$x), samp1.ls@coef), S = length(samp1), oct = ceiling(max(log2(samp1)))+1)
+samp1.gm.radt <- octavpredt(sad="gamma", coef=samp1.gm@coef, trunc = 0, S = length(samp1), oct = ceiling(max(log2(samp1)))+1)
+samp1.pw.radt <- octavpredt(sad="power", coef=samp1.pw@coef, S = length(samp1), oct = ceiling(max(log2(samp1)))+1)
+plot(octav(samp1))
+lines(samp1.pl.radt)
+lines(samp1.ls.radt, col="red")
+lines(samp1.gm.radt, col="green")
+lines(samp1.pw.radt, col="purple")
+legend("topright", c("Poisson-lognormal", "Logseries", "Gamma", "Power"), lty=1, col=c("blue","red", "green", "purple"))
