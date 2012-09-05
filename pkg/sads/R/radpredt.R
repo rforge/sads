@@ -12,9 +12,9 @@ radpredt <- function(object, x, sad, coef, trunc,...){
       }
       f1 <- approxfun(x=c(1, X), y=c(0, y), method="constant")
       ab <- f1(ppoints(S))
-      if(is.na(ab[1]) & !any(is.na(ab[-1]))){
-        ab[1] <- sum(x) - sum(ab[-1])
-      }
+      ## if(!any(is.na(ab[-1]))){
+      ##  ab[1] <- sum(x) - sum(ab[-1])
+      ##}
     }else if(sad == "gamma" || sad == "lnorm" || sad == "weibull"){
       Y <- ppoints(S)
       if(!missing(trunc)){
@@ -42,9 +42,9 @@ radpredt <- function(object, x, sad, coef, trunc,...){
       }
       f1 <- approxfun(x=c(1, X), y=c(0, y), method="constant")
       ab <- f1(ppoints(S))
-      if(is.na(ab[1]) & !any(is.na(ab[-1]))){
-        ab[1] <- sum(object@data$x) - sum(ab[-1])
-      }
+      ##if(is.na(ab[1]) & !any(is.na(ab[-1]))){
+      ##  ab[1] <- sum(object@data$x) - sum(ab[-1])
+      ##}
     }else if(object@distr == "C"){
       Y <- ppoints(S)
       if(!is.na(object@trunc)){

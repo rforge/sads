@@ -102,12 +102,12 @@ data(moths)# William's moth data
 \begin{center}
 @ 
 <<Ploting octaves, fig=TRUE>>=
-#par(mfrow=c(2,1))
+par(mfrow=c(2,1))
 plot(moths.oc)
-## Changing graphical parameters
-#plot(moths.oc, col="white", ylab="N de espécies", 
-#     xlab="Oitavas de abundância")
-#par(mfrow=c(1,1))
+##Changing graphical parameters
+plot(moths.oc, col="white", ylab="N de espécies", 
+     xlab="Oitavas de abundância")
+par(mfrow=c(1,1))
 @ %def 
 \end{center}  
 \caption{bla}
@@ -176,36 +176,40 @@ par(mfrow=c(1,1))
 @ 
 <<Fitting two other models>>=
 (moths.pl <- fitsad(moths,"poilog"))#default is zero-truncated
-#(moths.nb <- fitsad(moths,"nbinom"))## nao entendi
+(moths.ln <- fitsad(moths,"lnorm", trunc=0.5)) # lognormal truncated at 0.5
 (moths.gm <- fitsad(moths,"gamma"))
 @ %def 
 
 @ 
 <<Model selection table>>=
-AICtab(moths.ls, moths.pl, moths.nb, moths.gm)
+AICtab(moths.ls, moths.pl, moths.ln, moths.gm)
 @ %def 
 
 @ 
 <<Graphical comparison: octaves>>=
-head(moths.ls.oc <- octavpredt(moths.ls)) # verificar se permanece octavpredt
+head(moths.ls.oc <- octavpredt(moths.ls))# substituir por octavpred
 head(moths.pl.oc <- octavpredt(moths.pl))
+head(moths.ln.oc <- octavpredt(moths.ln))
 plot(moths.oc)
 lines(moths.ls.oc, col="blue")
 lines(moths.pl.oc, col="red")
-legend("topright", c("Logseries", "Poisson-lognormal"), lty=1, 
-       col=c("blue","red"))
+lines(moths.ln.oc, col="green")
+legend("topright", c("Logseries", "Poisson-lognormal", "Truncated lognormal"), lty=1, 
+       col=c("blue","red", "green"))
 @ %def 
 
 
 @ 
 <<Graphical comparison: octaves>>=
-head(moths.ls.rad <- radpredt(moths.ls)) # verificar se permanece radpredt
+head(moths.ls.rad <- radpredt(moths.ls)) # mudar para radpred
 head(moths.pl.rad <- radpredt(moths.pl))## rank 1 com valor negativo
+head(moths.ln.rad <- radpredt(moths.ln))
 plot(moths.rad)
 lines(moths.ls.rad, col="blue")
 lines(moths.pl.rad, col="red")
-legend("topright", c("Logseries", "Poisson-lognormal"), lty=1, 
-       col=c("blue","red"))
+lines(moths.ln.rad, col="green")
+legend("topright", c("Logseries", "Poisson-lognormal", "Truncated lognormal"), lty=1, 
+       col=c("blue","red", "green"))
 @ %def 
 
 
