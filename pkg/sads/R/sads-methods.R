@@ -90,9 +90,9 @@ setMethod("plot","fitsad",
             y <- object@data$x
             oct.df <- octav(y)
             rad.df <- rad(y)
-            oct.pred <- octavpredt(y)
+            oct.pred <- octavpredt(object)
             oct.ymax <- max(c(oct.df[, 3], oct.pred[, 3]), na.rm = TRUE)
-            rad.pred <- radpredt(y)
+            rad.pred <- radpredt(object)
             rad.ylim <- range(c(rad.df[, 2], rad.pred[, 2]), na.rm = TRUE)
             if (ask) {
               oask <- devAskNewPage(TRUE)
