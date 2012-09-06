@@ -1,0 +1,376 @@
+\documentclass[11pt, A4]{article}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{Sweave}
+%\usepackage{natbib}
+\setlength{\parindent}{0pt}
+%\pdfpagewidth=\paperwidth
+%\pdfpageheight=\paperheight
+\newcommand{\R}{{\sf R}}
+\newcommand{\code}[1]{\texttt{#1}}
+\SweaveOpts{eval=TRUE, keep.source=TRUE, echo=TRUE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\setkeys{Gin}{width=0.8\textwidth}
+\title{SADs without tears: \\ 
+  an introduction to species abundance distributions \\ 
+  and to a \R \ package to evaluate them}
+\author{Paulo Inácio Prado e Murilo Dantas Miranda}
+\maketitle
+
+@ 
+<<R setup, echo=FALSE, >>=
+options(width=60, continue=" ")
+@ %def 
+
+\section{Introdução}
+\label{sec:introducao}
+
+A dominância numérica de poucas espécies nas comunidades biológicas é uma das poucas leis gerais da ecologia \cite{McGill2007}. A maioria das espécies nas comunidades são representadas por poucos indivíduos, e poucas são as espécies abundantes, resultando em um histograma de distribuição de abundâncias tipicamente côncavo, conhecido na literatura como \emph{“hollow curve”}. Há pouquíssimas exceções a este padrão, o que um descritor básico da estrutura das comunidades. Embora o padrão seja único, muitas distribuições teóricas de probabilidade foram propostas para descrevê-lo. Portanto, o uso de \emph{sads} para descrever e comparar comunidades demanda ferramentas estatísticas para ajustar os vários modelos disponíveis e identificar o que melhor descreve os dados.
+
+Uma das ferramentas mais promissoras baseiam-se no princípio de verossimilhança estatística \cite{Edwards1972, Royall2000} para criar protocolos de ajuste e comparação simultânea de várias hipóteses estatísticas concorrentes. Um dos mais simples é a seleção de modelos baseada em índices de informação \cite{Burnham2002}, que ordena um conjunto de modelos de acordo com sua plausibilidade frente aos dados, levando em conta sua parcimônia. Na escala proposta recentemente por \cite{McGill2003}, essa seria a categoria mais rigorosa de testes de ajustes dos dados a modelos teóricos. O uso crescente destes conceitos é considerada uma mudança no paradigma de análise de dados, em resposta às limitações que as abordagens tradicionais impõem a muitas áreas da biologia \cite{Johnson2004}. 
+
+O pacote \code{sads} do ambiente estatístico \R \cite{R2012} tem funções para ajustar modelos de distribuição de abundância de espécies pelo método da máxima verossimilhança, e diagnosticar a qualidade do ajuste. Também permite a comparação de diferentes modelos ajustados ao mesmo conjunto de dados com gráficos e  métodos de seleção de modelos \cite{Burnham2002}. Este documento é um tutorial para uso deste pacote, que apresenta os conceitos estatísticos básicos envolvidos.
+
+
+\section{Instalação}
+
+O pacote ainda está em testes, por isso não está disponível no repositório CRAN do \R. No momento temos versões \emph{beta} compiladas para Linux e para Ruindows. Para este tutorial você precisará também do pacote de dados \code{Hughes}, disponível para as mesmas plataformas.  Para instalar a versão de teste do pacote \code{sads}, você precisa adicionar os seguintes pacotes à sua instalação de \R:
+
+\begin{itemize}
+\item \code{bbmle} \cite{bolker2012}
+\item \code{poilog} \cite{grotan2008}
+\item \code{VGAM} \cite{yee2012}
+\end{itemize}
+
+\subsection{Instalação em Linux}
+\label{sec:instalacao-em-linux}
+Após adicionar os pacotes acima à sua instalação de \R, copie os arquivos \code{sads\_0.2.06.tar.gz} e \code{Hughes\_1.0.tar.gz} para um diretório, carregue os pacotes no \R \ e chame-os com
+@ 
+<<installation, eval=FALSE>>=
+install.packages("diretorio/sads_0.2.06.tar.gz", repos=NULL)
+install.packages("diretorio/Hughes_1.0.tar.gz", repos=NULL)
+library(sads)
+library(Hughes)
+@ %def 
+
+onde \code{diretorio} é o caminho para o diretório onde você copiou o arquivo.
+
+\subsection{Instalação em Ruindows}
+\label{sec:instalacao-em-linux}
+Copie os arquivos \code{sads\_0.2.06.zip} e \code{Hughes\_1.0.zip} para um diretório, carregue os pacotes no \R \ e chame-os com
+@ 
+<<installation, eval=FALSE>>=
+install.packages("diretorio/sads_0.2.06.zip", repos=NULL)
+install.packages("diretorio/Hughes_1.0.zip", repos=NULL)
+library(sads)
+library(Hughes)
+@ %def 
+
+onde \code{diretorio} é o caminho para o diretório onde você copiou o arquivo.
+
+
+\section{Análise exploratória}
+\label{sec:analise-exploratoria}
+
+O objeto de dados básico para as análises de \emph{sads} é um vetor com valores das abundâncias de cada uma das espécies, registradas em uma amostra ou comunidade. Neste tutorial usaremos a abundância de espécies de mariposas capturadas em armadilhas luminosas na Inglaterra \cite{Fisher1943} e biomassa de animais bentônicos em substratos artificiais \cite{arntz1982}. Objetos com esses dois vetores de abundâncias estão disponíveis nos pacotes \code{sads} e \code{Hughes}, respectivamente. Veja as páginas de ajuda para mais informações. Carregue os objetos na área de trabalho com os comandos:
+
+@ 
+<<Loading datasets>>=
+data(moths)# William's moth data
+data(ARN82.eB.apr77)# Arntz et al. benthos data
+@ %def 
+
+\subsection{Qual o melhor gráfico?}
+\label{sec:qual-o-melhor}
+As sads são a maneira como o total de indivíduos (ou biomassa) na amostra se distribuem pelas espécies. Trata-se, portanto, de uma distribuição de frequência, e a primeira escolha para visualizá-la é um histograma, cujo resultado está na Figura \ref{fig:hist_aritm}:
+
+@ 
+<<Histogramas-escala-aritmetica, include=F>>=
+par(mfrow=c(2,1))
+hist(moths, xlab="Abundancia (n de indivíduos)", 
+     ylab="N de especies",main="Mariposas")
+hist(ARN82.eB.apr77, xlab="Abundancia (biomassa, g)", 
+     ylab="N de especies", main="Animais bentônicos")
+par(mfrow=c(1,1))
+@ 
+
+\begin{figure}[!h]
+  \begin{center}
+@ 
+<<fig1, fig=T, echo=F>>=
+<<Histogramas-escala-aritmetica>>
+@ %def 
+\end{center}
+\caption{Número de espécies por classes de abundância em número de indivíduos (acima) e em biomasa (abaixo).}
+\label{fig:hist_aritm}
+\end{figure}
+
+Os gráficos que você obteve mostram um problema comum de se usar histogramas com escala aritmética para representar SADs. Como na maioria das amostras tomadas de comunidades, há muitas espécies raras e pouquíssimas abundantes. O resultado é um histograma fortemente côncavo, e fica difícil comparar a frequência de espécies abundantes. As duas alternativas mais usadas são o gráfico de oitavas \cite{Preston1948} e  de ranque-abundância \footnote{também conhecido por diagrama de Whittaker ou diagrama de abundância} \cite{macarthur1957}. 
+
+\subsection{Tabela e gráfico de oitavas}
+\label{sec:oitavas}
+
+Nos histogramas de SADs com escala aritmética as primeiras classes (abundâncias baixas) concentram a maioria das espécies. Uma solução é aumentar o intervalo de classe para as espécies abundantes. \cite{Preston1948} propôs escalas em potência de base de dois, que ele chamou de oitavas. O limite das classes são dados por essas potências:
+\begin{description}
+\item [Primeira oitava:] $2^0 = 1$ indivíduo
+\item [Segunda oitava:] $2^1 = 2$ indivíduos
+\item [Terceira oitava:] mais que $2^1 = 2$ até $2^2 = 4$ indivíduos
+\item [n-ésima oitava:] mais que $2^{n-2}$ até $2^{n-1}$ indivíduos
+\end{description}
+
+Assim, a amplitude das classes aumenta com a abundância, o que compensa o fato de que espécies mais abundantes são poucas. Por exemplo, a primeira oitava é o número de espécies com apenas um indivíduo \footnote{singletons}, mas a décima oitava inclui as espécies com abundâncias entre $257$ e $512$ indivíduos, um intervalo bem mais amplo. Como qualquer escala logarítmica, as oitavas de Preston 'aproximam' valores altos. Use a função \code{octav} para gerar uma tabela com o número de espécies por oitava em cada amostra:
+
+@ 
+<<Tabulating species in octaves>>=
+(moths.oc <- octav(moths))
+(arn.oc <- octav(ARN82.eB.apr77))
+@ %def 
+
+Para os dados de biomassa temos oitavas negativas, pois para representar valores de biomassa menores que um precisamos de expoentes negativos:
+
+\begin{description}
+\item [Primeira oitava negativa:] $2^{-1} = 0.5$ a $2^0 = 1$ unidades de biomassa
+\item [Segunda oitava negativa:] $2^{-2} = 0.25$ a $2^{-1} = 0.5$ unidades de biomassa
+\item [n-ésima oitava negativa:] mais que $2^{2-n}$ até $2^{1-n}$ unidades de biomassa
+\end{description}
+
+Para criar um gráfico de oitavas, basta aplicar a função \code{plot} ao objeto que você criou com a função \code{octav} \footnote{\textbf{Nota técnica:} o comando \code{octav} cria um objeto da classe \code{octav}, para qual há um método específico para a função \code{plot}. Para entender melhor a mágica, é preciso ler sobre classes e métodos em \R. Mas não é necessário para que ela funcione.}. Também é possível alterar qualquer parâmetro gráfico do histograma. Os comandos abaixo exemplificam, e o resultado está na figura \ref{fig:hist-octN} 
+
+@ 
+<<Ploting-octaves, include=F>>=
+par(mfrow=c(2,1))
+plot(moths.oc)
+##Changing graphical parameters
+plot(moths.oc, col="white", ylab="N de espécies", 
+     xlab="Oitavas de abundância")
+par(mfrow=c(1,1))
+@ %def 
+
+\begin{figure}[h]
+  \begin{center}
+    @ 
+<<fig2, echo=F, fig=T>>=
+<<Ploting-octaves>>
+@ %def 
+  \end{center}  
+  \caption{Número de espécies por oitavas de abundância em uma amostra de mariposas capturadas com armadilhas luminosas \cite{Fisher1943}. As oitavas são classes de abundância em escala logarítmica de base 2. Assim, a primeira oitava inclui espécies com um indivíduo, a segunda com dois, a terceira com 3 a 4, e assim sucessivamente. \textbf{Acima:} padrão do método \code{plot} para um objeto da classe \code{octav}; \textbf{abaixo:} gráfico com alguns parâmetros modificados pelo usuário.}
+  \label{fig:hist-octN}
+\end{figure}
+
+O gráfico de oitavas para dados de biomassa terá alguns intervalos de classe menores do que um, que correspondem às oitavas negativas (fig \ref{fig:hist-octB}):
+@ 
+<<Biomass-octave-plot, include=F>>=
+plot(arn.oc)
+@ %def
+
+\begin{figure}[!h]
+  \begin{center}
+@ 
+<<fig3, fig=T, echo=F>>=
+<<Biomass-octave-plot>>
+@ %def 
+  \end{center}
+  \caption{Número de espécies por oitavas de biomassa em uma amostra de animais marinhos bentônicos \cite{arntz1982}.}
+  \label{fig:hist-octB}
+\end{figure}
+
+\paragraph{Cuidado:} não se esqueça que os intervalos de classe nos histogramas de oitavas não estão mais numa escala aritmética e sim logarítmica. Assim, quanto maior a classe, maior o intervalo de abundância que ela contém. Uma maneira mais honesta de representar esse histograma seria (fig \ref{fig:hist-honesto}):
+
+@ 
+<<Oitavas-honestas,include=F>>=
+hist(moths[moths<=128],breaks=c(0,2^(0:7)))
+@ %def 
+
+\begin{figure}[!h]
+  \begin{center}
+@
+<<fig4, echo=F, fig=T>>=
+<<Oitavas-honestas>>
+@ %def 
+  \end{center}
+  \caption{Histograma honesto com classes em potência de 2: a largura das barras é proporcional ao intervalo de cada classe. Os dados são números de mariposas capturadas em armadilhas luminosas \cite{Fisher1943}. O histograma mostra abundâncias até $2^7 = 128$ indivíduos, para fins ilustrativos.}
+  \label{fig:hist-honesto}
+\end{figure}
+
+Nesse histograma as larguras das barras variam, indicando corretamente que os intervalos de classe são diferentes. No gráfico de oitavas todas as barras são ajustadas para a mesma largura. Em uma analogia geométrica, as barras longas e finas são alargadas e diminuem de altura. As largas e baixas são estreitadas, e se elevam. Com isso as classes de menor abundância não dominam a escala das ordenadas ($y$), permitindo avaliar diferenças nas classes de maior abundância. O preço que se paga é uma distorção da escala aritmética, que não pode ser ignorada.
+
+\subsection{Tabelas e gráfico de rank-abundância}
+\label{sec:rank_abund}
+Para esse gráfico, primeiro criamos uma tabela com as espécies ordenadas da maior para a menor abundância, com a função \code{rad}:
+
+@ 
+<<Rank-abundance tables>>=
+head(moths.rad <- rad(moths))
+head(arn.rad <- rad(ARN82.eB.apr77))
+@ %def 
+
+Em seguida, plotamos a abundância de cada espécie em escala logarítmica em função do \emph{rank} da espécie. O gráfico será sempre uma linha descendente, mas a sua inclinação nos informa sobre a dominância. O comprimento da linha revela o número de espécies. Para obter os gráficos (fig. \ref{fig:rads}), aplique o comando \code{plot} às tabelas obtidas com o comando \code{rad}:
+
+@ 
+<<radplots, include=F>>=
+par(mfrow=c(2,1))
+plot(moths.rad, ylab="Number of individuals")
+plot(arn.rad, ylab="Biomass")
+par(mfrow=c(1,1))
+@ %def 
+
+\begin{figure}[!h]
+  \begin{center}
+@
+<<fig5, echo=F, fig=T>>=
+<<radplots>>
+@ %def 
+  \end{center}
+  \caption{Diagramas de rank-abundância das amostras de mariposas capturadas com armadilhas luminosas \cite{Fisher1943} (acima), e organismos bentônicos em susbstratos artificiais \cite{arntz1982} (abaixo). Cada ponto representa uma espécie. Nas ordenadas está o \emph{ranking} de abundância das espécies (a mais abundante tem \emph{ranking} um), e nas abcissas está a abundância, em escala logarítmica.}
+  \label{fig:rads}
+\end{figure}
+
+
+\section{Ajuste de modelos}
+
+\label{sec:ajuste-e-selecao}
+Vários modelos matemáticos foram criados para descrever as \emph{sads}. Um dos mais simples é a série logarítmica de \cite{Fisher1943}, em que o número esperado de espécies com $n$ indivíduos é
+
+\begin{equation}
+  \label{eq:ls}
+  S(n)\ =\ \alpha \, \frac{X^n}{n}  
+\end{equation}
+
+Sendo $\alpha$ o único parâmetro desse modelo, conhecido como \emph{alfa de Fisher}. A constante $X$ é uma função de $\alpha$ e do total de indivíduos na comunidade, $N$, e é sempre menor do que $1$, mas tende a esse valor à medida que tamanho da amostra aumenta:
+
+\begin{equation}
+  X \ = \ \frac{N}{N+\alpha}  
+\end{equation}
+
+Para ajustar a série logarítmica a um conjunto de dados temos que descobrir o valor do parâmetro $\alpha$ que resulta na melhor previsão do número de espécies em cada abundância. Fisher descobriu um método numérico para fazer isto \cite{Fisher1943} , que está implementado no pacote \emph{sads}, que tem também funções para avaliação da qualidade do ajuste.
+
+\subsection{Ajuste: objeto \code{fitsad}}
+\label{sec:ajust-objeto-fitsad}
+Os dados de mariposas que usamos foram os originalmente utilizados por Fisher para desenvolver sua série logarítmica \cite{Fisher1943}. Para fazer o ajuste use a função \code{fitsad}:
+
+@ 
+<<Fitting a logseries model>>=
+(moths.ls <- fitsad(moths,"ls"))
+@ %def 
+
+A função \code{fitsad} usa a função \code{mle2} do pacote \code{bbmle} \cite{bolker2012}, que implementa um método genérico de ajuste de modelos estatísticos por máxima verossimilhança \cite{Bolker2008}. O  ajuste de modelos de \emph{sads} é um caso particular desses procedimentos, e a função \code{fitsad} pode ser vista como uma aplicação particular, que "aproveita'' \footnote{\textbf{Outra nota técnica:} a função \code{fitsad} gera um objeto da classe \code{fitsad}, que herda toda a estrutura do objeto \code{mle2}.} os procedimentos da aplicação mais genérica. Por isso, o objeto resultante do ajuste guarda todas as informações sobre o modelo, que podem ser acessadas com funções e métodos já definidos. Abaixo os comandos para obter um resumo do modelo, seu coeficiente, e sua log-verossimilhança e valor de AIC:   
+@ 
+<<Operations on fitsad object>>=
+summary(moths.ls)
+coef(moths.ls)
+logLik(moths.ls)
+AIC(moths.ls)
+@ %def 
+
+
+\subsection{Avaliação do ajuste}
+\label{sec:avaliacao-do-ajuste}
+
+Outro comando importante herdado é o de cálculo do \emph{perfil de verossimilhança} do modelo. A verossimilhança expressa o quão plausível é um modelo estatístico como descrição dos dados. Ela varia com o valor do(s) parâmetro(s) do modelo, e uma maneira de busacr o melhor ajuste é econtrar os valores de parâmetros que resultam na maior verossimilhança possível. Chamamos esse procedimento de \emph{ajuste de máxima verossimilhança} e os valores resultantes dos parâmetros suas \emph{estimativas de máxima verossimilhança} (\emph{mle}). Um diagnóstico importante do modelo é investigar como sua verossimilhança (portanto sua qualidade como descrição dos dados) varia quando fazemos os parâmetros variar um pouco em torno dos \emph{mles}. A tabela desses valores e a verossimilhança resultante é chamada \emph{perfil de verossimilhança}. 
+
+A função \code{profile} gera o perfil \footnote{como isso implica me ajustar muitos modelos (um para cada novo valor de parâmetros), esta função pode demorar, e está muito sujeita a erros. Mas há maneiras de amenizar isso, veja \cite{Bolker2008}.}, que é usado para calcular o intervalo de confiança dos parâmetros. Faça isso para nosso ajuste da série logarítmica:
+@ 
+<<Profiling and intervals>>=
+moths.ls.prf <- profile(moths.ls)
+confint(moths.ls.prf) # conf intervals
+@ %def 
+
+Você pode plotar os perfis em duas escalas, o que permite avaliar seus intervalos de verossimilhança e confiança (fig. ):
+@ 
+<<Ploting-profiles, include=F>>=
+par(mfrow=c(1,2))
+plotprofmle(moths.ls.prf)# log-likelihood profile
+plot(moths.ls.prf)# z-transformed profile
+par(mfrow=c(1,1))
+@ %def
+
+\begin{figure}
+  \begin{center}  
+<<fig6, echo=F, fig=T>>=
+<<Ploting-profiles>>
+@ %def 
+  \end{center}
+  \caption{\textbf{Esquerda:} Perfil de verossimilhança do alfa de Fisher ajustado aos dados de mariposas capturadas com armadilhas luninosas \cite{Fisher1943}. A linha vermelha delimita o intervalo de verossimilhança, que seriam valores dos parâmetro alfa que resultariam em modelos tão plausíveis quanto o de máxima verossimilhança. Este intervalo dá expressa a precisão da estimativa do parâmetro.  \textbf{Direita:} o mesmo perfil, com a verossimilhança transformada para uma variável normal padornizada (variável z). Aceitando-se que o parâmetro tem distribuição normal, nesta escala é possível identificar os intervalos de confiança, que estão indicados pelas linhas pontilhadas vermelho-claras.}
+  \label{fig:profiles}
+\end{figure}
+
+
+Os perfis indicam a precisão dos parâmetros estimados. Para avaliar o ajuste do modelo aos dados, o pacote \code{sads} faz a função \code{plot} produzir quatro gráficos de diagnóstico (fig.\ref{fig:predls}), quando aplicados a um objeto de modelo de \emph{sads}:
+@ 
+<<Plot-of-predicted-values, include=FALSE, eval=F>>=
+par(mfrow=c(2,2))
+plot(moths.ls)
+par(mfrow=c(1,1))
+@ %def 
+
+\begin{figure}
+  \begin{center}
+@
+<<fig7, echo=F, fig=T, eval=F>>=
+<<Plot-of-predicted-values>>
+@ %def 
+  \end{center}
+  \caption{Gráficos para avaliação do ajuste do modelo de \emph{sad}. \textbf{Acima à esquerda:} \textbf{Acima à direita:} \textbf{Abaixo à esquerda:} \textbf{Abaixo à direita:}}. Os pontos pretos são os valores observados e as linhas são esperados pelo modelo. Veja texto para a interpretação dos gráficos.
+  \label{fig:predls}
+\end{figure}
+
+O dois primeiros gráficos são os diagramas de \emph{rank}-abundância e de oitavas, com os valores previstos pelo modelo sobrepostos. Os dois outros gráficos são duas maneiras mais efetivas, porém mais abstratas de avaliar o ajuste:
+
+\begin{description}
+\item[Gráfico de quantis:] para cada espécie, plota o valor de abundância previsto pelo modelo (\emph{theoretical quantile})em função do observado (\emph{empirical quantile}).
+\item[Gráfico de percentis:]  para cada espécie, plota a probabililidade pelo modelo de que uma espécie tenha sua abundância ou maior (\emph{theoretical percentile}, que é probabilidade acumulada teórica) em função da proporção observada de espécies que teve um valor igual ou superior de abundância (\emph{empirical percentile}, que a probabilidade acumulada empírica, \emph{ecdf}) 
+\end{description}
+
+Para esses dois gráficos, um ajuste perfeito do modelo resultaria em todos os valores observados iguais aos previstos. Neste caso, todos os pontos deveriam estar sobre uma linha de intercepto zero e inclinação um. Esta linha é indicada nos dois gráficos.
+
+\section{Comparação de modelos}
+\label{sec:comp-de-model}
+
+@ 
+<<Fitting two other models>>=
+(moths.pl <- fitsad(moths,"poilog"))#default is zero-truncated
+(moths.ln <- fitsad(moths,"lnorm", trunc=0.5)) # lognormal truncated at 0.5
+(moths.gm <- fitsad(moths,"gamma"))
+@ %def 
+
+@ 
+<<Model selection table>>=
+AICtab(moths.ls, moths.pl, moths.ln, moths.gm)
+@ %def 
+
+@ 
+<<Graphical comparison: octaves>>=
+head(moths.ls.oc <- octavpredt(moths.ls))# substituir por octavpred
+head(moths.pl.oc <- octavpredt(moths.pl))
+head(moths.ln.oc <- octavpredt(moths.ln))
+plot(moths.oc)
+lines(moths.ls.oc, col="blue")
+lines(moths.pl.oc, col="red")
+lines(moths.ln.oc, col="green")
+legend("topright", c("Logseries", "Poisson-lognormal", "Truncated lognormal"), lty=1, 
+       col=c("blue","red", "green"))
+@ %def 
+
+
+@ 
+<<Graphical comparison: octaves>>=
+head(moths.ls.rad <- radpredt(moths.ls)) # mudar para radpred
+head(moths.pl.rad <- radpredt(moths.pl))## rank 1 com valor negativo
+head(moths.ln.rad <- radpredt(moths.ln))
+plot(moths.rad)
+lines(moths.ls.rad, col="blue")
+lines(moths.pl.rad, col="red")
+lines(moths.ln.rad, col="green")
+legend("topright", c("Logseries", "Poisson-lognormal", "Truncated lognormal"), lty=1, 
+       col=c("blue","red", "green"))
+@ %def 
+
+
+\bibliographystyle{plain}
+\bibliography{vignetes}
+\end{document}
