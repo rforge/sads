@@ -16,6 +16,15 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \SweaveOpts{eval=TRUE, keep.source=TRUE, echo=TRUE}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% To do list
+%  - Incluir simulacao: gerar uma amostra de uma sad e depois ajustar
+%  - Ampliar em dois documentos: uma vinheta e uma apostila de introdução. Ainda está no meio do caminho
+%  - Na vinheta: comparar com resultados de outros pacotes (vegan, untb ...) e explicar as diferenças (radfit)
+%  - definir métodos de coerção para objetos vegan e untb
+%  - Incluir nos helps informacao sobre vegan, mle2, etc
+%  - Testar com dados bizarros
+%  - Incluir ZSM
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 %\setkeys{Gin}{width=0.9\textwidth}
