@@ -3,7 +3,8 @@ fitpower <- function(x, trunc, start.value, upper = 20, ...){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if (missing(start.value)){
-    shat <- 2
+    gamahat <- function(ga, xvec) eq <- -sum(log(xvec)) - zeta(ga, deriv =1)*length(xvec)/zeta(ga)
+    shat <- uniroot(gamahat, interval=c(1.01, upper), xvec = x)$root
   } else{
     shat <- start.value
   }

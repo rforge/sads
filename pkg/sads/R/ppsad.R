@@ -15,6 +15,6 @@ ppsad <- function (object) {
       p <- do.call(psad, c(list(q = rank), as.list(object@coef)))
     }
   }
-  plot(z, p, main = "P-P plot", xlab='Theoretical Percentiles', ylab='Sample Percentiles')
+  plot(z, p, main = "P-P plot", ylim = c(0, 1), xlab='Theoretical Percentiles', ylab='Sample Percentiles')
   abline(0, 1, col = "red", lty = 2)
 }

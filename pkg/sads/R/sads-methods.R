@@ -86,27 +86,25 @@ setMethod("lines","octav",
 
 setMethod("plot","fitsad",
           function(x, which=c("octaves","rad"), ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
-            object <- x
-            y <- object@data$x
-            oct.df <- octav(y)
-            rad.df <- rad(y)
-            oct.pred <- octavpredt(object)
+            oct.df <- octav(x)
+            rad.df <- rad(x)
+            oct.pred <- octavpredt(x)
             oct.ymax <- max(c(oct.df[, 3], oct.pred[, 3]), na.rm = TRUE)
-            rad.pred <- radpredt(object)
+            rad.pred <- radpredt(x)
             rad.ylim <- range(c(rad.df[, 2], rad.pred[, 2]), na.rm = TRUE)
-            if (ask) {
+            #if (ask) {
               oask <- devAskNewPage(TRUE)
               on.exit(devAskNewPage(oask))
-            }
-            if("octaves" %in% which){
+            #}
+            #if("octaves" %in% which){
               plot(oct.df, ylim = c(0, oct.ymax), ...)
               points(oct.pred, ...)
-            }
-            if("rad" %in% which){
+            #}
+            #if("rad" %in% which){
               plot(rad.df, ylim = rad.ylim, ...)
               lines(rad.pred, ...)
-            }
-            qqsad(object)
-            ppsad(object)
+            #}
+            qqsad(x)
+            ppsad(x)
           }
           )

@@ -39,6 +39,7 @@ VGAM::qpareto(p+0.000001, 1.5, 0.8091838)
 p <- ppareto(x, 0.8091838, 1.5, lower = F, log = T)
 qpareto(p, 0.8091838, 1.5, lower = F, log = T)
 
+fitmand(samp1)
 fitmand(x1, trunc = 1)
 
 fitpareto(x1, trunc = 1)
