@@ -1,4 +1,4 @@
-radpredt <- function(object, x, sad, coef, trunc, S, A, ...){
+radpred <- function(object, x, sad, coef, trunc, S, A, ...){
   dots <- list(...)
   if(!missing(sad) && !missing(coef)){
     if (!missing(x)){

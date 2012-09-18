@@ -1,4 +1,4 @@
-octavpredt <- function(object, x, sad, coef, trunc, oct, S,...){
+octavpred <- function(object, x, sad, coef, trunc, oct, S,...){
   dots <- list(...)
   if (!missing(sad) && !missing(coef)){
     if(!missing(x)){
