@@ -14,13 +14,11 @@ alonsoA5 <- function(n, J, m, x){
   exp(y)
 }
 
-gama <- 0.77*(100-1)/(1-0.77)
-lambda <- gama*1:10
-nu <- 100+gama*(1-1:10)
-alonsoA5(n=1, J=10, m=0.77, x = 5)
-
-"alonsoA5" 
-.C("alonsoA5", 1, 10, 0.77, 5)
+n <- 10
+J <- 200
+m <- 0.05
+x <- 0.05
+sum(alonso10(1:150, 150, 0.05, 2))
 
 ## Equacao 10: n esperado de especies com n individuos na amostra
 alonso10 <- function(n, J, m, theta, ...){
