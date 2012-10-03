@@ -1,6 +1,6 @@
 \name{moths}
-\alias{moths}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{williams}
+
 \title{
   Moths caught by lightraping at Rothamsted 1933-1936
 }
@@ -12,6 +12,7 @@
 
 \usage{
 data(moths)
+data(williams)
 }
 
 \format{

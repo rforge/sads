@@ -1,16 +1,17 @@
 \name{birds}
-\alias{birds}
+\alias{saunders}
 \title{
   Abundances of breeding birds in Quacker Run Valley, NY
 }
 
 \description{
-  A dataset containing the number of sights of nesting birds in a census
+  A dataset containing the number of sights of species of nesting birds in a census
   in a 16,697 acres Park in New York State, ran in 1936 by A. A. Saunders.
 }
 
 \usage{
 data(birds)
+data(saunders)
 }
 
 \format{
@@ -29,11 +30,11 @@ data(birds)
 
 
 \references{
-  Preston, F. W. 1948. The Commonness, And Rarity, of
-  Species. \emph{Ecology 29}:254–283.
+  Preston, F. W. 1948. The Commonness, and rarity, of
+  species. Ecology 29:254–283.
 
-  Saunders, A. A. 1936. \emph{Studies of breeding birds in the Allegany State
-  Park}. New York State Museum Handbook 16. Albany, NY.
+  Saunders, A. A. 1936. Studies of breeding birds in the Allegany State
+  Park. New York State Museum Handbook 16. Albany, NY.
 }
 
 \examples{
