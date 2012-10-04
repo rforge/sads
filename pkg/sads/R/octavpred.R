@@ -33,12 +33,20 @@ octavpred <- function(object, x, sad, coef, trunc, oct, S,...){
     if(!is.na(object@trunc)){
       if(object@sad == "ls")
         Y <- do.call(ptrunc, c(list(object@sad, q = n, coef = list(alpha = object@coef, N = sum(object@data$x)), trunc = object@trunc), dots))
+      else if(object@sad == "mzsm")
+        Y <- do.call(ptrunc, c(list(object@sad, q = n, coef = list(J = sum(object@data$x), theta = object@coef), trunc = object@trunc), dots))
+      else if(object@sad == "zsm")
+        Y <- do.call(ptrunc, c(list(object@sad, q = n, coef = c(list(J = sum(object@data$x)), as.list(object@coef)), trunc = object@trunc), dots))
       else
         Y <- do.call(ptrunc, c(list(object@sad, q = n, coef = as.list(object@coef), trunc = object@trunc), dots))
     }else {
       psad <- get(paste("p", object@sad, sep=""), mode = "function")
       if(object@sad == "ls")
         Y <- do.call(psad, c(list(q = n, alpha = object@coef, N = sum(object@data$x)), dots))
+      else if(object@sad == "mzsm")
+        Y <- do.call(psad, c(list(q = n, J = sum(object@data$x), theta = object@coef), dots))
+      else if(object@sad == "zsm")
+        Y <- do.call(psad, c(list(q = n, J = sum(object@data$x)), as.list(object@coef), dots))
       else
         Y <- do.call(psad, c(list(q = n), as.list(object@coef), dots))
     }
