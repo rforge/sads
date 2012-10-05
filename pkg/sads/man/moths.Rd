@@ -1,4 +1,5 @@
 \name{moths}
+\alias{moths}
 \alias{williams}
 
 \title{
@@ -38,10 +39,8 @@ sample of an animal population. The Journal of Animal Ecology, Vol. 12, No. 1. (
 
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 
 \examples{
 data(moths)
-plot(moths) # rank-abundance plot
+plot(rad(moths)) # rank-abundance plot
 }

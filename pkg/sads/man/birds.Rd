@@ -1,5 +1,7 @@
 \name{birds}
+\alias(birds}
 \alias{saunders}
+
 \title{
   Abundances of breeding birds in Quacker Run Valley, NY
 }
