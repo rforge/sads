@@ -16,6 +16,6 @@ fitzsm <- function(x, trunc, start.value,...){
   } else {
     LL <- function(m, theta) -sum(dtrunc("zsm", x, coef = list(c(J = J, m = m, theta = theta)), trunc = trunc, log = TRUE))
   }  
-  result <- mle2(LL, start = list( m = m, theta = theta), data = list(x = x), ...)
+  result <- mle2(LL, start = list( m = m, theta = theta), data = list(x = x), method="L-BFGS-B", lower=c(0.00001, 1), upper=c(0.9999999, length(x)))
   new("fitsad", result, sad="zsm", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

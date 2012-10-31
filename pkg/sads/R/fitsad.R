@@ -1,9 +1,9 @@
 fitsad <- function(x, sad, trunc, ...){ #trueLL dec.places - continuas
   dots <- list(...)
   fit <- get(paste("fit", sad, sep=""), mode = "function")
-  if(sad=="zsm" || sad =="mzsm" || sad == "geom" || sad == "ls" || sad == "nbinom" || sad == "poilog" || sad == "power" || sad == "zipf"){
+  if(sad=="volkov" || sad =="mzsm" || sad == "geom" || sad == "ls" || sad == "nbinom" || sad == "poilog" || sad == "power" || sad == "zipf" || sad == "mand"){
     if(missing(trunc)){
-      if(sad == "geom" || sad == "nbinom" || sad == "poilog") {
+      if(sad == "poilog") {
         trunc = 0
         do.call(fit, c(list(x = x), trunc = trunc, dots))
       }else
@@ -11,7 +11,7 @@ fitsad <- function(x, sad, trunc, ...){ #trueLL dec.places - continuas
     }else {
       do.call(fit, c(list(x = x), trunc = trunc, dots))
     }
-  }else if(sad == "gamma" || sad == "lnorm" || sad == "weibull"){
+  }else if(sad == "pareto" || sad == "gamma" || sad == "lnorm" || sad == "weibull"){
     if(missing(trunc)){
       do.call(fit, c(list(x = x), dots))
     }else{

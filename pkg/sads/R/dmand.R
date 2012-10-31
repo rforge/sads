@@ -9,7 +9,7 @@ dmand <- function (x, N, s, v, log = FALSE) {
     stop("N must be positive integer")
   if (!any(is.wholenumber(x))) 
     warning("x must be integer")
-  lny <- - s * log(x+v) - log(sum(1/((1:N)+v)^s))
+  lny <- - s * log(x+v) - log(sum(((1:N)+v)^(-s)))
   if (log) return(lny)
   else return(exp(lny))
 }

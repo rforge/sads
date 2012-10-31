@@ -1,4 +1,4 @@
-qpareto <- function (p, shape, scale, lower.tail = TRUE, log.p = FALSE) {
+qpareto <- function (p, shape, scale = min(q), lower.tail = TRUE, log.p = FALSE) {
   if(shape <= 0 || scale <= 0)
     stop("shape and scale must be greater than zero")
   if (log.p) 

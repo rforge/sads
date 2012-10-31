@@ -3,7 +3,7 @@ pmzsm <- function(q, J, theta, lower.tail=TRUE, log.p=FALSE){
   if (!all(is.finite(c(J, theta)))) stop("all parameters should be finite")
   if (J <= 0)  stop("J must be larger than zero")
   if (theta <= 0) stop("theta must be larger than zero")
-  z <- cumsum(dmzsm(1:max(q), J, theta))
+  z <- cumsum(dmzsm(x = 1:max(q), J = J, theta = theta))
   y <- z[q]
   if(!lower.tail) y <- 1-y
   if(log.p) y <- log(y)

@@ -14,12 +14,6 @@ alonsoA5 <- function(n, J, m, x){
   exp(y)
 }
 
-n <- 10
-J <- 200
-m <- 0.05
-x <- 0.05
-sum(alonso10(1:150, 150, 0.05, 2))
-
 ## Equacao 10: n esperado de especies com n individuos na amostra
 alonso10 <- function(n, J, m, theta, ...){
   f1 <- function(x, N){
@@ -30,6 +24,8 @@ alonso10 <- function(n, J, m, theta, ...){
   }
   theta*sapply(n,f2)
 }
+
+sum(alonso10(1:150, 150, 0.05, 2))
 
 ## Integrador Monte-Carlo (de Jones et al Scientific Simulation using R)
 mc.integral <- function(ftn, a, b, n=1e4, ...) {

@@ -6,11 +6,27 @@ qqsad <- function(object){
     if(!is.na(object@trunc)){
       if(object@sad == "ls")
         p <- do.call(ptrunc, c(list(object@sad, q = q, coef = c(sum(object@data$x), as.numeric(object@coef)), trunc = object@trunc)))
+      else if(object@sad == "zipf")
+        p <- do.call(ptrunc, c(list(object@sad, q = q, coef = c(length(object@data$x), as.numeric(object@coef)), trunc = object@trunc)))
+      else if(object@sad == "volkov")
+        p <- do.call(ptrunc, c(list(object@sad, q = q, coef = c(sum(object@data$x), as.numeric(object@coef)), trunc = object@trunc)))
+      else if(object@sad == "mzsm")
+        p <- do.call(ptrunc, c(list(object@sad, q = q, coef = c(sum(object@data$x), as.numeric(object@coef)), trunc = object@trunc)))
+      else if(object@sad == "mand")
+        p <- do.call(ptrunc, c(list(object@sad, q = q, coef = c(sum(object@data$x), as.numeric(object@coef)), trunc = object@trunc)))
       else
         p <- do.call(ptrunc, c(list(object@sad, q = q, coef = as.list(object@coef), trunc = object@trunc)))
     }else{
       if(object@sad == "ls")
         p <- do.call(pls, c(list(q = q), N = sum(object@data$x), alpha = as.numeric(object@coef)))
+      else if(object@sad == "zipf")
+        p <- do.call(pzipf, c(list(q = q), N = length(object@data$x), s = as.numeric(object@coef)))
+      else if(object@sad =="volkov")
+        p <- do.call(pvolkov, c(list(q = q), sum(object@data$x), as.numeric(object@coef)))
+      else if(object@sad =="mzsm")
+        p <- do.call(pmzsm, c(list(q = q), sum(object@data$x), as.numeric(object@coef)))
+      else if(object@sad =="mand")
+        p <- do.call(pmand, c(list(q = q), sum(object@data$x), as.numeric(object@coef)))
       else{
         psad <- get(paste("p", object@sad, sep=""), mode = "function")
         p <- do.call(psad, c(list(q = q), as.list(object@coef)))
@@ -24,7 +40,10 @@ qqsad <- function(object){
       q <- do.call(qtrunc, c(list(object@sad, p = p, coef = as.list(object@coef), trunc = object@trunc)))
     else{
       qsad <- get(paste("q", object@sad, sep=""), mode = "function")
-      q <- do.call(qsad, c(list(p = p), as.list(object@coef)))
+      if(object@sad == "pareto")
+        q <- do.call(qsad, c(list(p = p), shape = as.numeric(object@coef), scale=min(object@data$x)))
+      else
+        q <- do.call(qsad, c(list(p = p), as.list(object@coef)))
     }
   }else
     stop("unsupported distribution")

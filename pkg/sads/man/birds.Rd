@@ -1,5 +1,5 @@
 \name{birds}
-\alias(birds}
+\alias{birds}
 \alias{saunders}
 
 \title{

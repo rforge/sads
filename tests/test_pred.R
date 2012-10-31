@@ -6,7 +6,7 @@ library(untb)
 ## Ajustes e graficos passo a passo
 ## Uma mostra Poisson de uma lognormal
 set.seed(1913)
-samp1 <- rsad(200, frac=0.15, sad=lnorm, samp="Poisson", meanlog=3, sdlog=2)
+samp1 <- rsad(200, frac=0.15, sad="lnorm", meanlog=3, sdlog=2)
 ## O mesmo com uma amostra da logserie com mesma riqueza e total de individuos
 samp2 <- fisher.ecosystem(N=sum(samp1), S=length(samp1), nmax=sum(samp1))
 

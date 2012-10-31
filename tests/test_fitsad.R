@@ -91,3 +91,17 @@ ppsad(samp1.gm)
 ## Power
 ppsad(samp1.pw)
 
+source("fitmzsm.R")
+source("pmzsm.R")
+system.time((model1 <- fitmzsm(ARN82.eN.dec78)))
+
+source("fitzsm.R")
+system.time((model2 <- fitzsm(ARN82.eN.dec78)))
+plot(rad(ARN82.eN.dec78))
+lines(radpred(model), col=2)
+lines(radpred(model2), col=3)
+lines(radpred(x = ARN82.eN.dec78, sad = "zsm", coef = c(sum(ARN82.eN.dec78), 0.003499456,10.686740852)), col=3)
+plot(octav(ARN82.eN.dec78))
+lines(octavpred(model), col=2)
+lines(octavpred(model2), col=3)
+lines(octavpred(x = ARN82.eN.dec78, sad = "zsm", coef = c(sum(ARN82.eN.dec78), 0.003499456,10.686740852)), col=3)

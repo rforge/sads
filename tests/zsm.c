@@ -1,5 +1,6 @@
 #include<R.h>
 #include<Rmath.h>
+#include<Rinternals.h>
 
 double gammln(double xx){
   double x, y, tmp, ser;
@@ -69,9 +70,22 @@ double SomaAreas(int n, int J, double m, double theta, double dx){
   return s;
 }
 
-double Integral(int n, int J, double m, double theta, double precisao){
+void Intgrl1(int *n, int *J, double *m, double *theta, double *precisao, double *result){
   double dx, s0, s1;
-  dx = 1/100000.;
+  dx = 1/100.;
+  s0 = 0;
+  do {
+    //printf("integrando: %g passos, dx = %g\n", 1/dx, dx);
+    s1 = s0;
+    s0 = SomaAreas(*n, *J, *m, *theta, dx);
+    dx /= 2;
+  } while(abs(s1 - s0) > *precisao);
+  *result = s0;
+}
+
+double Intgrl2(int n, int J, double m, double theta, double precisao){
+  double dx, s0, s1;
+  dx = 1/100.;
   s0 = 0;
   do {
     //printf("integrando: %g passos, dx = %g\n", 1/dx, dx);
@@ -88,7 +102,16 @@ void sn(int *n, int *lengn, int *J, double *m, double *theta, double *precisao, 
   for (i=0; i < *lengn; i++){
     med = &n[i];
     //printf("%d\n", *med);
-    result[i] = *theta*Integral(*med, *J, *m, *theta, *precisao); //precisao 0.00001
+    result[i] = *theta*Intgrl2(*med, *J, *m, *theta, *precisao); //precisao 0.00001
     //printf("%g\n", result[i]);
+  }
+}
+
+void msn(int *n, int *lengn, int *J, double *theta, double *result){
+  int i;
+  int *med;
+  for (i=0; i < *lengn; i++){
+    med = &n[i];
+    result[i] = (*theta/(*med))*pow((1-(*med/(*J))), *theta-1) + *theta*(*theta-1)*(*theta-2)*pow((1-(*med/(*J))), *theta-3)/(*J*(*J)*2);
   }
 }

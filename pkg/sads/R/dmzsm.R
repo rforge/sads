@@ -1,15 +1,10 @@
-mzsm <- function(n, J, theta){
-  lengn <- length(n)
-  res <- rep(0, lengn)
-  fun <- .C("msn", as.integer(n), as.integer(lengn), as.integer(J), 
-            as.double(theta), result = res, PACKAGE = "zsm")
-  fun[["result"]]
-}
-
-dmzsm <- function(n, J, theta, log = FALSE,...){
-  all.values <- mzsm(1:J, J, theta)
-  all.values[all.values == Inf] <- NaN
-  lprobs <- log(all.values[n])-log(sum(all.values, na.rm=TRUE))
-  if(log) lprobs
-  else exp(lprobs)
+dmzsm <- function(x, J, theta, log = FALSE){
+  if (J <= 0) stop ("J must be great than zero")
+  if (theta <= 0) stop ("theta must be great than zero")
+  mzsm <- function(y, J, theta) (theta/y)*(1-y/J)^(theta-1)
+  sn <- mzsm(y=x, J = J, theta = theta)
+  mu <- mzsm(y=1:J, J = J, theta = theta)
+  lpn <- log(sn) - log(sum(mu))
+  if(log) return(lpn)
+  else return(exp(lpn))
 }

@@ -1,19 +1,19 @@
-fitmzsm <- function(x, trunc, start.value, ...){
+fitmzsm <- function(x, trunc, start.value, upper = length(x), ...){
   dots <- list(...)
-  J <- sum(x)
   if (!missing(trunc)){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if(missing(start.value)){
-    theta <- mean(x)
+    thetahat <- length(x)
   } else{
-    theta <- start.value
+    thetahat <- start.value
   }
   if (missing(trunc)){
-    LL <- function(theta) -sum(dmzsm(x, J, theta, log = TRUE))
+    LL <- function(theta) -sum(dmzsm(x, J = sum(x), theta = theta, log = TRUE))
   } else {
-    LL <- function(theta) -sum(dtrunc("mzsm", x, coef = list(J = J, theta = theta), trunc = trunc, log = TRUE))
+    LL <- function(theta) -sum(dtrunc("mzsm", x=x, coef = list(J = sum(x), theta = theta), trunc = trunc, log = TRUE))
   }  
-  result <- mle2(LL, start = list(theta = theta), data = list(x = x), ...)
+  result <- mle2(LL, start = list(theta = thetahat), data = list(x = x), method ="Brent", lower=0.001, upper=upper, ...)
+  if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
   new("fitsad", result, sad="mzsm", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }
