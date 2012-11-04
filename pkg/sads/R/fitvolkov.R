@@ -1,20 +1,27 @@
-fitvolkov <- function(x, trunc, start.value,...){
+fitvolkov <- function(x, trunc, start.values, ...){
   dots <- list(...)
-  if (!missing(trunc)){
-    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
-  }
-  if(missing(start.value)){
+  if(missing(start.values)){
     thetahat <- optimal.theta(x)
     mhat <- 0.5
   } else{
-    mhat <-start.value[1]
-    thetahat <- start.value[2]
+    thetahat <- start.values[1]
+    mhat <-start.values[2]
+  }
+  if(!"method" %in% names(dots)){
+    dots$method <- "L-BFGS-B"
+    if(!"lower" %in% names(dots)) dots$lower=c(theta=thetahat/5, m=1e-4)
+    if(!"upper" %in% names(dots)) dots$upper=c(theta=thetahat*5, m=0.9999)
+  }
+  if (!missing(trunc)){
+    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if (missing(trunc)){
-    LL <- function(m, theta) -sum(dvolkov(x, J = sum(x), m = m, theta = theta, log = TRUE))
+    LL <- function(theta, m) -sum(dvolkov(x,  theta = theta, m = m, J = sum(x),log = TRUE))
   } else {
-    LL <- function(m, theta) -sum(dtrunc("volkov", x = x, coef = list(c(J = sum(x), m = m, theta = theta)), trunc = trunc, log = TRUE))
-  }  
-  result <- mle2(LL, start = list(m = mhat, theta = thetahat), data = list(x = x), method="L-BFGS-B", lower=c(1e-4, thetahat/2), upper=c(0.99999999, thetahat*2))
+    LL <- function(theta, m) -sum(dtrunc("volkov", x = x,
+                                         coef = list(c(J = sum(x), m = m, theta = theta)),
+                                         trunc = trunc, log = TRUE))
+  }
+  result <- do.call(mle2, c(list(minuslogl=LL, start = list(theta = thetahat, m = mhat), data = list(x = x)), dots))
   new("fitsad", result, sad="volkov", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc)) 
 }

@@ -5,11 +5,12 @@ exportPattern(".")
 #       plotprofmle,pls,ppoilog,ppower,pth,ptrunc,pzipf,qls,qpoilog,qth,qtrunc,qzipf,radpred,rad, trueLL,trunc)
 ## Import specific functions from graphics used by new methods
 importFrom("graphics",plot, points, lines)
+importFrom("bbmle", AICc)
 ## Import a single function from VGAM
 importFrom("VGAM",zeta)
 ## Explicit classes and methods export
 exportClasses(fitsad,fitsadlist,rad,octav)
-exportMethods(plot, points, lines)
+exportMethods(plot, points, lines, AICc)
 ## From bbmle package
 #importClassesFrom(stats4,mle)
 #importFrom(stats4,coef,confint,logLik,BIC,summary,profile,vcov,AIC, update, plot)
@@ -28,5 +29,6 @@ import(
   bbmle,
   #fAsianOptions,
   #zipfR,
-  poilog
+  poilog,
+  untb
   )
