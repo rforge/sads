@@ -1,20 +1,28 @@
-dvolkov <- function(x, J, m, theta, log = FALSE){
-  volkov <- function (J, m, theta){
-    (gam <- m * (J - 1)/(1 - m))
-    integrand <- function(y, n) {
-      theta * exp(lgamma(J + 1) - lgamma(n + 1) - lgamma(J - 
-        n + 1) + lgamma(gam) - lgamma(J + gam) + lgamma(n + 
-        y) + lgamma(J - n + gam - y) - lgamma(1 + y) - lgamma(gam - 
-        y) - y * theta/gam)
-    }
-    f <- function(n) {
-      integrate(integrand, lower = 0, upper = gam , n = n)$value
-    }
-    out <- sapply(1:J, f)
-    return(out)
+dvolkov <- function(x, theta, m, J, log=FALSE, tol=1e-4, ...){
+  X <- 1-m
+  m.tilde <- J*m/(1-m)
+  omega <- theta/m.tilde - log(1-X)
+  f1 <- function(y,N){
+    k <- log(theta)+(N*log(X)-lfactorial(N)) 
+    f <- (lgamma(N+y)-lgamma(1+y))-omega*y 
+    exp(k+f)
   }
-  Sj <- volkov(J = J, m = m, theta = theta)
-  dsj <- Sj[x]/sum(Sj)
-  if(log) return(log(dsj))
-  else return(dsj)
+  f2 <- function(ab){
+   integrate(f1,0,Inf, N=ab, ...)$value
+  }
+  abunds <- 1
+  vals <- c()
+  vals[1] <- f2(abunds)
+  abunds <- abunds+1
+  vals[2] <- f2(abunds)
+  while((sum(vals))/(sum(vals[-abunds]))>(1+tol)|abunds<max(x))
+    {
+      abunds <- abunds+1
+      vals[abunds] <- f2(abunds)
+      }
+  ES <- theta*log((1-J*m)/(theta*(1-m))*log(m))
+  if(ES>sum(vals)) Stot <- ES
+  else Stot <- sum(vals)
+  if(log)log(vals[x]/Stot)
+  else vals[x]/Stot
 }

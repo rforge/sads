@@ -3,10 +3,11 @@ library(bbmle)
 library(vegan)
 
 ## Densidade a partir da funcao do Volkov
-dvolko <- function(x,J,theta,m)
+dvolkov <- function(x, J, m, theta, log=T)
 {
   Sj <- volkov(J=J,params=c(theta=theta,m=m))
-  Sj[x]/sum(Sj)
+  y <- Sj[x]/sum(Sj)
+  if(log)y else y
 }
 
 dvolko(1:5,J=21386,theta=50,m=0.1)
@@ -35,3 +36,11 @@ LL <- function(theta,m)
   }
 teste.bci <- mle2(LL, start=list(theta=50, m=0.1), method="L-BFGS-B", lower=c(40,0.001), upper=c(100,0.9))## problema
 summary(teste.bci)
+
+
+## Com logkda e optimal.params do untb
+moths.kda <- logkda.R(moths)
+moths.zsm <- optimal.params(moths, log.kda=moths.kda)
+## Testes da nova funcao de zsm pela formula do volkov, usando parametros obitidos acima
+moths.volk <- fitvolkov(moths, start.value=c(0.99, 50))
+
