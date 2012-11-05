@@ -1,12 +1,10 @@
-plotprofmle <- function(mleobj, nseg=20, ratio=log(8), which=NULL, auto.mfrow=TRUE,
-                        ask=!auto.mfrow&(prod(par("mfcol")) < length(which) && dev.interactive()),
+plotprofmle <- function(profobj, nseg=20, ratio=log(8), which=1:length(profobj@profile),
+                        ask = prod(par("mfcol")) < length(which) && dev.interactive(), 
                         col.line="blue", varname, ...){
-  if( class(mleobj)[1] != "profile.mle" &
-     class(mleobj)[1] != "profile.mle2") 
+  if( class(profobj)[1] != "profile.mle" &
+     class(profobj)[1] != "profile.mle2") 
     stop( "Object should have class \'profile.mle\' or \'profile.mle2\'")
-  opar <- par(no.readonly=TRUE)
-  on.exit(par(opar))
-  mleprof <- mleobj@profile
+  mleprof <- profobj@profile
   npar <- length(mleprof)
   dots <- list(...)
   if(!"ylab" %in% names(dots)) dots$ylab <- "Negative relative log-likelihood"
@@ -19,11 +17,6 @@ plotprofmle <- function(mleobj, nseg=20, ratio=log(8), which=NULL, auto.mfrow=TR
       vname <- varname
     }
     parseq = 1:npar
-    if (auto.mfrow) {
-      nl <- floor(sqrt(npar))
-      nc <- ceiling(npar/nl)
-      par(mfrow=c(nl,nc))
-    }
   }
   else{
     if(!missing(varname)){
@@ -32,7 +25,7 @@ plotprofmle <- function(mleobj, nseg=20, ratio=log(8), which=NULL, auto.mfrow=TR
     }
     parseq = which
   }
-  if (ask&!auto.mfrow) {
+  if(ask){
     oask <- devAskNewPage(TRUE)
     on.exit(devAskNewPage(oask))
   }

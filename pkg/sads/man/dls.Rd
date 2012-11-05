@@ -1,23 +1,28 @@
 \name{dls}
 \alias{dls}
 \alias{pls}
+\alias{qls}
 \title{Fisher's Logseries Distribution
 }
 \description{
-Density and distribution function for the Fisher's logseries probability distribution.
+Density, distribution function and quantile function for the Fisher's logseries probability distribution.
 }
 \usage{
 dls( x, N , alpha, log=FALSE)
 pls(q, N, alpha, lower.tail=TRUE, log.p=FALSE)
+qls(p, N, alpha, lower.tail = TRUE, log.p = FALSE)
 }
 
 \arguments{
   \item{x}{
-    vector of (non-negative integer) quantiles. Usually a vector of abundances of species in a sample.
+    vector of (integer, x>0) quantiles. Usually a vector of abundances of species in a sample.
   }
-  \item{q}{vector of (non-negative integer) quantiles. Usually a vector of
+  \item{q}{vector of (integer, x>0) quantiles. Usually a vector of
     abundances of species in a sample.
   }
+  \item{p}{
+    vector of probabilities.
+    }
   \item{N}{
     sample size. Usually the total number of individuals in the sample (see details).
   }
@@ -70,26 +75,50 @@ pls(q, N, alpha, lower.tail=TRUE, log.p=FALSE)
 }
 
 \value{
-'dls' gives the (log) density of the density, 'pls' gives the (log)
-distribution function.
+'dls' gives the (log) of the density, 'pls' gives the (log)
+distribution function, ''qls' gives the (log) the quantile function. 
 }
 \references{
 
   Alonso, D. and Ostling, A., and Etienne, R. S. 2008 The implicit
   assumption of symmetry and the species abundance
-  distribution. \emph{Ecology Letters, 11}: 93-105.
+  distribution. Ecology Letters, 11: 93-105.
   
-  Pielou, E.C. 1977. \emph{Mathematical Ecology}. New York: John Wiley
+  Fisher, R.A, Corbert, A.S. and Williams, C.B. (1943) The Relation between the number of species and the number of individuals in a random sample of an animal population. The Journal of Animal Ecology, 12(1): 42--58.
+
+  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling
+  species abundances. Ecology Letters 10:1037--1045
+
+
+  Pielou, E.C. 1977. Mathematical Ecology. New York: John Wiley
   and Sons.
 
-  Fisher, R.A, Corbert, A.S. and Williams, C.B. (1943) The Relation between the number of species and the number of individuals in a random sample of an animal population. \emph{The Journal of Animal Ecology, 12(1)}: 42--58.
-
-  Green,J. and Plotkin, J.B. 2007 A statistical theory for sampling species abundances. \emph{Ecology Letters 10}:1037--1045
 }
 \author{
-Paulo I. Prado
+Paulo I. Prado and Murilo Miranda
 }
 
 \seealso{
-dpois, dnbinom, dpoig, fit.logser
+  'dpois', 'dnbinom', 'dpoig'.
+  For for maximum likelihood estimation in the context of species
+  abundance distributions see 'fitls', 'fisherfit' in vegan package
+and 'fisher' in untb package.
 }
+
+\examples{
+x <- 1:100
+pdf <- dls(x=x, N=100, alpha=5)
+cdf <- pls(q=x, N=100, alpha=5)
+par(mfrow=c(1,2))
+plot(x,cdf, ylab="Cumulative Probability", type="b",
+     main="Logseries distribution, CDF")
+plot(x,pdf, ylab="Probability", type="h",
+     main="Logseries distribution, PDF")
+par(mfrow=c(1,1))
+
+## Fisher logseries is a discrete pdf, hence:
+pls(10,N=1000,alpha=50)==sum(dls(1:10,N=1000,alpha=50)) # should be TRUE
+
+## qls is the inverse of pls
+sum(qls(cdf,N=100,alpha=5)-x)
+  }

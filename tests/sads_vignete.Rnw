@@ -42,7 +42,7 @@ options(width=60, continue=" ")
 \section{Introdução}
 \label{sec:introducao}
 
-A dominância numérica de poucas espécies nas comunidades biológicas é uma das poucas leis gerais da ecologia \cite{McGill2007}. A maioria das espécies nas comunidades são representadas por poucos indivíduos, e poucas são as espécies abundantes, resultando em um histograma de distribuição de abundâncias tipicamente côncavo, conhecido na literatura como \emph{“hollow curve”}. Há pouquíssimas exceções a este padrão, o que um descritor básico da estrutura das comunidades. Embora o padrão seja único, muitas distribuições teóricas de probabilidade foram propostas para descrevê-lo. Portanto, o uso de \emph{sads} para descrever e comparar comunidades demanda ferramentas estatísticas para ajustar os vários modelos disponíveis e identificar o que melhor descreve os dados.
+A dominância numérica de poucas espécies nas comunidades biológicas é uma das poucas leis gerais da ecologia \cite{McGill2007}. A maioria das espécies nas comunidades são representadas por poucos indivíduos, e poucas são as espécies abundantes, resultando em um histograma de distribuição de abundâncias tipicamente côncavo, conhecido na literatura como \emph{“hollow curve”}. Há pouquíssimas exceções a este padrão, o que o torna um descritor básico da estrutura das comunidades. Embora o padrão seja único, muitas distribuições teóricas de probabilidade foram propostas para descrevê-lo. Portanto, o uso de \emph{sads} para descrever e comparar comunidades demanda ferramentas estatísticas para ajustar os vários modelos disponíveis e identificar o que melhor descreve os dados.
 
 Uma das ferramentas mais promissoras baseiam-se no princípio de verossimilhança estatística \cite{Edwards1972, Royall2000} para criar protocolos de ajuste e comparação simultânea de várias hipóteses estatísticas concorrentes. Um dos mais simples é a seleção de modelos baseada em índices de informação \cite{Burnham2002}, que ordena um conjunto de modelos de acordo com sua plausibilidade frente aos dados, levando em conta sua parcimônia. Na escala proposta recentemente por \cite{McGill2003}, essa seria a categoria mais rigorosa de testes de ajustes dos dados a modelos teóricos. O uso crescente destes conceitos é considerada uma mudança no paradigma de análise de dados, em resposta às limitações que as abordagens tradicionais impõem a muitas áreas da biologia \cite{Johnson2004}. 
 
@@ -197,7 +197,7 @@ plot(arn.oc)
 
 @ 
 <<Oitavas-honestas,include=F>>=
-hist(moths[moths<=128],breaks=c(0,2^(0:7)))
+hist(moths[moths<=128],breaks=c(0,2^(0:7)), xlab="Abundance class", ylab="Number os species", main="")
 @ %def 
 
 \begin{figure}[!h]
@@ -287,7 +287,7 @@ AIC(moths.ls)
 \subsection{Avaliação do ajuste}
 \label{sec:avaliacao-do-ajuste}
 
-Outro comando importante herdado é o de cálculo do \emph{perfil de verossimilhança} do modelo. A verossimilhança expressa o quão plausível é um modelo estatístico como descrição dos dados. Ela varia com o valor do(s) parâmetro(s) do modelo, e uma maneira de busacr o melhor ajuste é encontrar os valores de parâmetros que resultam na maior verossimilhança possível. Chamamos esse procedimento de \emph{ajuste de máxima verossimilhança} e os valores resultantes dos parâmetros suas \emph{estimativas de máxima verossimilhança} (\emph{mle}). Um diagnóstico importante do modelo é investigar como sua verossimilhança (portanto sua qualidade como descrição dos dados) varia quando fazemos os parâmetros variar um pouco em torno dos \emph{mles}. A tabela desses valores e a verossimilhança resultante é chamada \emph{perfil de verossimilhança}. 
+Outro comando importante herdado é o de cálculo do \emph{perfil de verossimilhança} do modelo. A verossimilhança expressa o quão plausível é um modelo estatístico como descrição dos dados. Ela varia com o valor do(s) parâmetro(s) do modelo, e uma maneira de buscar o melhor ajuste é encontrar os valores de parâmetros que resultam na maior verossimilhança possível. Chamamos esse procedimento de \emph{ajuste de máxima verossimilhança} e os valores resultantes dos parâmetros suas \emph{estimativas de máxima verossimilhança} (\emph{mle}). Um diagnóstico importante do modelo é investigar como sua verossimilhança (portanto sua qualidade como descrição dos dados) varia quando fazemos os parâmetros variar um pouco em torno dos \emph{mles}. A tabela desses valores e a verossimilhança resultante é chamada \emph{perfil de verossimilhança}. 
 
 A função \code{profile} gera o perfil \footnote{como isso implica me ajustar muitos modelos (um para cada novo valor de parâmetros), esta função pode demorar, e está muito sujeita a erros. Mas há maneiras de amenizar isso, veja \cite{Bolker2008}.}, que é usado para calcular o intervalo de confiança dos parâmetros. Faça isso para nosso ajuste da série logarítmica:
 @ 
@@ -312,7 +312,7 @@ par(mfrow=c(1,1))
 <<Ploting-profiles>>
 @ %def 
   \end{center}
-  \caption{\textbf{Esquerda:} Perfil de verossimilhança do alfa de Fisher ajustado aos dados de mariposas capturadas com armadilhas luminosas \cite{Fisher1943}. A linha vermelha delimita o intervalo de verossimilhança, que seriam valores dos parâmetro alfa que resultariam em modelos tão plausíveis quanto o de máxima verossimilhança. Este intervalo dá expressa a precisão da estimativa do parâmetro.  \textbf{Direita:} o mesmo perfil, com a verossimilhança transformada para uma variável normal padronizada (variável z). Aceitando-se que o parâmetro tem distribuição normal, nesta escala é possível identificar os intervalos de confiança, que estão indicados pelas linhas pontilhadas vermelho-claras.}
+  \caption{\textbf{Esquerda:} Perfil de verossimilhança do alfa de Fisher ajustado aos dados de mariposas capturadas com armadilhas luminosas \cite{Fisher1943}. A linha vermelha delimita o intervalo de verossimilhança, que são valores dos parâmetro alfa que resultariam em modelos tão plausíveis quanto o de máxima verossimilhança. Este intervalo dá expressa a precisão da estimativa do parâmetro.  \textbf{Direita:} o mesmo perfil, com a verossimilhança transformada para uma variável normal padronizada (variável z). Aceitando-se que o parâmetro tem distribuição normal, nesta escala é possível identificar os intervalos de confiança, que estão indicados pelas linhas pontilhadas vermelho-claras.}
   \label{fig:profiles}
 \end{figure}
 
@@ -364,16 +364,16 @@ Comparamos os modelos com o critério de informação de Akaike, que expressa a 
 
 @ 
 <<Model selection table>>=
-AICtab(moths.ls, moths.pl, moths.ln, moths.gm, base=T)
+AICtab(moths.ls, moths.pl, moths.ln, base=T)
 @ %def 
 
 A seleção de modelos indica que a distribuição Poisson-lognormal truncada em zero é a descrição mais plausível desses dados, mas que as distribuições de série logarítmica e lognormal truncada em 0,5 são modelos igualmente bons. Podemos avaliar isso plotando as linhas dos previstos por esses modelos sobre os histogramas de oitavas. Para isso, primeiro calculamos o número espécies em cada oitava previstos pelos modelos com a função \code{octavpred} 
 
 @ 
 <<Predicted values for octaves>>=
-head(moths.ls.oc <- octavpredt(moths.ls))# substituir por octavpred
-head(moths.pl.oc <- octavpredt(moths.pl))
-head(moths.ln.oc <- octavpredt(moths.ln))
+head(moths.ls.oc <- octavpred(moths.ls))
+head(moths.pl.oc <- octavpred(moths.pl))
+head(moths.ln.oc <- octavpred(moths.ln))
 @ %def 
 
 \setkeys{Gin}{width=0.7\textwidth}
@@ -405,9 +405,9 @@ Para comparar os modelos no diagrama de \emph{rank}-abundância primeiro criamos
 
 @ 
 <<Predicted values - radplots>>=
-head(moths.ls.rad <- radpredt(moths.ls)) 
-head(moths.pl.rad <- radpredt(moths.pl))
-head(moths.ln.rad <- radpredt(moths.ln))
+head(moths.ls.rad <- radpred(moths.ls)) 
+head(moths.pl.rad <- radpred(moths.pl))
+head(moths.ln.rad <- radpred(moths.ln))
 @ %def 
 
 e em seguida criamos o gráficos e incluímos das linhas dos valores previstos:

@@ -1,7 +1,9 @@
 pmand <- function (q, N, s, v, lower.tail = TRUE, log.p = FALSE){
-  if (s <= 0 || v < 0) 
-    stop("s and v must be greater than zero")
-  if (N < 1) 
+  if (s <= 0 ) 
+    stop("s must be greater than zero")
+  if (v <= 0) 
+    stop("v must be greater than zero")
+  if (N < 1||!any(is.wholenumber(N))) 
     stop("N must be positive integer")
   y <- NULL
   for (i in 1:length(q)) {

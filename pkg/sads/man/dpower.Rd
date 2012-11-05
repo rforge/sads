@@ -2,11 +2,11 @@
 \alias{dpower}
 \alias{ppower}
 \alias{qpower}
-\title{Power distribution
+\title{Power discrete distribution
 }
 \description{
-Density, distribution function and quantile function for
-power distribution with parameter 's'.
+Density, distribution function and quantile function for discrete
+version of power distribution with parameter 's'.
 }
 \usage{
 dpower( x, s, log=FALSE)
@@ -16,10 +16,10 @@ qpower( p, s, lower.tail= TRUE, log.p=FALSE)
 
 \arguments{
   \item{x}{
-    vector of (non-negative integer) quantiles. In the context of
+    vector of (integer x>0) quantiles. In the context of
     species abundance distributions, this is a vector of abundances of species in a sample.
   }
-  \item{q}{vector of (non-negative integer) quantiles. In the context of
+  \item{q}{vector of (integer x>0) quantiles. In the context of
     species abundance distributions, a vector of
     abundances of species in a sample.
   }
@@ -39,7 +39,8 @@ qpower( p, s, lower.tail= TRUE, log.p=FALSE)
 }
 
 \details{
-  The power density is
+  The power density is a discrete probability distribution defined for
+  integer x>0:
 
   p(x) = x^(-s) / zeta (s)
 
@@ -47,14 +48,14 @@ qpower( p, s, lower.tail= TRUE, log.p=FALSE)
   negative power of 'x', given by the 's' exponent. The Riemann's zeta
   function is the integration constant.
 
-  The power distribution can be used as species abundance distribution (sad) model, which
+  The power distribution can be used as a species abundance distribution (sad) model, which
   describes the probability of the abundance 'x' of given species in a
   sample or assemblage of species.
  }
 
 \value{
-'dpower' gives the (log) density of the density, 'ppower' gives the (log)
-distribution function, 'qpower' gives the quantile function.
+  'dpower' gives the (log) density of the density, 'ppower' gives the (log)
+  distribution function, 'qpower' gives the quantile function.
 }
 
 \references{
@@ -67,6 +68,24 @@ Paulo I. Prado and Murilo Dantas Miranda
 }
 
 \seealso{
-dzeta in VGAM package; rsad for random
-generation fitpower for maximum likelihood estimation in the context of species abundance distributions.
+'dzeta' in VGAM package; 'fitpower' for maximum likelihood estimation in the context of species abundance distributions.
+}
+
+\examples{
+x <- 1:20
+pdf <- dpower(x=x, s=2)
+cdf <- ppower(q=x, s=2)
+par(mfrow=c(1,2))
+plot(x,cdf, ylab="Cumulative Probability", type="b",
+     main="Power distribution, CDF")
+plot(x,pdf, ylab="Probability", type="h",
+     main="Power distribution, PDF")
+par(mfrow=c(1,1))
+
+## The power distribution is a discrete pdf, hence:
+ppower(10,s=2)==sum(dpower(1:10,s=2)) # should be TRUE
+
+## quantile is the inverse of cdf
+sum(qpower(cdf,s=2)-x) # should be zero
+
 }

@@ -2,36 +2,40 @@
 \alias{dzipf}
 \alias{pzipf}
 \alias{qzipf}
-\title{Zipf distribution
-}
+
+\title{Zipf distribution}
+
 \description{
 Density, distribution function and quantile function for
 Zipf distribution with parameters ‘N’ and ‘s’.
 }
+
 \usage{
 dzipf( x, N, s, log=FALSE)
-pzipf( q, N, sig, lower.tail=TRUE, log.p=FALSE)
-qzipf( p, N, sig, S=30)
+pzipf( q, N, s, lower.tail=TRUE, log.p=FALSE)
+qzipf( p, N, s, lower.tail = TRUE, log.p = FALSE)
 }
 
 \arguments{
   \item{x}{
     vector of (non-negative integer) quantiles. In the context of
-    species abundance distributions, this is a vector of abundances of species in a sample.
+    species abundance distributions, this is a vector of abundances or
+    abundance ranks of species in a sample.
   }
   \item{q}{vector of (non-negative integer) quantiles. In the context of
     species abundance distributions, a vector of
-    abundances of species in a sample.
+    abundances or abundance ranks of species in a sample.
   }
   \item{p}{
-    vetor of probabilities.
+    vector of probabilities.
   }
   \item{N}{
-    positive integer 0 < N <Inf, total number of elements of a collection. In the context of
+    positive integer 0 < N < Inf, total number of elements of a collection. In the context of
     species abundance distributions, usually the number of species in a sample.
   }
   \item{s}{
-  positive real s > 1; Zipf's exponent}
+    positive real s > 0; Zipf's exponent
+  }
   \item{log, log.p}{
     logical; if TRUE, probabilities p are given as log(p).
   }
@@ -42,32 +46,39 @@ qzipf( p, N, sig, S=30)
 }
 
 \details{
-  Zipf distribution describe the probability or frequency of occurrence
+  The Zipf distribution describes the probability or frequency of occurrence
   of a given element from a set of 'N' elements. According to Zipf's
-  law, this probability  is inversely proportional to a power 's' of the
-  rank  of the element. The density function is
+  law, this probability  is inversely proportional to a power 's' of the frequency
+  rank of the element in the set. The density function is
 
   p(x) = (x^(-s)) / sum((1:N)^(-s))
 
   Since p(x) is proportional to a power of 'x', the Zipf distribution is a
-  power distribution. The Zeta distribution is a special case when N=Inf.
+  power distribution. The Zeta distribution is a special case when
+  N=Inf.
 
-  The Zipf distribution is widely used to describe the probability
+  The Zipf distribution has a wide range of application (Li 2011). One
+  of its best know application is to describe the probability
   of occurrence of a given word that has a ranking 'x' in a \emph{corpus} that has a total of 'N'
-  words. It can be used as well to describe the probability of the rank
-  or abundance 'x' of given species in a sample or assemblage of 'N' species.
+  words. It can be used as well to describe the probability of the
+  abundance rank or even the abundance 'x' of a given species in a sample or assemblage of 'N' species.
 }
 
 \value{
-'dzipf' gives the (log) density of the density, 'pzipf' gives the (log)
-distribution function, 'qzipf' gives the quantile function.
+  'dzipf' gives the (log) density, 'pzipf' gives the (log)
+  distribution function, 'qzipf' gives the quantile function.
 }
 
 \references{
-  Zipf's Law. http://en.wikipedia.org/wiki/Zipf's_law.
 
   Johnson N. L., Kemp, A. W. and Kotz S. (2005) Univariate Discrete
-  Distributions, 3rd edition, Hoboken, New Jersey: Wiley. Section 11.2.20. 
+  Distributions, 3rd edition, Hoboken, New Jersey: Wiley. Section
+  11.2.20. 
+
+  Li, W. (2011). Zipf's Law
+  Bibliography. \url{http://www.nslij-genetics.org/wli/zipf/index.html}.
+  
+  Zipf's Law. \url{http://en.wikipedia.org/wiki/Zipf's_law}.
 }
 
 \author{
@@ -75,6 +86,22 @@ Paulo I. Prado and Murilo Dantas Miranda
 }
 
 \seealso{
-dpois, dlnorm; dzipf and rzipf in zipfR package; rsad for random
-generation fitzipf for maximum likelihood estimation in the context of species abundance distributions.
+\code{dzipf} and \code{rzipf} and related functions in \pkg{zipfR} package; \code{Zeta} for
+zeta distribution in
+\pkg{VGAM} package; \code{\link{fitzipf}} and \code{\link{fitsad}} for maximum likelihood estimation in the context of species abundance distributions.
+}
+
+\examples{
+x <- 1:20
+pdf <- dzipf(x=x, N=100, s=2)
+cdf <- pzipf(q=x, N=100, s=2)
+par(mfrow=c(1,2))
+plot(x,cdf, ylab="Cumulative Probability", type="b",
+     main="Zipf distribution, CDF")
+plot(x,pdf, ylab="Probability", type="h",
+     main="Zipf distribution, PDF")
+par(mfrow=c(1,1))
+
+## quantile is the inverse of cdf
+sum(qzipf(cdf,N=100, s=2)-x) # should be zero
 }
