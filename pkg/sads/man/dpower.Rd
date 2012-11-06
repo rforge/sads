@@ -54,8 +54,11 @@ qpower( p, s, lower.tail= TRUE, log.p=FALSE)
  }
 
 \value{
-  'dpower' gives the (log) density of the density, 'ppower' gives the (log)
-  distribution function, 'qpower' gives the quantile function.
+  \code{dpower} gives the (log) density of the density, \code{ppower} gives the (log)
+  distribution function, \code{qpower} gives the quantile function.
+
+  Invalid values for parameter \code{s} will result in return
+  values \code{NaN}, with a warning.
 }
 
 \references{

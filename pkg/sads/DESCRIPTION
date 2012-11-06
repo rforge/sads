@@ -5,8 +5,8 @@ Version: 0.2.09
 Date: 2012-11-03
 Author: Paulo I. Prado and Murilo Dantas Miranda
 Maintainer: Paulo I. Prado <prado@ib.usp.br>
-Depends: MASS, bbmle, poilog, untb
-Imports: methods, graphics, VGAM
+Depends: MASS, bbmle, poilog 
+Imports: methods, graphics, VGAM, untb
 Description: Maximum likelihood tools to fit and compare models of species abundance distributions.
 License: GPL-2
 LazyData: yes

@@ -28,28 +28,31 @@
 \begin{itemize}
 \item Check why
   @ 
-<<eavl=T>>=
+<<eval=F>>=
 pzipf(10,N=100,s=2) - sum(dzipf(1:10,N=100,s=2))
 @ %def 
 gives a small difference. Once solved include this command in help page. 
 \item Check why
   @ 
-<<>>=
+<<eval=F>>=
 p.123 <-ppareto(1:3,shape=3,scale=1) 
-sum(qpareto(p.123, shape=3, scale=1)-1:3)
+sum(qpareto(p.123, 3, scale=1)-1:3)
 @ %def 
-gives a small difference. Once solved include this command in help page. 
+gives a small difference. SOLVED: difference because \code{ppareto(1,shape=3,scale=1)} is zero 
   
 \end{itemize}
 
 \section{Distributions}
 \label{sec:distributions}
+\item Distributions to include:
 \begin{itemize}
-\item Continuous power
-\item Truncated power (or Power-bend)
-\item Geometric series
-\item Broken-stick (= Poisson sample of exponential?)
-\item Make invalid parameters return \code{NaN}, instead than stoping!
+  \begin{itemize}
+  \item Continuous power
+  \item Truncated power (or Power-bend)
+  \item Geometric series
+  \item Broken-stick (= Poisson sample of exponential?) 
+  \end{itemize}
+\item Make invalid parameters return \code{NaN}, instead than stoping! \textbf{DONE}
 \item Allow Pareto distribution to return zero values when scale >= min(x). (Maybe not a good idea: may cause fitting problems.). 
 \end{itemize}
 
@@ -69,6 +72,7 @@ gives a small difference. Once solved include this command in help page.
 \label{sec:other-functions}
 \begin{itemize}
 \item Include Connoly's et al. \cite{connoly2009} bootstrap method in \code{rsad}
+\item Include functions for sars, starting with those proposed by Coleman \cite{coleman1981} and Kobayashi \cite{kobayashi1980}.
 \end{itemize}
 
 \section{Help pages}
@@ -76,6 +80,7 @@ gives a small difference. Once solved include this command in help page.
 \begin{itemize}
 \item Include links to the functions cited in the \code{seealso} section
 \item Use markups for codes, url, etc
+\item For quantile functions that use search algorithm or approxfun include this information in the note section of help page.
 \end{itemize}
 
 \bibliographystyle{plain}

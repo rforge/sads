@@ -47,6 +47,9 @@ log(p) and log(d).
 \value{
 \code{dpareto} gives the (log) density, \code{ppareto} gives the (log)
 distribution function, \code{qpareto} gives the quantile function.
+
+Invalid values for parameters \code{shape} or \code{scale} will result in return
+values \code{NaN}, with a warning.
 }
 
 \details{
@@ -72,7 +75,7 @@ In ecology the Pareto distribution can be used to describe the distribution
 of abundances among species in a biological assemblage
 (a.k.a. biological community) or in a sample taken from such an
 assemblage. Though much less used than the lognormal to fit sads, it can fit better the extremities
-of the empirical distributions (Johnson et al. 1995, p.608).
+of the empirical distributions to which the lognormal applies (Johnson et al. 1995, p.608).
 }
 
 \note{
@@ -102,6 +105,10 @@ curve(ppareto(x, shape=3, scale=1), 1,8, ylab="Probability",
       main="Pareto CDF")
 par(mfrow=c(1,1))
 }
+
+## Quantile is the inverse funtion of probability:
+p.123 <-ppareto(1:3,shape=3,scale=0.99) 
+sum(qpareto(p.123, shape=3, scale=0.99)-1:3) # should be zero
 
 \author{Paulo I. Prado and Murilo Miranda}
 

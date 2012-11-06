@@ -104,4 +104,7 @@ par(mfrow=c(1,1))
 
 ## quantile is the inverse of cdf
 sum(qzipf(cdf,N=100, s=2)-x) # should be zero
+
+## Zipf distribution is discrete hence
+all.equal(sum(dzipf(1:10,N=10,s=2)),pzipf(10,N=10,s=2)) # should be TRUE
 }

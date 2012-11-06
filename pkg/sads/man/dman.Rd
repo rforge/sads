@@ -68,6 +68,9 @@ qmand( p, N, s, v, lower.tail = TRUE, log.p = FALSE)
 \value{
 'dmand' gives the (log) density of the density, 'pmand' gives the (log)
 distribution function, 'qmand' gives the quantile function.
+
+Invalid values for parameters \code{v} or \code{s} will result in return
+values \code{NaN}, with a warning.
 }
 
 \references{

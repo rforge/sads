@@ -2,8 +2,8 @@
 \alias{dls}
 \alias{pls}
 \alias{qls}
-\title{Fisher's Logseries Distribution
-}
+\title{Fisher's Logseries Distribution}
+
 \description{
 Density, distribution function and quantile function for the Fisher's logseries probability distribution.
 }
@@ -27,7 +27,7 @@ qls(p, N, alpha, lower.tail = TRUE, log.p = FALSE)
     sample size. Usually the total number of individuals in the sample (see details).
   }
   \item{alpha}{
-    Fisher's alpha parameter (see details).
+    real positive; Fisher's alpha parameter (see details).
   }
   \item{log, log.p}{
     logical; if TRUE, probabilities p are given as log(p).
@@ -75,8 +75,11 @@ qls(p, N, alpha, lower.tail = TRUE, log.p = FALSE)
 }
 
 \value{
-'dls' gives the (log) of the density, 'pls' gives the (log)
-distribution function, ''qls' gives the (log) the quantile function. 
+\code{dls} gives the (log) of the density, \code{pls} gives the (log)
+distribution function, \code{qls} gives the (log) the quantile function.
+
+Invalid values for parameter \code{alpha} will result in return
+  values \code{NaN}, with a warning.
 }
 \references{
 
@@ -99,10 +102,10 @@ Paulo I. Prado and Murilo Miranda
 }
 
 \seealso{
-  'dpois', 'dnbinom', 'dpoig'.
+  \code{dpois}, \code{dnbinom}, \code{\link{dpoig}}.
   For for maximum likelihood estimation in the context of species
-  abundance distributions see 'fitls', 'fisherfit' in vegan package
-and 'fisher' in untb package.
+  abundance distributions see \code{\link{fitls}}, \code{fisherfit} in \pkg{vegan} package
+  and \code{fisher} in \pkg{untb} package.
 }
 
 \examples{
@@ -117,8 +120,8 @@ plot(x,pdf, ylab="Probability", type="h",
 par(mfrow=c(1,1))
 
 ## Fisher logseries is a discrete pdf, hence:
-pls(10,N=1000,alpha=50)==sum(dls(1:10,N=1000,alpha=50)) # should be TRUE
+all.equal(pls(10,N=1000,alpha=50), sum(dls(1:10,N=1000,alpha=50)) # should be TRUE
 
 ## qls is the inverse of pls
-sum(qls(cdf,N=100,alpha=5)-x)
+all.equal(qls(cdf,N=100,alpha=5), x) # should be TRUE
   }

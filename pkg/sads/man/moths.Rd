@@ -1,7 +1,5 @@
 \name{moths}
 \alias{moths}
-\alias{williams}
-
 \title{
   Moths caught by lightraping at Rothamsted 1933-1936
 }

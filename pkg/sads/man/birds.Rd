@@ -1,13 +1,13 @@
 \name{birds}
 \alias{birds}
-\alias{saunders}
+
 
 \title{
   Abundances of breeding birds in Quacker Run Valley, NY
 }
 
 \description{
-  A dataset containing the number of sights of species of nesting birds in a census
+  A dataset containing the number of sights of nesting birds by species in a census
   in a 16,697 acres Park in New York State, ran in 1936 by A. A. Saunders.
 }
 
