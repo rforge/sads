@@ -9,23 +9,28 @@
 \alias{fitweibull}
 \alias{fitzipf}
 \title{ML fiting of species abundance distributions}
-\description{Fits basic probability distributions for
+\description{Fits probability distributions for
   abundances of species in a sample or assemblage
 }
 \usage{
-fitsad(x, distr=
-c("gamma","geom","lnorm","ls","nbinom","poilog","power","weibull","zipf"),
-trunc, start.value, trueLL, dec.places, ...)
-fitgamma(x, trunc, start.value, trueLL, dec.places, ...  )
+fitsad(x, sad=
+sad =c("gamma","geom","lnorm","ls","mand","mzsm","nbinom","pareto","poilog","power","weibull","volkov","zipf"),
+trunc, start.value, trueLL = TRUE , dec.places = 0, ...)
+fitgamma(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
 fitgeom(x, trunc, start.value, ...  )
-fitlnorm(x, trunc, start.value, trueLL, dec.places, ...  )
-fitls(x, trunc, start.value, ...  )
+fitlnorm(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
+fitls(x, trunc, start.value, upper = length(x), ...  )
+fitmand(x, trunc, start.value, ... )
+fitmzsm(x, trunc, start.value, upper = length(x), ... )
 fitnbinom(x, trunc, start.value, ...  )
+fitpareto(x, trunc, start.value, trueLL = TRUE, dec.places = 0, upper = 20, ... )
 fitpoilog(x, trunc, start.value, ...  )
 fitpower(x, trunc, start.value, ...  )
-fitweibull(x, trunc, start.value, trueLL, dec.places, ...  )
+fitweibull(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
+fitvolkov(x, trunc, start.values, ... )
 fitzipf(x, trunc, start.value, ...  )
 }
+
 \arguments{
   \item{x}{vector of (positive integer) quantiles. In the context of
     sads, some abundance measurement (e.g., number of individuals,
@@ -47,6 +52,13 @@ fitzipf(x, trunc, start.value, ...  )
 }
 \references{
 }
+\source{
+  If starting value is not supplied in \code{fitls}, it is calculated through numerical optimization with the \code{uniroot}
+  function, following the code of the function \code{fishers.alpha} of the
+  \pkg{untb} package. Since \code{fishers.alpha} implements the
+  numerical recipe of Fisher (1943), this starting value is already the
+  maximum likelihood estimate for Fisher's alpha Alonso et al. (2008, supplementary material).
+  }
 \seealso{
 }
 \examples{

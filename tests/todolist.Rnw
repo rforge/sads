@@ -81,6 +81,8 @@ gives a small difference. SOLVED: difference because \code{ppareto(1,shape=3,sca
 \item Include links to the functions cited in the \code{seealso} section
 \item Use markups for codes, url, etc
 \item For quantile functions that use search algorithm or approxfun include this information in the note section of help page.
+\item Add Paulo's email in all help pages
+\item Add keywords 
 \end{itemize}
 
 \bibliographystyle{plain}

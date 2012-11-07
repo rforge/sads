@@ -1,24 +1,24 @@
-\name{fitlogser}
-\alias{fitlogser}
+\name{fitls}
+\alias{fitls}
 \title{Fits Fisher's Logseries Distribution}
 \description{
-Fits Fisher's logseries distribution
-by maximum likelihood, from a vector of species abundances or from the total number of
-species and individuals in a sample.
+Fits Fisher's logseries distribution to a vector of species abundances by maximum likelihood.
 }
 \usage{
-fitlogser( x, size , rich, ... )
+fitls( x, trunc, start.value, upper = length(x), ...)
 }
 
 \arguments{
   \item{x}{
     vector of (non-negative integer) abundances of species in a sample.
   }
-  \item{size}{
-    total number of individuals in the sample. Ignored if x is supplied.
+  \item{trunc}{
+    
   }
-  \item{rich}{
-    total number of species in the sample. Ignored if x is supplied
+  \item{start.value}{
+    
+  }
+  \item{upper}{
   }
   \item{...}{
     further arguments to be passed to mle2
@@ -46,20 +46,18 @@ fitlogser( x, size , rich, ... )
   X = N / (alpha+ N)
   
   This function implements the original numerical recipe by Fisher to
-  fit the logseries distribution, given a vector of abundances, or ,
-  alternatively, the number of individuals and species in the sample. Alonso et al. (2008,
+  fit the logseries distribution, given a vector of species abundances.
+  Alonso et al. (2008,
   supplementary material) showed that this recipe gives the maximum
-  likelihood estimate of Fisher's alpha. The function also
-  calculates the log-likelihood and Akaike information index for the
-  fit.
-
+  likelihood estimate of Fisher's alpha.
+  
   Fitting is done through numerical optmization with the 'uniroot'
   function, following the code of the function 'fishers.alpha' of the
-  untb package. After that, if abundances were supplied, the fitted value of the alpha parameter is
+  untb package. After that, fitted value of the alpha parameter is
   use to get the Log-likelihood from the logseries density
   function 'dls', using the 'mle2' function from bbmle package. The
   resulting object is of the class 'fitsad' which inherits from 'mle2'
-  class and thus has methods for extraction of AIC, coeficients and so on (see fitsad-class help). 
+  class and thus has methods for extraction of AIC, coeficients and so on (see \code{\link{fitsad-class}}). 
 }
 
 \value{

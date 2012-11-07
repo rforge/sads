@@ -6,12 +6,12 @@
 }
 \description{
 Density, distribution function and quantile function for
-Poisson-longnormal distribution with parameters ‘mu’ and ‘sig’.
+Poisson-longnormal distribution with parameters \code{mu} and \code{sig}.
 }
 \usage{
 dpoilog( x, mu, sig, log=FALSE)
 ppoilog( q, mu, sig, lower.tail=TRUE, log.p=FALSE)
-qpoilog( p, mu, sig, S=30)
+qpoilog( (p, mu, sig, S = 30, lower.tail = TRUE, log.p = FALSE)
 }
 
 \arguments{
@@ -22,7 +22,7 @@ qpoilog( p, mu, sig, S=30)
     abundances of species in a sample.
   }
   \item{p}{
-    vetor of probabilities.
+    vector of probabilities.
   }
   \item{mu,sig}{
     parameters of the compounding lognormal distribution (see details).
@@ -34,7 +34,8 @@ qpoilog( p, mu, sig, S=30)
     logical; if TRUE (default), probabilities are P[X <= x],
     otherwise, P[X > x].
   }
-  \item{S}{
+  \item{S}{positive integer; initial value for bissection method.
+  (see note)
     }
 }
 
@@ -62,7 +63,7 @@ exponential variables, (b) sampling is a Poisson proccess with expected
 value E[x]= f*n where n is the abundance in the community and f the
 fraction of individuals sampled, (c) individuals are sampled with replacement, or the
 fraction of total individuals sampled is small enough to approximate a
-sample with replacement. See Engen (1977) and Alonso et al. (2008) for critic evaluations.
+sample with replacement. See Engen (1977) and Alonso et al. (2008) for critical evaluations.
 }
 
 \value{
@@ -70,16 +71,23 @@ sample with replacement. See Engen (1977) and Alonso et al. (2008) for critic ev
 distribution function, 'qpoilog' gives the quantile function.
 }
 
+\note{
+parameter \code{S} in \code{qpoilog} is just a starting value for the
+bissection method, and does affect the final result, only the
+convergence velocity. A good guess is the total number of observations,
+which in the context of sads is the observed number of species.
+}
+
 \source{
-  The three functions were built from dpoilog function from poilog
-  package (Vidar Grøtan and Steinar Engen).
+  The three functions were built from \code{dpoilog} function from \pkg{poilog}
+  package (Vidar \enc{Grøtan}{Grotan} and Steinar Engen).
   
-  dpoilog is just a wraper of poilog::dpoilog with an additional 'log' argument.
+  \code{dpoilog} is just a wraper of \code{poilog::dpoilog} with an additional 'log' argument.
 
-  ppoilog does the cumulative sum of poilog::dpoilog.
+  \code{ppoilog} does the cumulative sum of \code{poilog::dpoilog}.
 
-  qpoilog uses the ... method to approximate numerically quantiles using
-  poilog::dpoilog, and is extremely slow for a large number of quantiles.
+  \code{qpoilog} uses modified bissection method to find numerically quantiles using
+  \code{ppoilog}, and is extremely slow for a large number of quantiles.
 }
 
 \references{
@@ -100,7 +108,7 @@ distribution function, 'qpoilog' gives the quantile function.
 }
 
 \author{
-Paulo I. Prado and Murilo Dantas Miranda
+Paulo I. Prado \email{prado@ib.usp.br} and Murilo Dantas Miranda
 }
 
 \seealso{

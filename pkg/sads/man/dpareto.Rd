@@ -7,7 +7,7 @@
 
 \description{
   Density, distribution function and quantile function for
-  the Pareto distribution with parameters ‘shape’ and ‘scale’.
+  the Pareto distribution with parameters \code{shape} and \code{scale}.
 }
 
 \usage{
@@ -83,8 +83,8 @@ of the empirical distributions to which the lognormal applies (Johnson et al. 19
 These functions implement the Pareto distribution of the first kind sensu
 Johnson et al. (1995, pp.574).
 
-The pdf and cdf are defined as zero for all x < scale, but the
-functions \code{[dp]pareto} currently return an error if scale > min(x), to avoid some
+The pdf and cdf are defined as zero for all \code{x < scale}, but the
+functions \code{[dp]pareto} currently return an error if \code{scale > min(x)}, to avoid some
 fitting and ploting problems.
 }
 
@@ -104,11 +104,11 @@ curve(dpareto(x, shape=3, scale=1), 1,8, ylab="Density",
 curve(ppareto(x, shape=3, scale=1), 1,8, ylab="Probability",
       main="Pareto CDF")
 par(mfrow=c(1,1))
-}
+
 
 ## Quantile is the inverse funtion of probability:
 p.123 <-ppareto(1:3,shape=3,scale=0.99) 
 sum(qpareto(p.123, shape=3, scale=0.99)-1:3) # should be zero
-
+}
 \author{Paulo I. Prado and Murilo Miranda}
 

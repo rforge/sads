@@ -6,7 +6,7 @@
 
 \description{
 Density, distribution function and quantile function for
-Zipf-Mandelbrodt distribution with parameters ‘N’ 's' and ‘v’.
+Zipf-Mandelbrodt distribution with parameters \code{N} \code{s} and \code{v}.
 }
 
 \usage{
@@ -18,15 +18,13 @@ qmand( p, N, s, v, lower.tail = TRUE, log.p = FALSE)
 \arguments{
   \item{x}{
     vector of (non-negative integer) quantiles. In the context of
-    species abundance distributions, this is a vector of abundances or
-    abundance ranks of species in a sample.
+    species abundance distributions, this is a vector of abundance ranks of species in a sample.
   }
   \item{q}{vector of (non-negative integer) quantiles. In the context of
-    species abundance distributions, a vector of
-    abundances or abundance ranks of species in a sample.
+    species abundance distributions, a vector of abundance ranks of species in a sample.
   }
   \item{p}{
-    vetor of probabilities.
+    vector of probabilities.
   }
   \item{N}{
     positive integer 0 < N < Inf, total number of elements of a collection. In the context of
@@ -49,25 +47,23 @@ qmand( p, N, s, v, lower.tail = TRUE, log.p = FALSE)
 
 \details{
   The Mandelbrodt distribution describes the probability or frequency of occurrence
-  of a given element from a set of 'N' elements. This probability  is inversely proportional to a power 's' of the
+  of a given element from a set of \code{N} elements. This probability  is inversely proportional to a power \code{s} of the
   rank of the frequency of the element in the set. The density function is
 
   p(x) = ((x+v)^(-s)) / sum(((1:N)+q)^(-s))
 
-  Since p(x) is proportional to a power of 'x', the Zipf-Mandelbrodt distribution is a
+  Since p(x) is proportional to a power of \code{x}, the Zipf-Mandelbrodt distribution is a
   power distribution. The Zipf distribution is a special case when
   v=0. Hence, the Zipf-Mandelbrodt distribution is generalization of the
-  Zipf Law, and
-  is widely used in the same cases. In Ecology, it
-  can be used to describe the probability of the rank
-  or abundance 'x' of given species in a sample or assemblage of 'N'
+  Zipf Law, and is widely used in the same cases. In Ecology, it
+  can be used to describe the probability of the abundance rank \code{x} of given species in a sample or assemblage of \code{N}
   species.
   
 }
 
 \value{
-'dmand' gives the (log) density of the density, 'pmand' gives the (log)
-distribution function, 'qmand' gives the quantile function.
+\code{dmand} gives the (log) density of the density, \code{pmand} gives the (log)
+distribution function, \code{qmand} gives the quantile function.
 
 Invalid values for parameters \code{v} or \code{s} will result in return
 values \code{NaN}, with a warning.
@@ -79,7 +75,7 @@ values \code{NaN}, with a warning.
   Distributions, 3rd edition, Hoboken, New Jersey: Wiley. Section
   11.2.20. 
 
-  Magurran, A. E., & McGill, B. J. (2011). Biological Diversity -
+  Magurran, A. E., and McGill, B. J. (2011). Biological Diversity -
   Frontiers in measurement and assessment. Oxford: Oxford University Press.
   
 }
@@ -89,8 +85,8 @@ Paulo I. Prado and Murilo Dantas Miranda
 }
 
 \seealso{
-'dmand' and 'rmand' and related functions in mandR package; 'Zeta' for
-zeta distribution in VGAM package; 'fitmand' for maximum likelihood estimation in the context of species abundance distributions.
+\code{dmand} and \code{rmand} and related functions in \pkg{mandR} package; \code{Zeta} for
+zeta distribution in \pkg{VGAM} package.
 }
 
 \examples{

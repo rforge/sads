@@ -1,7 +1,8 @@
-fitsad <- function(x, sad, trunc, ...){ #trueLL dec.places - continuas
+fitsad <- function(x, sad =c("gamma","geom","lnorm","ls","mzsm","nbinom","pareto","poilog","power","weibull","volkov"),
+trunc, start.value, trueLL = TRUE, dec.places = 0, ...){ 
   dots <- list(...)
   fit <- get(paste("fit", sad, sep=""), mode = "function")
-  if(sad=="volkov" || sad =="mzsm" || sad == "geom" || sad == "ls" || sad == "nbinom" || sad == "poilog" || sad == "power" || sad == "zipf" || sad == "mand"){
+  if(sad=="volkov" || sad =="mzsm" || sad == "geom" || sad == "ls" || sad == "nbinom" || sad == "poilog" || sad == "power"){
     if(missing(trunc)){
       if(sad == "poilog") {
         trunc = 0

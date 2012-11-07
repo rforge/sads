@@ -25,7 +25,7 @@ fitls <- function(x, trunc, start.value, upper = length(x), ...){
       LL <- function(alpha) -sum(dls(x, N, alpha, log = TRUE))
       result <- mle2(LL, start = list(alpha = alfa), data = list(x = x), method = "Brent", lower = 0, upper = upper, ...)
     }
-    if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
+    if(abs(as.numeric(result@coef) - upper) < 0.0000001) warning("mle equal to upper bound provided. \n Try new value for the 'upper' argument")
     new("fitsad", result, sad = "ls", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
   }
 }

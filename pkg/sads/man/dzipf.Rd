@@ -7,7 +7,7 @@
 
 \description{
 Density, distribution function and quantile function for
-Zipf distribution with parameters ‘N’ and ‘s’.
+Zipf distribution with parameters \code{N} and \code{s}.
 }
 
 \usage{
@@ -19,12 +19,10 @@ qzipf( p, N, s, lower.tail = TRUE, log.p = FALSE)
 \arguments{
   \item{x}{
     vector of (non-negative integer) quantiles. In the context of
-    species abundance distributions, this is a vector of abundances or
-    abundance ranks of species in a sample.
+    species abundance distributions, this is a vector of abundance ranks of species in a sample.
   }
   \item{q}{vector of (non-negative integer) quantiles. In the context of
-    species abundance distributions, a vector of
-    abundances or abundance ranks of species in a sample.
+    species abundance distributions, a vector of abundance ranks of species in a sample.
   }
   \item{p}{
     vector of probabilities.
@@ -61,12 +59,12 @@ qzipf( p, N, s, lower.tail = TRUE, log.p = FALSE)
   of its best know application is to describe the probability
   of occurrence of a given word that has a ranking 'x' in a \emph{corpus} that has a total of 'N'
   words. It can be used as well to describe the probability of the
-  abundance rank or even the abundance 'x' of a given species in a sample or assemblage of 'N' species.
+  abundance rank of a given species in a sample or assemblage of 'N' species.
 }
 
 \value{
-  'dzipf' gives the (log) density, 'pzipf' gives the (log)
-  distribution function, 'qzipf' gives the quantile function.
+  \code{dzipf} gives the (log) density, \code{pzipf} gives the (log)
+  distribution function, \code{qzipf} gives the quantile function.
 }
 
 \references{
@@ -88,7 +86,7 @@ Paulo I. Prado and Murilo Dantas Miranda
 \seealso{
 \code{dzipf} and \code{rzipf} and related functions in \pkg{zipfR} package; \code{Zeta} for
 zeta distribution in
-\pkg{VGAM} package; \code{\link{fitzipf}} and \code{\link{fitsad}} for maximum likelihood estimation in the context of species abundance distributions.
+\pkg{VGAM} package.
 }
 
 \examples{

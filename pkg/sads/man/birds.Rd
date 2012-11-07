@@ -13,7 +13,6 @@
 
 \usage{
 data(birds)
-data(saunders)
 }
 
 \format{
@@ -33,7 +32,7 @@ data(saunders)
 
 \references{
   Preston, F. W. 1948. The Commonness, and rarity, of
-  species. Ecology 29:254–283.
+  species. Ecology 29:254-283.
 
   Saunders, A. A. 1936. Studies of breeding birds in the Allegany State
   Park. New York State Museum Handbook 16. Albany, NY.

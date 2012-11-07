@@ -11,7 +11,6 @@
 
 \usage{
 data(moths)
-data(williams)
 }
 
 \format{
