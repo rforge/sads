@@ -1,27 +1,33 @@
 fitzipf <- function(x, N, trunc, start.value, upper = 20, ...){
+  if(class(x)!="rad") rad.tab <- rad(x)
+  else rad.tab <- x
+  y <- rep(rad.tab$rank, rad.tab$abund)
   dots <- list(...)
   if (!missing(trunc)){
-    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
+    if (min(y)<=trunc) stop("truncation point should be lower than the lowest rank")
   }
   if(missing(N)){
-    N <- length(x)
+    N <- max(rad.tab$rank)
   }
   if(missing(start.value)){
-    p <- x/sum(x)
+    p <- rad.tab$abund/sum(rad.tab$abund)
     lzipf <- function(s, N) -s*log(1:N) - log(sum(1/(1:N)^s))
     opt.f <- function(s) sum((log(p) - lzipf(s, length(p)))^2)
     opt <- optimize(opt.f, c(0.5, length(p)))
     sss <- opt$minimum
-  }else{
+  }
+  else{
     sss <- start.value
   }
   if(missing(trunc)){
-    LL <- function(N, s) -sum(dzipf(x, N, s, log = TRUE))
-  } else{
-    LL <- function(N, s) -sum(dtrunc("zipf", x = x, coef = list(N = N, s = s), trunc = trunc, log = TRUE))
+    LL <- function(N, s) -sum(dzipf(y, N, s, log = TRUE))
   }
-  result <-  mle2(LL, start = list(N=N, s = sss), data = list(x = x), method = "Brent", lower = 0, upper = upper,
+  else{
+    LL <- function(N, s) -sum(dtrunc("zipf", x = y, coef = list(N = N, s = s), trunc = trunc, log = TRUE))
+  }
+  result <-  mle2(LL, start = list(N=N, s = sss), data = list(x = y), method = "Brent", lower = 0, upper = upper,
                   fixed=list(N=N), ...)
-  if(abs(as.numeric(result@coef) - upper) < 0.001) warning("mle equal to upper bound provided. \n Try value for the 'upper' arguent")
-  new("fitsad", result, sad="zipf", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
+  if(abs(as.numeric(result@coef) - upper) < 0.001)
+    warning("mle equal to upper bound provided. \n Try increase value for the 'upper' argument")
+  new("fitrad", result, sad="zipf", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc), rad.tab=rad.tab)
 }

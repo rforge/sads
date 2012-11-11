@@ -4,23 +4,23 @@
 \alias{fitlnorm}
 \alias{fitls}
 \alias{fitnbinom}
+\alias(fitpareto}
 \alias{fitpoilog}
 \alias{fitpower}
 \alias{fitweibull}
-\alias{fitzipf}
+\alias{fitvolkov}
 \title{ML fiting of species abundance distributions}
 \description{Fits probability distributions for
   abundances of species in a sample or assemblage
 }
 \usage{
 fitsad(x, sad=
-sad =c("gamma","geom","lnorm","ls","mand","mzsm","nbinom","pareto","poilog","power","weibull","volkov","zipf"),
+sad =c("gamma","geom","lnorm","ls","mzsm","nbinom","pareto","poilog","power","weibull","volkov"),
 trunc, start.value, trueLL = TRUE , dec.places = 0, ...)
 fitgamma(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
 fitgeom(x, trunc, start.value, ...  )
 fitlnorm(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
 fitls(x, trunc, start.value, upper = length(x), ...  )
-fitmand(x, trunc, start.value, ... )
 fitmzsm(x, trunc, start.value, upper = length(x), ... )
 fitnbinom(x, trunc, start.value, ...  )
 fitpareto(x, trunc, start.value, trueLL = TRUE, dec.places = 0, upper = 20, ... )
@@ -28,7 +28,6 @@ fitpoilog(x, trunc, start.value, ...  )
 fitpower(x, trunc, start.value, ...  )
 fitweibull(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...  )
 fitvolkov(x, trunc, start.values, ... )
-fitzipf(x, trunc, start.value, ...  )
 }
 
 \arguments{
