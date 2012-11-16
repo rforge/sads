@@ -10,7 +10,7 @@ importFrom("bbmle", AICc)
 importFrom("VGAM",zeta)
 importFrom("untb", volkov, optimal.theta)
 ## Explicit classes and methods export
-exportClasses(fitsad,fitsadlist,rad,octav)
+exportClasses(rad,octav,fitsad,fitrad)
 exportMethods(plot, points, lines, AICc)
 ## From bbmle package
 #importClassesFrom(stats4,mle)

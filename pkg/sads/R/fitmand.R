@@ -21,5 +21,5 @@ fitmand <- function(x, trunc, start.value, ...){
     LL <- function(N, s, v) -sum(dtrunc("mand", x = y, coef = list(N = N, s = s, v = v), trunc = trunc, log = TRUE))
   }
   result <- mle2(LL, start = list(s = shat, v = vhat, N=N), data = list(x = y), fixed=list(N=N), ...)
-  new("fitrad", result, sad="mand", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
+  new("fitrad", result, rad="mand", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
 }

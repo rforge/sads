@@ -4,7 +4,7 @@
 \alias{fitlnorm}
 \alias{fitls}
 \alias{fitnbinom}
-\alias(fitpareto}
+\alias{fitpareto}
 \alias{fitpoilog}
 \alias{fitpower}
 \alias{fitweibull}
