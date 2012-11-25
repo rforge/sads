@@ -32,14 +32,20 @@
 pzipf(10,N=100,s=2) - sum(dzipf(1:10,N=100,s=2))
 @ %def 
 gives a small difference. Once solved include this command in help page. 
+\item Check why \code{summary} for \code{fitsad} objects returned by \code{fitvolkov} results in a \code{summary} with a huge \code{call}. Probably due the use of \code{do.call} to call \code{mle2}.
+\end{itemize}
+
+\subsection{Solved}
+\label{sec:solved}
+\begin{itemize}
 \item Check why
   @ 
 <<eval=F>>=
 p.123 <-ppareto(1:3,shape=3,scale=1) 
 sum(qpareto(p.123, 3, scale=1)-1:3)
 @ %def 
-gives a small difference. SOLVED: difference because \code{ppareto(1,shape=3,scale=1)} is zero 
-  
+gives a small difference. 
+\paragraph{SOLVED:} difference because \code{ppareto(1,shape=3,scale=1)} is zero 
 \end{itemize}
 
 \section{Distributions}
@@ -52,8 +58,13 @@ gives a small difference. SOLVED: difference because \code{ppareto(1,shape=3,sca
   \item Geometric series
   \item Broken-stick (= Poisson sample of exponential?) 
   \end{itemize}
-\item Make invalid parameters return \code{NaN}, instead than stoping! \textbf{DONE}
 \item Allow Pareto distribution to return zero values when scale >= min(x). (Maybe not a good idea: may cause fitting problems.). 
+\end{itemize}
+
+\subsection{Done}
+\label{sec:done}
+\begin{itemize}
+\item Make invalid parameters return \code{NaN}, instead than stoping. 
 \end{itemize}
 
 \section{Fitting}

@@ -17,9 +17,10 @@ fitmand <- function(x, trunc, start.value, ...){
   }
   if (missing(trunc)){
     LL <- function(N, s, v) -sum(dmand(y, N = N, s, v, log = TRUE))
-  } else{
+  }
+  else{
     LL <- function(N, s, v) -sum(dtrunc("mand", x = y, coef = list(N = N, s = s, v = v), trunc = trunc, log = TRUE))
   }
   result <- mle2(LL, start = list(s = shat, v = vhat, N=N), data = list(x = y), fixed=list(N=N), ...)
-  new("fitrad", result, rad="mand", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
+  new("fitrad", result, rad="mand", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc), rad.tab=rad.tab)
 }

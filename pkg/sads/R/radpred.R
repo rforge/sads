@@ -35,7 +35,7 @@ radpred <- function(x, sad, rad, coef, trunc, S, A, N, ...){
       if (!missing(x) && class(x)=="numeric"){
         S <- length(x)
         if (sad == "volkov" || sad == "mzsm" || sad == "ls" || sad == "geom" || sad == "nbinom"|| sad == "power"|| sad == "poilog"){
-          y <- 1:max(x)
+          y <- 1:sum(x)
           if(!is.na(trunc)){
             X <- do.call(ptrunc, c(list(sad, q = y, coef = as.list(coef), lower.tail=F, trunc = trunc), dots))
           }
@@ -93,7 +93,7 @@ radpred <- function(x, sad, rad, coef, trunc, S, A, N, ...){
     else{
       S <- length(x@data$x)
       if (x@distr == "D"){
-        y <- 1:max(x@data$x)
+        y <- 1:sum(x@data$x)
         if(!is.na(x@trunc)){
           if(x@sad=="ls") 
             X <- do.call(ptrunc, c(list(x@sad, q = y, coef = list(alpha = x@coef, N = sum(x@data$x)),

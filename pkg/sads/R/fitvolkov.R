@@ -3,7 +3,8 @@ fitvolkov <- function(x, trunc, start.values, ...){
   if(missing(start.values)){
     thetahat <- optimal.theta(x)
     mhat <- 0.5
-  } else{
+  }
+  else{
     thetahat <- start.values[1]
     mhat <-start.values[2]
   }
@@ -16,12 +17,15 @@ fitvolkov <- function(x, trunc, start.values, ...){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if (missing(trunc)){
-    LL <- function(theta, m) -sum(dvolkov(x,  theta = theta, m = m, J = sum(x),log = TRUE))
-  } else {
-    LL <- function(theta, m) -sum(dtrunc("volkov", x = x,
-                                         coef = list(c(J = sum(x), m = m, theta = theta)),
-                                         trunc = trunc, log = TRUE))
+    LL <- function(theta, m) -sum(dvolkov(x,  theta = theta, m = m, J = sum(x), log = TRUE))
+  }
+  else {
+    LL <- function(theta, m) {
+      -sum(dtrunc("volkov", x = x,
+                  coef = list(J = sum(x), m = m, theta = theta),
+                  trunc = trunc, log = TRUE))
+    }
   }
   result <- do.call(mle2, c(list(minuslogl=LL, start = list(theta = thetahat, m = mhat), data = list(x = x)), dots))
-  new("fitsad", result, sad="volkov", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc)) 
+  new("fitsad", result, sad="volkov", distr = "D", trunc = ifelse(missing(trunc), NaN, trunc))
 }

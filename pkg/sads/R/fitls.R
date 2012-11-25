@@ -10,7 +10,8 @@ fitls <- function(x, trunc, start.value, upper = length(x), ...){
     sol <- uniroot(f1, interval = c(1/N, N))
     alfa <- sol$root
     X <- N/(N + alfa)
-  } else{
+  }
+  else{
     alfa <- start.value
   }
   if (!missing(x)){
