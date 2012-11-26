@@ -1,4 +1,4 @@
-qqrad <- function(object, rad , coef, trunc=NA, distr){
+qqrad <- function(object, rad , coef, trunc=NA, distr, plot=TRUE){
   if(class(object)=="fitrad"){
     rad <- object@rad
     coef <- as.list(bbmle::coef(object))
@@ -31,9 +31,12 @@ qqrad <- function(object, rad , coef, trunc=NA, distr){
       qrad <- get(paste("q", rad, sep=""), mode = "function")
       q <- do.call(qrad, c(list(p = p), coef))
     }
-  } 
-  ##  else
-  ##    stop("unsupported distribution")
-  plot(q, ranks, main = "Q-Q plot", xlab="Theoretical Quantile", ylab="Sample Quantiles")
-  abline(0, 1, col = "red", lty = 2)
+  }
+  else
+    stop("please choose 'D'iscrete or 'Continuous' for 'distr'")
+  if(plot){
+    plot(q, ranks, main = "Q-Q plot", xlab="Theoretical Quantile", ylab="Sample Quantiles")
+    abline(0, 1, col = "red", lty = 2)
+  }
+  return(invisible(data.frame(theoret.q=q, sample.q=ranks)))
 }

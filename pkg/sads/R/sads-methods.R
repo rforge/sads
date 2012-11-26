@@ -113,6 +113,35 @@ setMethod("plot","fitsad",
           }
           )
 
+setMethod("plot","fitrad",
+          function(x, which=1:4, ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
+            oct.df <- octav(x)
+            rad.df <- rad(x)
+            oct.pred <- octavpred(x)
+            oct.ymax <- max(c(oct.df[, 3], oct.pred[, 3]), na.rm = TRUE)
+            rad.pred <- radpred(x)
+            rad.ylim <- range(c(rad.df[, 2], rad.pred[, 2]), na.rm = TRUE)
+            if (ask) {
+              oask <- devAskNewPage(TRUE)
+              on.exit(devAskNewPage(oask))
+            }
+            if(1 %in% which){
+              plot(oct.df, ylim = c(0, oct.ymax), ...)
+              points(oct.pred, ...)
+            }
+            if(2 %in% which){
+              plot(rad.df, ylim = rad.ylim, ...)
+              lines(rad.pred, ...)
+            }
+            if(3 %in% which){
+              qqrad(x, ...)
+            }
+            if(4 %in% which){
+              pprad(x, ...)
+            }
+          }
+          )
+
 ## copy of the method in bbmle, with a line added to assure df is not NULL
 setMethod("AICc","fitsad",
           function (object, ..., nobs, k = 2){

@@ -1,9 +1,8 @@
-ppsad <- function (object, sad, coef, trunc=NA, distr) {
+ppsad <- function (object, sad, coef, trunc=NA, plot=TRUE) {
   if(class(object)=="fitsad"){
     sad <- object@sad
     coef <- as.list(bbmle::coef(object))
     trunc <- object@trunc
-    distr <- object@distr
     x <- object@data$x
   }
   else if(class(object)=="numeric")
@@ -13,26 +12,25 @@ ppsad <- function (object, sad, coef, trunc=NA, distr) {
   z <- ppoints(S)
   if(!is.na(trunc)){
     if(sad == "ls")
-      p <- do.call(ptrunc, c(list(sad, q = rank, coef = c(sum(x), as.numeric(coef)), trunc = trunc)))
-    else if(sad == "volkov")
-      p <- do.call(ptrunc, c(list(sad, q = rank, coef = c(as.numeric(coef),sum(x))), trunc = trunc))
-    else if(sad == "mzsm")
-      p <- do.call(ptrunc, c(list(sad, q = rank, coef = c(as.numeric(coef),sum(x))), trunc = trunc))
+      p <- do.call(ptrunc, list(sad, q = rank, coef = c(list(N=(sum(x)),coef)), trunc = trunc))
+    else if(sad == "volkov"||sad=="mzsm")
+      p <- do.call(ptrunc, list(sad, q = rank, coef = c(list(J=(sum(x)),coef)), trunc = trunc))
     else
       p <- do.call(ptrunc, list(sad, q = rank, coef = coef, trunc = trunc))
   }
   else{
+    psad <- get(paste("p", sad, sep=""), mode = "function")
     if(sad == "ls")
-      p <- do.call(pls, c(list(q = rank), N=sum(x), alpha=as.numeric(coef)))
-    else if(sad == "volkov")
-      p <- do.call(pvolkov, c(list(q = rank, J=sum(x)), as.numeric(coef)))
-    else if(sad == "mzsm")
-      p <- do.call(pmzsm, c(list(q = rank, J=sum(x)), as.numeric(coef)))
+      p <- do.call(psad, c(list(q = rank, N=sum(x)), coef))
+    else if(sad == "volkov"||sad=="mzsm")
+      p <- do.call(psad, c(list(q = rank, J=sum(x)), coef))
     else{
-      psad <- get(paste("p", sad, sep=""), mode = "function")
       p <- do.call(psad, c(list(q = rank), coef))
     }
   }
-  plot(z, p, main = "P-P plot", ylim = c(0, 1), xlab='Theoretical Percentiles', ylab='Sample Percentiles')
-  abline(0, 1, col = "red", lty = 2)
+  if(plot){
+    plot(p, z, main = "P-P plot", ylim = c(0, 1), xlab='Theoretical Percentiles', ylab='Sample Percentiles')
+    abline(0, 1, col = "red", lty = 2)
+  }
+  return(invisible(data.frame(theoret.p=p, sample.p=z)))
 }

@@ -33,6 +33,12 @@ pzipf(10,N=100,s=2) - sum(dzipf(1:10,N=100,s=2))
 @ %def 
 gives a small difference. Once solved include this command in help page. 
 \item Check why \code{summary} for \code{fitsad} objects returned by \code{fitvolkov} results in a \code{summary} with a huge \code{call}. Probably due the use of \code{do.call} to call \code{mle2}.
+\item Check warnings returned when detaching the package:
+    @ 
+<<eval=F>>=
+detach("package:sads", unload=T)
+@ %def 
+
 \end{itemize}
 
 \subsection{Solved}
