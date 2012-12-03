@@ -9,4 +9,4 @@ Depends: MASS, bbmle, poilog
 Imports: methods, graphics, VGAM, untb
 Description: Maximum likelihood tools to fit and compare models of species abundance distributions.
 License: GPL-2
-LazyData: yes
+LazyData: no

@@ -1,9 +1,9 @@
 octav <- function(x, oct, ...){
   if(is(x, "fitsad"))
     y <- x@data$x
-  if(is(x,"fitrad"))
+  else if(is(x,"fitrad"))
     y <- x@rad.tab$abund
-  if(is(x,"numeric"))
+  else if(is(x,"numeric"))
     y <- x
   if(missing(oct)){
     oct <- 1:(ceiling(max(log2(y)))+1)

@@ -1,11 +1,12 @@
 \name{moths}
+\docType{data}
 \alias{moths}
 \title{
   Moths caught by lightraping at Rothamsted 1933-1936
 }
 
 \description{
-  A dataset containing the number of captures of nocturnal macrolepidoptera (moths) in light traps
+  This dataset gives the number of captures of 240 species of nocturnal macrolepidoptera (moths) in light traps
   at the Rothamsted Experimental Station, UK between 1933 and 1936. 
 }
 
@@ -14,7 +15,7 @@ data(moths)
 }
 
 \format{
-  A unamed vector of integers of the class spcount
+  A unamed vector of 240 integers.
 }
 
 \details{
@@ -36,8 +37,4 @@ sample of an animal population. The Journal of Animal Ecology, Vol. 12, No. 1. (
 
 }
 
-
-\examples{
-data(moths)
-plot(rad(moths)) # rank-abundance plot
-}
+\keyword{datasets}
