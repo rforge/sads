@@ -39,6 +39,42 @@ gives a small difference. Once solved include this command in help page.
 detach("package:sads", unload=T)
 @ %def 
 
+\item Check incorrect calculations of \code{radpred} when data object is provided in argument \code{object}:
+@
+<<eval=F>>=
+data(moths)
+moths.ls <- fitsad(moths, "ls")
+moths.rad.pred <- radpred(moths.ls)
+moths.rad.pred2 <- radpred(object=moths, sad="ls", 
+                             coef=list(alpha=35), distr="D")
+moths.rad.pred3 <- radpred(object=moths, sad="ls", 
+                             coef=list(alpha=35), distr="D", S=length(moths), N=sum(moths))
+plot(moths.rad.pred)
+lines(moths.rad.pred2, col="black")
+lines(moths.rad.pred3, col="red")
+@
+
+\item Conferir funcao trueLL e seu uso na fitsad, pois pelo menos para dados de mariposas de Fisher
+  resulta em melhoria do modelo lognormal truncado, mas o grafico de oitavas nao mostra isto
+  @ 
+<<TrueLL>>=
+## TRUE likelihood 
+##(Lindsey, J.K. 1999. Some stattistical heresies. _The Statistician 48(1): 1-40).
+moths.ls <- fitsad(moths, "ls")
+moths.pln <- fitsad(moths, "poilog")
+moths.ln1 <- fitsad(moths, "lnorm", trunc=0.5)
+moths.ln2 <- fitsad(moths, "lnorm", trunc=0.5, trueLL=F)
+AICctab(moths.ls, moths.pln, moths.ln1, moths.ln2,
+        nobs=length(moths), base=T, weights=T)
+## Verificando: graficos parecem nao sustentar 
+## o melhor desempenho do lognormal
+plot(moths.oc)
+lines(octavpred(moths.pln))
+lines(octavpred(moths.ln1), col="red")
+## E qqplots mostram melhor ajuste da Logserie
+
+@ %def 
+
 \end{itemize}
 
 \subsection{Solved}
@@ -84,7 +120,13 @@ gives a small difference.
 
 \section{Diagnostic}
 \label{sec:graphical-functions}
-
+\begin{itemize}
+\item \textbf{DONE} Include (...) arguments in function \code{qqsad}.
+\item Check if all functions for diagnostic plots have the (...) argument.
+\item For \code{qqsad} consider to use the function qqline to draw the line 
+  (seems to allow any probability distribution thorugh argiment \code{probs}).
+  If not posible, at least add argument \code{probs} to control the line slope.
+\end{itemize}
 \section{Other functions}
 \label{sec:other-functions}
 \begin{itemize}

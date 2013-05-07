@@ -1,3 +1,4 @@
+
 \documentclass[11pt, A4]{article}
 \usepackage[brazil]{babel}
 \usepackage{graphicx}
@@ -305,7 +306,8 @@ moths.ls.prf <- profile(moths.ls)
 confint(moths.ls.prf) # conf intervals
 @ %def 
 
-Você pode plotar os perfis em duas escalas, o que permite avaliar seus intervalos de verossimilhança e confiança (fig. ):
+Você pode plotar os perfis em duas escalas, o que permite avaliar seus intervalos de verossimilhança e confiança 
+(fig. \ref{fig:profiles}):
 \setkeys{Gin}{width=0.75\textwidth}
 @ 
 <<Ploting-profiles, include=F>>=
@@ -376,7 +378,7 @@ Comparamos os modelos com o critério de informação de Akaike, que expressa a 
 AICtab(moths.ls, moths.pl, moths.ln, base=T)
 @ %def 
 
-A seleção de modelos indica que a distribuição Poisson-lognormal truncada em zero é a descrição mais plausível desses dados, mas que as distribuições de série logarítmica e lognormal truncada em 0,5 são modelos igualmente bons. Podemos avaliar isso plotando as linhas dos previstos por esses modelos sobre os histogramas de oitavas. Para isso, primeiro calculamos o número espécies em cada oitava previstos pelos modelos com a função \code{octavpred} 
+A seleção de modelos indica que a distribuição lognormal truncada em 0,5 é a descrição mais plausível desses dados, mas que as distribuição Poisson-lognormal é um modelos igualmente bons. Podemos avaliar isso plotando as linhas dos previstos por esses modelos sobre os histogramas de oitavas. Para isso, primeiro calculamos o número espécies em cada oitava previstos pelos modelos com a função \code{octavpred} 
 
 @ 
 <<Predicted values for octaves>>=

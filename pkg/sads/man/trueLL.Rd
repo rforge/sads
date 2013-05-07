@@ -45,8 +45,9 @@ named arguments to be passed to the probability function defined by the argument
   The (log)likelihood function is often defined as any function
   proportional to the (sum) product of probability density of the observations. In its original
   formulation, however, the likelihood is proportional to the product of
-  probabilities, not probabilities densities (Lindsey 1999, Fisher
-  1922). For  continuous variables these probabilities are calculated through
+  probabilities, not probabilities densities (Fisher 1922, stressed by
+  Lindsey 1999). 
+  For  continuous variables these probabilities are calculated through
   integration of the probability density function in an interval. For
   observed values of continuous variables, this interval is defined by
   the measurement precision. 
@@ -93,5 +94,5 @@ logLik(fitdistr(x,"lognormal"))
 ## Which is the sum of log of densities
 sum( dlnorm(x, meanlog=mean(log(x)), sdlog=sd(log(x)), log=TRUE) )
 ## Correct log-likelihood
-trueLL(x, lnorm, dec.places=1, meanlog=mean(log(x)), sdlog=sd(log(x)))
+trueLL(x, "lnorm", dec.places=1, coef=list(meanlog=mean(log(x)), sdlog=sd(log(x))))
 }
