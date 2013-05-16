@@ -62,6 +62,7 @@ qmand( p, N, s, v, lower.tail = TRUE, log.p = FALSE)
 }
 
 \value{
+  
 \code{dmand} gives the (log) density of the density, \code{pmand} gives the (log)
 distribution function, \code{qmand} gives the quantile function.
 

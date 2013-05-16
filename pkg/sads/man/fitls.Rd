@@ -4,6 +4,7 @@
 \description{
 Fits Fisher's logseries distribution to a vector of species abundances by maximum likelihood.
 }
+
 \usage{
 fitls( x, trunc, start.value, upper = length(x), ...)
 }
@@ -13,7 +14,8 @@ fitls( x, trunc, start.value, upper = length(x), ...)
     vector of (non-negative integer) abundances of species in a sample.
   }
   \item{trunc}{
-    
+    non-negative integer, trunc > min(x); truncation point to fit a
+  truncated distribution.    
   }
   \item{start.value}{
     

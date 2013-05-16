@@ -41,7 +41,9 @@ qpoilog( (p, mu, sig, S = 30, lower.tail = TRUE, log.p = FALSE)
 
 \details{
  A compound Poisson-lognormal distribution is a Poisson probability distribution
-where its single parameter lambda, is a random variable with lognormal distribution The density function is 
+where its single parameter lambda, is a random variable with lognormal
+ distribution. 
+The density function is 
 
 p(x) = (exp(x*mu + x^2*sig/2)*(2*pi*sig)^(-1/2))/x! * g(y)
 
@@ -73,7 +75,7 @@ distribution function, 'qpoilog' gives the quantile function.
 
 \note{
 parameter \code{S} in \code{qpoilog} is just a starting value for the
-bissection method, and does affect the final result, only the
+bissection method, and does not affect the final result, only the
 convergence velocity. A good guess is the total number of observations,
 which in the context of sads is the observed number of species.
 }
