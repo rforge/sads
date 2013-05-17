@@ -1,4 +1,4 @@
-fitpoilog <- function(x, trunc, ...){
+fitpoilog <- function(x, trunc = 0, ...){
   dots <- list(...)
   if (!missing(trunc)){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")

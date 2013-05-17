@@ -1,7 +1,7 @@
 fitpareto <- function(x, trunc, start.value, trueLL = TRUE, dec.places = 0, upper = 20, ...){
   dots <- list(...)
   if (!missing(trunc)){
-    if (min(x)<=trunc) stop("truncation point should, be lower than the lowest data value")
+    if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }
   if(missing(start.value)){
     alpha <- length(x)/sum(log(x)-log(min(x)))

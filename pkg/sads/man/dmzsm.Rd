@@ -94,7 +94,7 @@ values \code{NaN}, with a warning.
   model of biodiversity. \emph{Ecology Letters 7}:901-910
 
   Hubbell, S. P.  2001.  “The Unified Neutral Theory of Biodiversity”.
-  Princeton University Press.
+  Princeton University Press
 }
 
 \author{

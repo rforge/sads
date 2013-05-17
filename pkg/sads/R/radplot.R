@@ -1,4 +1,0 @@
-radplot <- function(x,...){
-  plot(1:length(x),x[order(x,decreasing=T)],
-       xlab="Species Rank",ylab="Species Abundance",log="y",...)
-}

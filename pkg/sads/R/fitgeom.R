@@ -1,4 +1,4 @@
-fitgeom <- function(x, trunc, start.value, ...){
+fitgeom <- function(x, trunc = 0, start.value, ...){
   if (!missing(trunc)){
     if (min(x)<=trunc) stop("truncation point should be lower than the lowest data value")
   }

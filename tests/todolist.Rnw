@@ -98,8 +98,27 @@ lines(z1.r1)
   \item \textbf{DONE} Try a method based on step functions rather than the current search algorithm.
   \item Compare the results of both methods (maybe include both in the function?).
   \end{itemize}
-    
- 
+\item ensure that all mehods for data frames work with classes \code{octav} and \code{rad}.
+  Some do not seem to work, e.g.:
+@ 
+<<dataframe_methods_octav>>=
+data(moths)
+teste <- octav(moths)
+teste2 <- octav(moths, preston=TRUE)
+cbind(teste,teste2)
+@ %def 
+
+\item Summary of \code{fivolkov} with extremelly long call,
+  probably due the use of do.call in the function:
+@ 
+<<summary-volkov>>=
+mag5 <- c(103,115,13,2,67,36,51,8,6,61,10,21,
+          7,65,4,49,92,37,16,6,23,9,2,6,5,4,
+          1,3,1,9,2)
+mg5.v <- fitvolkov(mag5)
+summary(mg5.v)
+@ %def 
+
 \end{itemize}
 
 \subsection{Solved}
@@ -127,6 +146,9 @@ gives a small difference.
   \end{itemize}
 \item Allow Pareto distribution to return zero values when scale >= min(x). (Maybe not a good idea: may cause fitting problems.). 
 \item Make invalid parameters return \code{NaN}, instead than stoping. (done in some functions, check in all)
+
+\item Finish functions for distribution and fitting fo Poisson-gamma and Poisson-exponential. 
+  Currently only density functions (old code, check) available.
 \end{itemize}
 
 
@@ -137,7 +159,8 @@ gives a small difference.
 \item Evaluate if Wilson's \cite{wilson2009} methods for fitting rads can/should be included;
 \item Include geometric series and He \& Tang's method \cite{he2008} fitting method;
 \item Check if fitting problems for Pareto distribution can occur (see pareto help page in VGAM: \url{http://finzi.psych.upenn.edu/R/library/VGAM/html/pareto1.html} and also references in McGuill's chapter on sads in \cite{magurran2011}.
-\item Check if parameters J for mszm and volkov and N for ls can be declared as fixed in their fitting functions. This will also allow to eliminate a bunch of \code{if}'s in \code{radpred} and \code{octavpred}. 
+\item Check if parameters J for mszm and volkov and N for ls can be declared as fixed in their fitting functions. 
+  This will also allow to eliminate a bunch of \code{if}'s in \code{radpred} and \code{octavpred}. 
 \end{itemize}
 
 \section{Diagnostic}
@@ -152,11 +175,13 @@ gives a small difference.
   instead of the slower generic solution that uses the quantile function.
 \item For \code{radpred} methods for \code{fitrad} class, 
   check if the distribution type (D=discrete or C=continuous) is necessary, as used for  \code{fitsad} classes.
-\item Include Preston's method for distribution of boundary values among octaves in \code{octav} and \code{octavpred}
+\item \textbf{DONE} Include Preston's method for distribution of boundary values among octaves in \code{octav} and \code{octavpred}
 
 \item Rewrite \code{octav} and \code{octavpred} to use \code{hist} instead of \code{cut}, 
-  see example of dzsm and help page of cut: ``Instead of ‘table(cut(x, br))’, ‘hist(x, br, plot = FALSE)’ is
-  more efficient and less memory hungry.''. Also, more handy to choose midpoints and different classing methods (e.g. rigth=T or FALSE in cut)
+  see example of dzsm and help page of cut: 
+  ``Instead of ‘table(cut(x, br))’, ‘hist(x, br, plot = FALSE)’ is
+  more efficient and less memory hungry.''. 
+  Also, more handy to choose midpoints and different classing methods (e.g. rigth=T or FALSE in cut)
 \end{itemize}
 
 \section{Other functions}

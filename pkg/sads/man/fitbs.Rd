@@ -78,7 +78,7 @@ fitrbs( x, trunc, ...)
   operations with sad or rad models, such as
   comparison with other models through model selection,
   diagnostic plots and so on
-  (see \code{\link{fitsad-method}} and \code{\link{fitsad-method}} 
+  (see \code{\link{fitsad-method}} and \code{\link{fitrad-method}} 
 }
 
 \value{
