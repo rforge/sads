@@ -59,7 +59,8 @@ random variables that follow a lognormal density function, with
 parameters (mu + ln(f), sigma) (Engen et al. 2002).
 
 Hence, a Poisson-exponential distribution is a model for species
-abundances distributions (SAD) in a sample taken from a community under the assumptions that (a) species
+abundances distributions (SAD) in a sample taken from a community
+under the assumptions that (a) species
 abundances in the community are independent identically distributed
 exponential variables, (b) sampling is a Poisson proccess with expected
 value E[x]= f*n where n is the abundance in the community and f the
@@ -114,6 +115,6 @@ Paulo I. Prado \email{prado@ib.usp.br} and Murilo Dantas Miranda
 }
 
 \seealso{
-dpois, dlnorm; dpoilog and rpoilog in poilog package; rsad for random
-generation, fitpoilog for maximun likelihood estimation.
+dpois, dlnorm; dpoilog and rpoilog in poilog package; \link{\code{rsad}} for random
+generation, \link{\code{fitpoilog}} for maximum likelihood estimation.
 }

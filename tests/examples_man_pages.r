@@ -83,3 +83,40 @@ coef(mg5.v)
 par(mfrow=c(2,2))
 plot(mg5.v)
 par(mfrow=c(1,1))
+
+## fitsad ##
+moths.ln <- fitsad(moths, "lnorm", trunc=0.5)
+moths.pln <- fitsad(moths, "poilog")
+AICctab(moths.ln, moths.pln, nobs=length(moths), weights=TRUE)
+plot(octav(moths))
+lines(octavpred(moths.ln))
+lines(octavpred(moths.pln), col="red")
+legend()
+## Biomass as abundance variable
+data(ARN82.eB.apr77) #bentonic marine animals
+AR.ln <- fitsad(ARN82.eB.apr77, sad="lnorm", dec.places=2)
+AR.g <- fitsad(ARN82.eB.apr77, sad="gamma", dec.places=2)
+AR.wb <- fitsad(ARN82.eB.apr77, sad="weibull", dec.places=2)                
+plot(octav(ARN82.eB.apr77))
+lines(octavpred(AR.ln))
+lines(octavpred(AR.g), col="red")
+lines(octavpred(AR.wb), col="green")
+legend("topright", c("lognormal", "gamma", "weibull"), lty=1, col=c("blue","red", "green"))
+AICctab(AR.ln, AR.g, AR.wb, nobs=length(ARN82.eB.apr77), weights=T)
+##alternativa: rads
+plot(rad(ARN82.eB.apr77))
+lines(radpred(AR.ln))
+lines(radpred(AR.g), col="red")
+lines(radpred(AR.wb), col="green")
+
+## Octavpred ##
+## effect of Preston criteria
+data(moths) ## Fisher's moth data
+moths.ln <- fitsad(moths, "lnorm") ## fit to the lognormal
+AICctab(moths.ln, moths.pln, nobs=length(moths), weights=TRUE)
+par(mfrow=c(1,2))
+plot(octav(moths))
+lines(octavpred(moths.ln))
+plot(octav(moths, preston=T))
+lines(octavpred(moths.ln))
+par(mfrow=c(1,1))

@@ -100,13 +100,14 @@ qvolkov( p, theta, m, J, lower.tail = TRUE, log.p = FALSE )
 
     Hankin, R. K. S. 2007. Introducing untb, an {R} Package For Simulating Ecological Drift
 	Under the Unified Neutral Theory of Biodiversity. \emph{Journal
-	of Statistical Software 22} (12) 
+	of Statistical Software 22} (12). 
 
     Hubbell, S. P.  2001.  “The Unified Neutral Theory of Biodiversity”.
     Princeton University Press.
     
     Volkov, I.,  Banavar, J. R., Hubbell, S. P., Maritan, A. 2003.
-    Neutral theory and relative species abundance in ecology.  \emph{Nature 424}:1035--1037
+    Neutral theory and relative species abundance in ecology.
+    \emph{Nature 424}:1035--1037
   }
   
   \seealso{\link{\code{fitvolkov}} for maximum likelihood fit,

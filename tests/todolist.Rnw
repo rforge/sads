@@ -143,6 +143,8 @@ gives a small difference.
   \item Truncated power (or Power-bend)
   \item \textbf{DONE} Geometric series
   \item \textbf{DONE} Broken-stick 
+  \item Poisson-gamma (mayne, since it is negative binomial)
+  \item Poisson-exponencial
   \end{itemize}
 \item Allow Pareto distribution to return zero values when scale >= min(x). (Maybe not a good idea: may cause fitting problems.). 
 \item Make invalid parameters return \code{NaN}, instead than stoping. (done in some functions, check in all)
@@ -182,6 +184,8 @@ gives a small difference.
   ``Instead of ‘table(cut(x, br))’, ‘hist(x, br, plot = FALSE)’ is
   more efficient and less memory hungry.''. 
   Also, more handy to choose midpoints and different classing methods (e.g. rigth=T or FALSE in cut)
+\item for \code{radplot} and \code{octavplot} methods for \code{fitsads} and \code{fitrad}
+  include predicted line of the fitted model.
 \end{itemize}
 
 \section{Other functions}
@@ -196,10 +200,26 @@ gives a small difference.
 \label{sec:help-pages}
 \begin{itemize}
 \item Include links to the functions cited in the \code{seealso} section
-\item Use markups for codes, url, etc
+\item Use markups for codes, url, pkg, etc
 \item For quantile functions that use search algorithm or approxfun include this information in the note section of help page.
 \item Add Paulo's email in all help pages
 \item Add keywords 
+\item add email
+\item  Todo do man pages:
+  \begin{itemize}
+  \item \code{ppsad},\code{qqsad}, \code{pprad},\code{qqrad}
+  \item \code{radfit}
+  \item classes and methods
+  \item generic functions \code{octavepred} and \code{radpred} and their methods
+  \item \code{fitsad} (finish)
+  \end{itemize}
+\end{itemize}
+
+\section{Vignette}
+\label{sec:vignette}
+\begin{itemize}
+\item  Incluir todas as funções relevantes
+\item Tabela com todas as sads implementadas
 \end{itemize}
 
 \bibliographystyle{plain}
