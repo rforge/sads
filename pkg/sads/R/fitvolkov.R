@@ -5,8 +5,8 @@ fitvolkov <- function(x, trunc, start.values, ...){
     mhat <- 0.5
   }
   else{
-    thetahat <- start.values[1]
-    mhat <-start.values[2]
+    thetahat <- start.values[[1]]
+    mhat <-start.values[[2]]
   }
   if(!"method" %in% names(dots)){
     dots$method <- "L-BFGS-B"

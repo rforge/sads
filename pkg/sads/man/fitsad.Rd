@@ -147,8 +147,8 @@ fitweibull(x, trunc, start.value, trueLL = TRUE, dec.places = 0, ...)
   these functions fit by default zero-truncated distributions.
   Using the geometric distribution as a SAD model is not to be
   confounded to fitting the Geometric series \link{\code{fitgeom}}
-  as a Rank-abundance
-  Distribution (RAD) model.
+  as a rank-abundance
+  distribution (RAD) model.
 
   Function \code{fitls} implements the original numerical recipe by Fisher (1943) to
   fit the logseries distribution, given a vector of species abundances.

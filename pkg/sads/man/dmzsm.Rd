@@ -57,7 +57,7 @@ pmzsm(q, J, theta, lower.tail=TRUE, log.p=FALSE)
   with equal demographic rates (neutrality or ecological
   equivalence assumptiom, Hubbell 2001).
   Alonso et McKane (2004) proposed an approximation for the density
-  function for large Poisson sample (J>100):
+  function for a large Poisson sample (J>100):
 
   p(x) = N(x)/(sum(from 1 to S) N(x))
 
