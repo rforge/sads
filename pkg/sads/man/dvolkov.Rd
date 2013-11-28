@@ -138,3 +138,4 @@ bci.exp2 <- octavpred( bci, sad = "volkov",
 lines( bci.exp2 )
 
 }
+

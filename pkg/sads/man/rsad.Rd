@@ -7,7 +7,8 @@ A given number of realizations of a probability distribution (species
 abundances in a community) is sampled by a Poisson or Negative Binomial process. 
 }
 \usage{
-rsad(S, frac, sad, samp=c("Poisson","Negbinom"), k , zeroes=FALSE, ...)
+rsad(S, frac, sad, samp=c("Poisson","Negbinom"), k , zeroes=FALSE,
+ssize=1, ...)
 }
 \arguments{
   \item{S}{
@@ -33,6 +34,9 @@ rsad(S, frac, sad, samp=c("Poisson","Negbinom"), k , zeroes=FALSE, ...)
   \item{zeroes}{
     logical; should zero values be included in the returned vector?
   }
+  \item{ssize}{
+    integer>0; sample size: number of draws taken from the community.
+    }
   \item{...}{
     named arguments to be passed to the probability function defined by the
     argument sad.
@@ -59,7 +63,8 @@ distribution given by the argument 'sad'.
 }
 
 \value{
-vector of (zero truncated) abundances in the sample
+  if 'ssize'=1 a vector of (zero truncated) abundances in the sample;
+  if 'ssize'>1 a data.frame with sample identification, species identification, and (zero truncated) abundances.
 }
 
 \references{

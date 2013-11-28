@@ -55,7 +55,10 @@ lines(moths.rad.pred3, col="red")
 @
 
 \item Conferir funcao trueLL e seu uso na fitsad, pois pelo menos para dados de mariposas de Fisher
-  resulta em melhoria do modelo lognormal truncado, mas o grafico de oitavas nao mostra isto
+  resulta em melhoria do modelo lognormal truncado, mas os gráficos de diagnóstico não mostram isso.
+  Se usamos ajuste à lognormal com \code{trueLL=FALSE} a logserie empata com lognormal e pln, o que faz sentido,
+  pois ela está errando em apenas um dos valores de abundância (o maior), 
+  enquanto os outros dois modelos acertam nesse mas erram em vários outros. Veja qqplots.
   @ 
 <<TrueLL>>=
 ## TRUE likelihood 
@@ -67,11 +70,11 @@ moths.ln2 <- fitsad(moths, "lnorm", trunc=0.5, trueLL=F)
 AICctab(moths.ls, moths.pln, moths.ln1, moths.ln2,
         nobs=length(moths), base=T, weights=T)
 ## Verificando: graficos parecem nao sustentar 
-## o melhor desempenho do lognormal
+## o melhor desempenho do lognormal em relacao aa pln com trueLL
 plot(moths.oc)
 lines(octavpred(moths.pln))
 lines(octavpred(moths.ln1), col="red")
-## E qqplots mostram melhor ajuste da Logserie
+## Veja tambem qqplots
 @ %def 
 \item \code{fitzipf} slow:
 @ 
@@ -118,6 +121,8 @@ mag5 <- c(103,115,13,2,67,36,51,8,6,61,10,21,
 mg5.v <- fitvolkov(mag5)
 summary(mg5.v)
 @ %def 
+
+\item fucntions \code{rad} and \code{octav} should handle zero and negative numebrs (exception or exclusion, as in arg log=''xy'' of \code{plot}.
 
 \end{itemize}
 
