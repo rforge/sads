@@ -70,10 +70,10 @@ Para instalar a versão de teste do pacote \code{sads}, você precisa adicionar 
 Após adicionar os pacotes acima à sua instalação de \R, vá ao sítio do 
 Laboratório de Ecologia Teórica do IBUSP, seção \emph{R codes} 
 (\url{http://ecologia.ib.usp.br/let/doku.php?id=engl:tutorials:rcode}). Baixe o arquivo 
-\code{sads\_0.1.01.tar.gz} para um diretório. Execute o \R, carregue e chame o pacote com
+\code{sads\_0.1.02.tar.gz} para um diretório. Execute o \R, carregue e chame o pacote com
 @ 
 <<installation, eval=FALSE>>=
-install.packages("diretorio/sads_0.1.01.tar.gz", repos=NULL)
+install.packages("diretorio/sads_0.2.01.tar.gz", repos=NULL)
 library(sads)
 @ %def 
 
