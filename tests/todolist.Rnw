@@ -182,13 +182,14 @@ gives a small difference.
   instead of the slower generic solution that uses the quantile function.
 \item For \code{radpred} methods for \code{fitrad} class, 
   check if the distribution type (D=discrete or C=continuous) is necessary, as used for  \code{fitsad} classes.
-\item \textbf{DONE} Include Preston's method for distribution of boundary values among octaves in \code{octav} and \code{octavpred}
+\item \textbf{DONE} Include Preston's method for distribution of boundary values among octaves in \code{octav}
+\item nclude Preston's method for distribution of boundary values among octaves in \code{octavpred}
 
 \item Rewrite \code{octav} and \code{octavpred} to use \code{hist} instead of \code{cut}, 
   see example of dzsm and help page of cut: 
   ``Instead of ‘table(cut(x, br))’, ‘hist(x, br, plot = FALSE)’ is
   more efficient and less memory hungry.''. 
-  Also, more handy to choose midpoints and different classing methods (e.g. rigth=T or FALSE in cut)
+  Also, more handy to choose midpoints and different cutting methods (e.g. rigth=TRUE or FALSE in cut)
 \item for \code{radplot} and \code{octavplot} methods for \code{fitsads} and \code{fitrad}
   include predicted line of the fitted model.
 \end{itemize}
@@ -216,7 +217,7 @@ gives a small difference.
   \item \code{radfit}
   \item classes and methods
   \item generic functions \code{octavepred} and \code{radpred} and their methods
-  \item \code{fitsad} (finish)
+  \item \code{fitsad} (finish, e.g. include bronke stick)
   \end{itemize}
 \end{itemize}
 
