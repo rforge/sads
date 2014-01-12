@@ -24,9 +24,11 @@ ssize=1, ...)
     "geom" for the geometric distribution.
   }
   
-  \item{Pois.samp}{
-    logical; use Poisson sampling process? If FALSE negative binomial
-    sampling is used to simulate aggregation
+  \item{samp}{
+    character; sampling process: "Poisson" (independent sampling of
+    individuals)
+    or "Negbinom" for negative binomial
+    sampling to simulate aggregation of individuals in sampling units.
   }
   \item{k}{
     positive; size parameter for the sampling binomial negative 

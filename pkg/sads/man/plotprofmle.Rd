@@ -13,7 +13,7 @@
 \usage{
 plotprofmle(mleobj, nseg=20, ratio=log(8), which=NULL,auto.mfrow=TRUE,
 ask=!auto.mfrow & (prod(par("mfcol"))<length(which)&&dev.interactive()),
-col.line="blue", varname, ...)
+col.line="blue", varname, \dots)
 }
 
 \arguments{
@@ -45,6 +45,8 @@ col.line="blue", varname, ...)
     vector of names; labels for the x-axes. If NULL defaults the names of
     mle's in mleobj.  
   }
+
+  \item{\dots}{further arguments to be passed to plot}
 }
 
 \details{

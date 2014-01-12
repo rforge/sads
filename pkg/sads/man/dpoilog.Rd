@@ -11,7 +11,7 @@ Poisson-longnormal distribution with parameters \code{mu} and \code{sig}.
 \usage{
 dpoilog( x, mu, sig, log=FALSE)
 ppoilog( q, mu, sig, lower.tail=TRUE, log.p=FALSE)
-qpoilog( (p, mu, sig, S = 30, lower.tail = TRUE, log.p = FALSE)
+qpoilog( p, mu, sig, S = 30, lower.tail = TRUE, log.p = FALSE)
 }
 
 \arguments{
