@@ -26,13 +26,7 @@
 \section{Bugs and Issues}
 \label{sec:bugs-issues}
 \begin{itemize}
-\item Check why
-  @ 
-<<eval=F>>=
-pzipf(10,N=100,s=2) - sum(dzipf(1:10,N=100,s=2))
-@ %def 
-gives a small difference. Once solved include this command in help page. 
-\item Check why \code{summary} for \code{fitsad} objects returned by \code{fitvolkov} results in a \code{summary} with a huge \code{call}. Probably due the use of \code{do.call} to call \code{mle2}.
+
 \item Check warnings returned when detaching the package:
     @ 
 <<eval=F>>=
@@ -78,7 +72,7 @@ lines(octavpred(moths.ln1), col="red")
 @ %def 
 \item \code{fitzipf} slow:
 @ 
-<<zipf-slow>>=
+<<zipf-slow, eval=FALSE>>=
 z1 <- rpois(100, lambda=dzipf(1:100, s=0.2, N=100)*10000)
 z1 <- z1[z1>0]
 z1.fit <- fitzipf(z1) #slow. Why?
@@ -111,18 +105,7 @@ teste2 <- octav(moths, preston=TRUE)
 cbind(teste,teste2)
 @ %def 
 
-\item Summary of \code{fivolkov} with extremelly long call,
-  probably due the use of do.call in the function:
-@ 
-<<summary-volkov>>=
-mag5 <- c(103,115,13,2,67,36,51,8,6,61,10,21,
-          7,65,4,49,92,37,16,6,23,9,2,6,5,4,
-          1,3,1,9,2)
-mg5.v <- fitvolkov(mag5)
-summary(mg5.v)
-@ %def 
-
-\item fucntions \code{rad} and \code{octav} should handle zero and negative numebrs (exception or exclusion, as in arg log=''xy'' of \code{plot}.
+\item functions \code{rad} and \code{octav} should handle zero and negative numbers (exception or exclusion, as in arg log=''xy'' of \code{plot}.
 
 \end{itemize}
 
@@ -130,30 +113,50 @@ summary(mg5.v)
 \label{sec:solved}
 \begin{itemize}
 \item Check why
-  @ 
+@ 
 <<eval=F>>=
 p.123 <-ppareto(1:3,shape=3,scale=1) 
 sum(qpareto(p.123, 3, scale=1)-1:3)
 @ %def 
 gives a small difference. 
 \paragraph{SOLVED:} difference because \code{ppareto(1,shape=3,scale=1)} is zero 
+\item Check why
+  @ 
+<<eval=TRUE>>=
+pzipf(10,N=100,s=2) - sum(dzipf(1:10,N=100,s=2))
+@ %def 
+gives a small difference. Once solved include this command in help page. 
+\paragraph{SOLVED:} Half the default numerical tolerance of \Sexpr{.Machine$double.eps ^ 0.5} The correct test is
+<<eval=TRUE>>=
+all.equal(pzipf(10,N=100,s=2), sum(dzipf(1:10,N=100,s=2)))
+@ %def 
+\item Check why \code{summary} for \code{fitsad} objects returned by \code{fitvolkov} results in a \code{summary} with a huge \code{call}. Probably due the use of \code{do.call} to call \code{mle2}.
+@ 
+<<summary-volkov>>=
+mag5 <- c(103,115,13,2,67,36,51,8,6,61,10,21,
+          7,65,4,49,92,37,16,6,23,9,2,6,5,4,
+          1,3,1,9,2)
+mg5.v <- fitvolkov(mag5, skip.hessian=TRUE)
+summary(mg5.v)
+@ %def 
+\paragraph{SOLVED:} just quote the names of the function called by \code{do.call}, function code: 
+\code{result <- do.call("mle2", c(list(minuslogl=LL, start = list(theta = thetahat, m = mhat), data = list(x = x)), dots))  }
 \end{itemize}
 
 \section{Distributions}
 \label{sec:distributions}
-\item Distributions to include:
 \begin{itemize}
+  \item Distributions to include:
   \begin{itemize}
   \item Continuous power
   \item Truncated power (or Power-bend)
   \item \textbf{DONE} Geometric series
   \item \textbf{DONE} Broken-stick 
-  \item Poisson-gamma (mayne, since it is negative binomial)
+  \item Poisson-gamma (maybe, since it is negative binomial)
   \item Poisson-exponencial
   \end{itemize}
 \item Allow Pareto distribution to return zero values when scale >= min(x). (Maybe not a good idea: may cause fitting problems.). 
 \item Make invalid parameters return \code{NaN}, instead than stoping. (done in some functions, check in all)
-
 \item Finish functions for distribution and fitting fo Poisson-gamma and Poisson-exponential. 
   Currently only density functions (old code, check) available.
 \end{itemize}
@@ -167,7 +170,17 @@ gives a small difference.
 \item Include geometric series and He \& Tang's method \cite{he2008} fitting method;
 \item Check if fitting problems for Pareto distribution can occur (see pareto help page in VGAM: \url{http://finzi.psych.upenn.edu/R/library/VGAM/html/pareto1.html} and also references in McGuill's chapter on sads in \cite{magurran2011}.
 \item Check if parameters J for mszm and volkov and N for ls can be declared as fixed in their fitting functions. 
-  This will also allow to eliminate a bunch of \code{if}'s in \code{radpred} and \code{octavpred}. 
+  This will also allow to eliminate a bunch of \code{if}'s in \code{radpred} and \code{octavpred}.
+\item Use \code{do.call} to call \code{mle2} inside fitting functions to get the explicit arguments in the call slot
+  and thus in the summary. This is done in \code{fitvolkov}, compare to \emph{e.g.} \code{fitls}:
+  @ 
+<<summary-volkov>>=
+mag5 <- c(103,115,13,2,67,36,51,8,6,61,10,21,
+          7,65,4,49,92,37,16,6,23,9,2,6,5,4,
+          1,3,1,9,2)
+fitsad(mag5, "volkov",skip.hessian=TRUE)
+fitsad(mag5, "ls") ## Call without explicit arguments
+@ 
 \end{itemize}
 
 \section{Diagnostic}
