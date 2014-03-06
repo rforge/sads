@@ -1,27 +1,32 @@
 # Export all names not beggining with .
 exportPattern("^[^\\.]")
-#Alternative: do not export internal functions
-##export(dls,dpoig,dpoilog,dpoix,dpower,dtrunc,dzipf,fitsad,octavpred,octav,
-#       plotprofmle,pls,ppoilog,ppower,pth,ptrunc,pzipf,qls,qpoilog,qth,qtrunc,qzipf,radpred,rad, trueLL,trunc)
-## Import specific functions from other packages used by new methods
-importFrom("graphics",plot, points, lines)
-importFrom("bbmle", AICc)
-## Import a single function from VGAM and untb
-importFrom("VGAM",zeta)
-importFrom("untb", volkov, optimal.theta)
+#Alternative: export functions explicitly (and do not export internal functions)
+## export(dbs, dgs, dls, dmand, dmzsm, dpareto, dpoilog, dpower, drbs, dtrunc, dvolkov, dzipf,
+##        fitbs, fitgamma, fitgeom, fitgs, fitlnorm, fitls, fitmand, fitmzsm, fitnbinom, fitpareto, fitpoilog, fitpower,
+##        fitrad, fitrbs, fitsad, fitvolkov, fitweibull, fitzipf,
+##        octav, 
+##        pbs, pgs,
+##        plotprofmle,
+##        pls, pmand, pmzsm, ppareto, ppoilog, ppower,
+##        pprad, ppsad,
+##        prbs,
+##        ptrunc,
+##        pvolkov, pzipf,
+##        qbs, qgs, qls, qmand, qpareto, qpoilog, qpower,
+##        qqrad, qqsad,
+##        qrbs,
+##        qtrunc,
+##        qvolkiv, qzip,
+##        rad, rsad, trueLL)
 ## Explicit classes and methods export
 exportClasses(rad,octav,fitsad,fitrad)
 exportMethods(plot, points, lines, AICc, octavpred, radpred)
-## From bbmle package
-#importClassesFrom(stats4,mle)
-#importFrom(stats4,coef,confint,logLik,BIC,summary,profile,vcov,AIC, update, plot)
-#importFrom(stats,
-#           anova,deviance,residuals,
-#           simulate,predict,formula)
-#importFrom(lattice,xyplot,splom)  ## for slice methods
-#importFrom(numDeriv,hessian,grad)
-#importClassesFrom(bbmle,mle2)
-
+## Import specific functions from other packages used by new methods
+importFrom("graphics",plot, points, lines)
+#importFrom("bbmle", AICc)
+## Import a single function from VGAM and untb
+importFrom("VGAM",zeta)
+importFrom("untb", volkov, optimal.theta)
 ## Import all packages listed as Imports or Depends
 import(
   methods,

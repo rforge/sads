@@ -26,12 +26,17 @@
 \section{Bugs and Issues}
 \label{sec:bugs-issues}
 \begin{itemize}
-
 \item Check warnings returned when detaching the package:
     @ 
 <<eval=F>>=
 detach("package:sads", unload=T)
 @ %def 
+Or when the developer version is loaded with \code{load_all} of devtools package. 
+Many warning messages like that
+\begin{verbatim}
+1: In FUN(X[[2L]], ...) :
+  Created a package name, ‘2014-03-06 20:04:12’, when none found
+\end{verbatim}
 
 \item Check incorrect calculations of \code{radpred} when data object is provided in argument \code{object}:
 @
