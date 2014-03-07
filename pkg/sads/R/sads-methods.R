@@ -170,7 +170,7 @@ setMethod("AICc","fitsad",
           )
 
 
-## rapred generic functions and methods ###
+## radpred generic functions and methods ###
 
 setGeneric("radpred",
 def = function(object, sad, rad, coef, trunc, distr, S, N, ...) standardGeneric("radpred")

@@ -26,12 +26,13 @@
 \section{Bugs and Issues}
 \label{sec:bugs-issues}
 \begin{itemize}
-\item Check warnings returned when detaching the package:
+\item Check warnings \code{Created a package name, '[date]', when none found} returned when detaching the package:
     @ 
 <<eval=F>>=
 detach("package:sads", unload=T)
 @ %def 
-Or when the developer version is loaded with \code{load_all} of devtools package. 
+Reported as bug at \url{https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15481}.
+Similar beahvior when the developer version is loaded with \code{load_all} of devtools package. 
 Many warning messages like that
 \begin{verbatim}
 1: In FUN(X[[2L]], ...) :
@@ -100,7 +101,7 @@ lines(z1.r1)
   \item \textbf{DONE} Try a method based on step functions rather than the current search algorithm.
   \item Compare the results of both methods (maybe include both in the function?).
   \end{itemize}
-\item ensure that all mehods for data frames work with classes \code{octav} and \code{rad}.
+\item ensure that all methods for data frames work with classes \code{octav} and \code{rad}.
   Some do not seem to work, e.g.:
 @ 
 <<dataframe_methods_octav>>=
@@ -111,6 +112,17 @@ cbind(teste,teste2)
 @ %def 
 
 \item functions \code{rad} and \code{octav} should handle zero and negative numbers (exception or exclusion, as in arg log=''xy'' of \code{plot}.
+\item Check why loading developer version with \code{load_all} these messages are issued:
+\begin{verbatim}
+Note: in method for ‘octavpred’ with signature
+‘object="fitsad",sad="missing",rad="missing",coef="missing",trunc="missing",oct="ANY",S="missing",N="missing"’:
+expanding the signature to include omitted arguments in definition: =
+"missing"
+Note: in method for ‘octavpred’ with signature
+‘object="fitrad",sad="missing",rad="missing",coef="missing",trunc="missing",oct="ANY",S="missing",N="missing"’:
+expanding the signature to include omitted arguments in definition: =
+"missing"
+\end{verbatim}
 
 \end{itemize}
 
