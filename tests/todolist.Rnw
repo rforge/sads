@@ -31,28 +31,13 @@
 <<eval=F>>=
 detach("package:sads", unload=T)
 @ %def 
-Reported as bug at \url{https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15481}.
+Reported as a (unsoved?) bug at \url{https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15481}.
 Similar beahvior when the developer version is loaded with \code{load_all} of devtools package. 
 Many warning messages like that
 \begin{verbatim}
 1: In FUN(X[[2L]], ...) :
   Created a package name, ‘2014-03-06 20:04:12’, when none found
 \end{verbatim}
-
-\item Check incorrect calculations of \code{radpred} when data object is provided in argument \code{object}:
-@
-<<eval=F>>=
-data(moths)
-moths.ls <- fitsad(moths, "ls")
-moths.rad.pred <- radpred(moths.ls)
-moths.rad.pred2 <- radpred(object=moths, sad="ls", 
-                             coef=list(alpha=35), distr="D")
-moths.rad.pred3 <- radpred(object=moths, sad="ls", 
-                             coef=list(alpha=35), distr="D", S=length(moths), N=sum(moths))
-plot(moths.rad.pred)
-lines(moths.rad.pred2, col="black")
-lines(moths.rad.pred3, col="red")
-@
 
 \item Conferir funcao trueLL e seu uso na fitsad, pois pelo menos para dados de mariposas de Fisher
   resulta em melhoria do modelo lognormal truncado, mas os gráficos de diagnóstico não mostram isso.
@@ -112,7 +97,8 @@ cbind(teste,teste2)
 @ %def 
 
 \item functions \code{rad} and \code{octav} should handle zero and negative numbers (exception or exclusion, as in arg log=''xy'' of \code{plot}.
-\item Check why loading developer version with \code{load_all} these messages are issued:
+\item Check why installing the package with \code{install.packages} or loading 
+  developer version with \code{load_all} these messages are issued:
 \begin{verbatim}
 Note: in method for ‘octavpred’ with signature
 ‘object="fitsad",sad="missing",rad="missing",coef="missing",trunc="missing",oct="ANY",S="missing",N="missing"’:
@@ -158,6 +144,21 @@ summary(mg5.v)
 @ %def 
 \paragraph{SOLVED:} just quote the names of the function called by \code{do.call}, function code: 
 \code{result <- do.call("mle2", c(list(minuslogl=LL, start = list(theta = thetahat, m = mhat), data = list(x = x)), dots))  }
+\item Check incorrect calculations of \code{radpred} when data object is provided in argument \code{object}:
+@
+<<eval=F>>=
+data(moths)
+moths.ls <- fitsad(moths, "ls")
+moths.rad.pred <- radpred(moths.ls)
+moths.rad.pred2 <- radpred(object=moths, sad="ls", 
+                             coef=as.list(coef(moths.ls)), distr="D")
+moths.rad.pred3 <- radpred(sad="ls", coef=as.list(coef(moths.ls)), distr="D", S=length(moths), N=sum(moths))
+plot(moths.rad.pred, type="l")
+lines(moths.rad.pred2, col="blue")
+lines(moths.rad.pred3, col="red")
+@
+\paragraph{SOLVED:} values match now. Nor sure about the bug before. This is not the problem, but 
+method for object=numeric changed to include a warning is argument 'distr' is missing.
 \end{itemize}
 
 \section{Distributions}

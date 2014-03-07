@@ -270,50 +270,52 @@ setMethod("radpred",signature(object="numeric", sad="missing", rad="character",
 
 ## if object is a numeric vector of abundances and sad argument is given (rad, S, N,  arguments should be missing)
 setMethod("radpred",signature(object="numeric", sad="character", rad="missing",
-                              coef="list", distr="character", S="missing", N="missing"),
+                              coef="list", distr="ANY", S="missing", N="missing"),
           function(object, sad, rad, coef, trunc, distr, ...){
-            dots <- list(...)
-            S <- length(object)
-            N <- sum(object)
-            if (distr == "D"){
-              y <- 1:N
-              if(!missing(trunc)){
-                if(sad=="ls") 
-                  X <- do.call(ptrunc, c(list(sad, q = y, coef = c(list(N = N),coef),
-                                              lower.tail=F, trunc = trunc)))
-                else if(sad=="mzsm"||sad=="volkov") 
-                  X <- do.call(ptrunc, list(sad, q = y, coef = c(list(J = N), coef),
-                                            lower.tail=F, trunc = trunc))
-                else
-                  X <- do.call(ptrunc, list(sad, q = y, coef = coef, lower.tail=F, trunc = trunc))
+              if( missing(distr) ) stop("Argument 'distr' missing, please choose \"D\" or \"C\"")
+              dots <- list(...)
+              S <- length(object)
+              N <- sum(object)
+              if (distr == "D"){
+                  y <- 1:N
+                  if(!missing(trunc)){
+                      if(sad=="ls") 
+                          X <- do.call(ptrunc, c(list(sad, q = y, coef = c(list(N = N),coef),
+                                                      lower.tail=F, trunc = trunc)))
+                      else if(sad=="mzsm"||sad=="volkov") 
+                          X <- do.call(ptrunc, list(sad, q = y, coef = c(list(J = N), coef),
+                                                    lower.tail=F, trunc = trunc))
+                      else
+                          X <- do.call(ptrunc, list(sad, q = y, coef = coef, lower.tail=F, trunc = trunc))
+                  }
+                  else {
+                      psad <- get(paste("p", sad, sep=""), mode = "function")
+                      if(sad=="ls")
+                          X <- do.call(psad, c(list(q = y, lower.tail = F, N = N),coef))
+                      else if(sad=="mzsm"||sad=="volkov")
+                          X <- do.call(psad, c(list(q = y, lower.tail = F, J = N), coef))
+                      else
+                          X <- do.call(psad, c(list(q = y, lower.tail = F), coef))
+                  }
+                  f1 <- approxfun(x=c(1, X), y=c(0, y), method="constant")
+                  ab <- f1(ppoints(S))
               }
-              else {
-                psad <- get(paste("p", sad, sep=""), mode = "function")
-                if(sad=="ls")
-                  X <- do.call(psad, c(list(q = y, lower.tail = F, N = N),coef))
-                else if(sad=="mzsm"||sad=="volkov")
-                  X <- do.call(psad, c(list(q = y, lower.tail = F, J = N), coef))
-                else
-                  X <- do.call(psad, c(list(q = y, lower.tail = F), coef))
+              else if(distr == "C"){
+                  Y <- ppoints(S)
+                  if(!missing(trunc)){
+                      ab <- do.call(qtrunc, list(sad, p = Y, coef = coef, lower.tail=F, trunc = trunc))
+                  }
+                  else{
+                      qsad <- get(paste("q", sad, sep=""), mode = "function")
+                      ab <- do.call(qsad, c(list(p = Y, lower.tail = F), coef))
+                  }
               }
-              f1 <- approxfun(x=c(1, X), y=c(0, y), method="constant")
-              ab <- f1(ppoints(S))
-            }
-            else if(distr == "C"){
-              Y <- ppoints(S)
-              if(!missing(trunc)){
-                ab <- do.call(qtrunc, list(sad, p = Y, coef = coef, lower.tail=F, trunc = trunc))
-              }
-              else{
-                qsad <- get(paste("q", sad, sep=""), mode = "function")
-                ab <- do.call(qsad, c(list(p = Y, lower.tail = F), coef))
-              }
-            }
-            new("rad", data.frame(rank=1:S, abund=ab))
+              new("rad", data.frame(rank=1:S, abund=ab))
           }
           )
 
-## if object is missing and rad is given. sad should not be given. All other arguments except distr should be given, except trunc (optional)
+## if object is missing and rad is given. sad should not be given. All other arguments except distr should be given,
+## except trunc (optional)
 setMethod("radpred",signature(object="missing", sad="missing", rad="character",
                               coef="list", distr="missing", S="numeric", N="numeric"),
           function(object, sad, rad, coef, trunc, distr, S, N, ...){
