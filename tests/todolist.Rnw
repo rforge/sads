@@ -31,7 +31,7 @@
 <<eval=F>>=
 detach("package:sads", unload=T)
 @ %def 
-Reported as a (unsoved?) bug at \url{https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15481}.
+Reported as a (unsolved?) bug at \url{https://bugs.r-project.org/bugzilla/show_bug.cgi?id=15481}.
 Similar beahvior when the developer version is loaded with \code{load_all} of devtools package. 
 Many warning messages like that
 \begin{verbatim}
