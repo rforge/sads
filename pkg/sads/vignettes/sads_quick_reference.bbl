@@ -1,0 +1,47 @@
+\begin{thebibliography}{7}
+
+\bibitem[Bolker \& {R Development Core Team}(2014)]{Bolkerbbmle}
+Bolker, B. \& {R Development Core Team}, 2014.
+\newblock bbmle: Tools for general maximum likelihood estimation.
+\newblock R package version 1.0.16.
+
+\bibitem[Grøtan \& Engen(2008)]{grotan2008}
+Grøtan, V. \& S.~Engen, 2008.
+\newblock poilog: Poisson lognormal and bivariate Poisson lognormal
+  distribution.
+\newblock R package version 0.4.
+
+\bibitem[MacArthur(1957)]{macarthur1957}
+MacArthur, R., 1957.
+\newblock On the relative abundance of bird species.
+\newblock \emph{Proceedings of the National Academy of Sciences of the United
+  States of America} \textbf{43}:293.
+
+\bibitem[May(1975)]{May1975}
+May, R.~M., 1975.
+\newblock Patterns of species abundance and diversity.
+\newblock In M.~L. Cody \& J.~M. Diamond, editors, \emph{Ecology and Evolution
+  of Communities}, chapter~4, pages 81--120. Harvard University Press,
+  Cambridge, MA.
+
+\bibitem[McGill et~al.(2007)McGill, Etienne, Gray, Alonso, Anderson, Benecha,
+  Dornelas, Enquist, Green, He, Hurlbert, Magurran, Marquet, Maurer, Ostling,
+  Soykan, Ugland, \& White]{McGill2007}
+McGill, B., R.~Etienne, J.~Gray, D.~Alonso, M.~Anderson, H.~Benecha,
+  M.~Dornelas, B.~Enquist, J.~Green, F.~He, A.~Hurlbert, A.~E. Magurran,
+  P.~Marquet, B.~Maurer, A.~Ostling, C.~Soykan, K.~Ugland, \& E.~White, 2007.
+\newblock Species abundance distributions: moving beyond single prediction
+  theories to integration within an ecological framework.
+\newblock \emph{Ecology Letters} \textbf{10}:995--1015.
+
+\bibitem[Preston(1948)]{Preston1948}
+Preston, F.~W., 1948.
+\newblock The commonness and rarity of species.
+\newblock \emph{Ecology} \textbf{29}:254--283.
+
+\bibitem[Wilson(1991)]{wilson1991}
+Wilson, J., 1991.
+\newblock Methods for fitting dominance/diversity curves.
+\newblock \emph{Journal of Vegetation Science} \textbf{2}:35--46.
+
+\end{thebibliography}

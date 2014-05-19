@@ -4,7 +4,7 @@ octav <- function(x, oct, preston=FALSE, ...){
   else if(is(x,"fitrad"))
     y <- x@rad.tab$abund
   else if(is(x,"numeric"))
-    y <- x
+    y <- x[x>0]
   if(missing(oct)){
     oct <- 1:(ceiling(max(log2(y)))+1)
     if(any(y < 1)){
@@ -12,6 +12,7 @@ octav <- function(x, oct, preston=FALSE, ...){
       oct <- c(octlower, oct)
     }
   }
+  else oct <- min(oct):max(oct)
   N <- 2^(oct-1)
   oc.class <- cut(y, breaks=c(0, N), labels=oct)
   res <- as.data.frame(table(oc.class))

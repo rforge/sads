@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Arch Linux)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: sads_quick_reference.aux
+The style file: ecology.bst
+Database file #1: sads_quick_reference.bib
+You've used 7 entries,
+            2712 wiz_defined-function locations,
+            650 strings with 5794 characters,
+and the built_in function-call counts, 3693 in all, are:
+= -- 315
+> -- 262
+< -- 8
++ -- 89
+- -- 80
+* -- 325
+:= -- 683
+add.period$ -- 22
+call.type$ -- 7
+change.case$ -- 61
+chr.to.int$ -- 7
+cite$ -- 7
+duplicate$ -- 138
+empty$ -- 216
+format.name$ -- 91
+if$ -- 711
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 5
+newline$ -- 38
+num.names$ -- 30
+pop$ -- 48
+preamble$ -- 1
+purify$ -- 54
+quote$ -- 0
+skip$ -- 98
+stack$ -- 0
+substring$ -- 179
+swap$ -- 28
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 63
+warning$ -- 0
+while$ -- 30
+width$ -- 0
+write$ -- 93

@@ -95,8 +95,14 @@ teste <- octav(moths)
 teste2 <- octav(moths, preston=TRUE)
 cbind(teste,teste2)
 @ %def 
-
-\item functions \code{rad} and \code{octav} should handle zero and negative numbers (exception or exclusion, as in arg log=''xy'' of \code{plot}.
+\begin{itemize}
+\item Specially create methods to manipulate objects like [ and \$, which include integrity checking of the object (e.g. no negative values, octave classes and rad abundances ordered and so on)
+\end{itemize}
+\item functions \code{rad} and \code{octav} should handle zero and negative numbers 
+  (exception or exclusion, as in arg log=''xy'' of \code{plot}.
+  \begin{itemize}
+  \item \textbf{Partially DONE}: both functions exclude zero values, with no warning. Include warning or too obvious?
+  \end{itemize}
 \item Check why installing the package with \code{install.packages} or loading 
   developer version with \code{load_all} these messages are issued:
 \begin{verbatim}
@@ -110,6 +116,7 @@ expanding the signature to include omitted arguments in definition: =
 "missing"
 \end{verbatim}
 
+\item octave is based on \code{hist} but doe not work with argument \code{prob=TRUE}
 \end{itemize}
 
 \subsection{Solved}
