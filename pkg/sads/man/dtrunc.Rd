@@ -1,19 +1,26 @@
 \name{dtrunc}
+
 \alias{dtrunc}
 \alias{ptrunc}
-\title{Left-truncation of density and probability distributions}
-\description{Returns density and probability values for
+\alias{qtrunc}
+
+\title{Left-truncation of density, probability and quantile of distributions}
+
+\description{Returns density, probability and quantile values for
   distribution functions left-truncated at a specified value.}
+
 \usage{
 dtrunc(f, x, trunc, coef, log = FALSE)
 ptrunc(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE)
+qtrunc(f, p, trunc, coef, lower.tail = TRUE, log.p = FALSE)
 }
+
 \arguments{
 
   \item{f}{
     character;
     root name of the density or distribution function to be truncated
-    - e.g., "lnorm" for the lognormal distribution; "geom" for the geometric distribution.
+    - e.g., \kbd{"lnorm"} for the lognormal distribution; \kbd{"geom"} for the geometric distribution.
   }
   
   \item{x, q}{
@@ -21,13 +28,17 @@ ptrunc(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE)
   }
   
   \item{trunc}{
-    numeric, trunc>min(x). Truncation value (see details).
-    }
+    numeric, \code{trunc > min(x)}. Truncation value (see details).
+  }
+  
+  \item{p}{
+    vector of probabilities.
+  }
   
     \item{coef}{
       numeric named list; parameters values of the density or
       distribution function, named accordingly (see details). 
-      }
+    }
   
   \item{log, log.p}{
     logical; if TRUE, probabilities p are given as log(p). 
@@ -43,6 +54,7 @@ ptrunc(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE)
   \code{dtrunc} gives the (log) density defined by \code{f} left-truncated at \code{trunc}.
   \code{ptrunc} gives the (log) distribution function defined by
   \code{f} left-truncated at \code{trunc}.
+  \code{qtrunc} gives the quantile of the density defined by \code{f} left-truncated at \code{trunc}.
 }
 
 \details{
@@ -62,10 +74,11 @@ ptrunc(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE)
   g'(x) and G'(x) defined above for
   a vector of values \code{x} from any
   standard distribution function available in R.
-  This means that the "upper tail" of a continuous distribution
+  This means that the 'upper tail' of a continuous distribution
   is rescaled to integrate to one.
   Accordingly, for discrete distributions, the probabilities
   for all \code{x}>trunc are rescaled to sum one.
+  \code{qtrunc} is the inverse function of \code{ptrunc}.
 
   Left-truncated distributions can be used to
   describe the species abundance distributions (SADs),
@@ -80,19 +93,19 @@ ptrunc(f, q, trunc, coef, lower.tail=TRUE, log.p=FALSE)
 
 \seealso{
   Distributions for standard distributions in R;
-  many functions in package 'sads' have an argument \code{trunc} that
+  many functions in package \pkg{sads} have an argument \code{trunc} that
   allows to simulate and fit truncated
   distributions
-  for species abundance distributions (e.g., \link{fitsad}
-  \link{rsad}, \link{radpred}, \link{octavpred}.
+  for species abundance distributions (e.g., \code{\link{fitsad}}
+  \code{\link{rsad}}, \code{\link{radpred}}, \code{\link{octavpred}}.
   Package 'VGAM' has truncated versions of many standard functions;
-  see \code{Truncate-methods} in package 'distr'for  general
+  see \code{Truncate-methods} in package \pkg{distr} for  general
   methods to build R objects of truncated distributions.
 }
 
 \source{
   Codes from Nadarajah and Kotz (2006),
-  which is a more generic solution
+  which provide a more generic solution
   for left and right truncation.
 }
 
@@ -114,5 +127,6 @@ B <- (ppois( 1:5 , lambda = 1.5 ) -
 ## checking
 identical(A,B)
 }
+
 
 

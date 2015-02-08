@@ -27,12 +27,12 @@ qrbs( p, N, S, lower.tail = TRUE, log.p = FALSE )
   \item{x}{
     vector of (non-negative integer) quantiles. In the context of
     species abundance distributions, this is a vector of abundances (for
-    \code{dbs} and \code{drbs}) or abundance ranks (for \code{drbs})
+    \code{dbs}) or abundance ranks (for \code{drbs})
     of species in a sample.
   }
   \item{q}{vector of (non-negative integer) quantiles. In the context of
     species abundance distributions, a vector of abundances
-    (for \code{dbs} and \code{drbs})
+    (for \code{dbs})
     or abundance ranks (for \code{drbs}) of species in a sample.
   }
   \item{p}{
@@ -64,7 +64,7 @@ qrbs( p, N, S, lower.tail = TRUE, log.p = FALSE )
 
   where n(i) is the abundance in the i-th most abundant element
   (MacArthur 1960, May 1975).
-  Hence the probability (or expected proportion of occurences)
+  Hence the probability (or expected proportion of occurrences)
   in the i-th element is
 
   p(i) = n(i)/N = n(i) = (sum(from k=i to S) 1/k) / S
@@ -73,7 +73,7 @@ qrbs( p, N, S, lower.tail = TRUE, log.p = FALSE )
   probabilities and quantiles based on the expression above, for p(i).
   Therefore, \code{[dpq]rbs} can be used as rank-abundance model
   for species ranks in a sample or biological community
-  see \code{\link{fitrad-class}}.
+  see \code{\link{fitrad}}.
 
   The probability density for a given abundance value in the Broken-stick model
   is given by 
@@ -83,14 +83,18 @@ qrbs( p, N, S, lower.tail = TRUE, log.p = FALSE )
   Where x is the abundance of a given element in the collection (May 1975).
   \code{[dpq]bs} return probabilities and quantiles according to the
   expression above for p(x).
-  Therefore, \code{[dpq]bs} can be used as
+  Therefore, \code{[dpq]bs} can be used as a
   species abundance model
-  see \code{\link{fitsad-class}}.
+  see \code{\link{fitsad}}.
   }
 
 \value{
-  \code{dmand} gives the (log) density of the density, \code{pmand} gives the (log)
-  distribution function, \code{qmand} gives the quantile function.
+  \code{dbs}  gives the (log) density and  \code{pbs} gives the (log)
+  distribution function of abundances,  and \code{qbs} gives the
+  corresponding quantile function.
+  \code{drbs}  gives the (log) density and  \code{prbs} gives the (log)
+  distribution function of ranks,  and \code{qrbs} gives the
+  corresponding quantile function.
 }
 
 \references{
@@ -103,26 +107,24 @@ qrbs( p, N, S, lower.tail = TRUE, log.p = FALSE )
   Communities}. Harvard University Press. pp 81--120.
   }
 
-\author{
-Paulo I. Prado and Murilo Dantas Miranda
-}
+\author{Paulo I Prado \email{prado@ib.usp.br} and Murilo Dantas Miranda.}
 
 \seealso{
-  \code{fitbs} and \code{fitrbs} to fit the Broken-stick distribution
-  as a sad and rad model of species abundances.
+  \code{\link{fitbs}} and \code{\link{fitrbs}} to fit the Broken-stick distribution
+  as a abundance (SAD) and rank-abundance (RAD) model.
 }
 
 \examples{
 x <- 1:25
-pdf <- drbs(x=x, N=100, S=25)
-cdf <- prbs(q=x, N=100, S=25)
+PDF <- drbs(x=x, N=100, S=25)
+CDF <- prbs(q=x, N=100, S=25)
 par(mfrow=c(1,2))
-plot(x,cdf, ylab="Cumulative Probability", type="b",
+plot(x,CDF, ylab="Cumulative Probability", type="b",
      main="Broken-stick distribution, CDF")
-plot(x,pdf, ylab="Probability", type="h",
+plot(x,PDF, ylab="Probability", type="h",
      main="Broken-stick distribution, PDF")
 par(mfrow=c(1,1))
 
-## quantile is the inverse of cdf
-sum(qrbs(cdf,N=100, S=25)-x) # should be zero
+## quantile is the inverse of CDF
+all.equal( qrbs( CDF, N=100, S=25), x) # should be zero
 }

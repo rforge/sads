@@ -56,17 +56,19 @@ AICctab(moths.ls, moths.pln, moths.ln1, moths.ln2,
         nobs=length(moths), base=T, weights=T)
 ## Verificando: graficos parecem nao sustentar 
 ## o melhor desempenho do lognormal em relacao aa pln com trueLL
-plot(moths.oc)
+plot(octav(moths))
 lines(octavpred(moths.pln))
 lines(octavpred(moths.ln1), col="red")
+legend("topright", c("Poilog", "Lognormal"), 
+       lty=1, pch=1, col=c("blue", "red"))
 ## Veja tambem qqplots
 @ %def 
 \item \code{fitzipf} slow:
 @ 
 <<zipf-slow, eval=FALSE>>=
-z1 <- rpois(100, lambda=dzipf(1:100, s=0.2, N=100)*10000)
+z1 <- rpois(100, lambda=dzipf(1:100, s=1, N=100)*10000)
 z1 <- z1[z1>0]
-z1.fit <- fitzipf(z1) #slow. Why?
+zz1.fit <- fitzipf(z1) #slow. Why?
 @ %def 
 
 \item Check why predicted line for rad in Zipf model does not fit the end of the empirical rad:
@@ -116,7 +118,7 @@ expanding the signature to include omitted arguments in definition: =
 "missing"
 \end{verbatim}
 
-\item octave is based on \code{hist} but doe not work with argument \code{prob=TRUE}
+\item octave is based on \code{hist} but does not work with argument \code{prob=TRUE}
 \end{itemize}
 
 \subsection{Solved}
